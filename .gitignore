@@ -1,0 +1,12 @@
+target
+
+# IntelliJ
+*.iml
+.idea
+
+# yarn
+node_modules
+
+# Archlinux
+pkg/Archlinux/pkg
+*.pkg.tar.xz

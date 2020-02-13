@@ -1,0 +1,10 @@
+{% extends "movies/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load tz %}
+
+{% block content %}
+${ trans("Genre List") }
+{% include "movies/widgets/headline.html" %}
+{% include "movies/widgets/movie_count_table.html" with list=genres path="movies:genre_detail" %}
+{% endblock %}

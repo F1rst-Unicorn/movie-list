@@ -1,0 +1,355 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!--
+    movie-list is a website to manage a large list of movies
+    Copyright (C) 2019  The movie-list developers
+
+    This file is part of the movie-list program suite.
+
+    movie-list is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    movie-list is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see https://www.gnu.org/licenses/.
+-->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.njsm.movielist</groupId>
+    <artifactId>server</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+
+    <name>movie list server</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>2.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-spring5</artifactId>
+            <version>2.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>2.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>2.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.2.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.2.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.2.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.2.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>5.2.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.2.2.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>5.2.2.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-core</artifactId>
+            <version>1.5.18</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.12.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>3.12.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>3.12.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava</artifactId>
+            <version>4.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava-java8</artifactId>
+            <version>4.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient</artifactId>
+            <version>0.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_servlet</artifactId>
+            <version>0.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.29</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.2.4</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <de.njsm.movielist.server.db.host>localhost</de.njsm.movielist.server.db.host>
+                <de.njsm.movielist.server.db.port>5432</de.njsm.movielist.server.db.port>
+                <de.njsm.movielist.server.db.name>movie-list</de.njsm.movielist.server.db.name>
+                <de.njsm.movielist.server.circuitbreaker.timeout>2000</de.njsm.movielist.server.circuitbreaker.timeout>
+                <de.njsm.movielist.server.db.postgres.user>movie-list</de.njsm.movielist.server.db.postgres.user>
+                <de.njsm.movielist.server.db.postgres.password>linux</de.njsm.movielist.server.db.postgres.password>
+                <de.njsm.movielist.server.db.postgres.ssl>false</de.njsm.movielist.server.db.postgres.ssl>
+                <de.njsm.movielist.server.db.postgres.sslmode>disable</de.njsm.movielist.server.db.postgres.sslmode>
+                <de.njsm.movielist.server.db.postgres.sslcert>${user.home}/ssl/stocks@rivendell.j.njsm.de.crt</de.njsm.movielist.server.db.postgres.sslcert>
+                <de.njsm.movielist.server.db.postgres.sslkey>${user.home}/ssl/stocks@rivendell.j.njsm.de.pk8</de.njsm.movielist.server.db.postgres.sslkey>
+                <de.njsm.movielist.server.db.postgres.sslrootcert>${user.home}/ssl/ca.crt</de.njsm.movielist.server.db.postgres.sslrootcert>
+            </properties>
+        </profile>
+        <profile>
+            <id>teamcity</id>
+            <properties>
+                <de.njsm.movielist.server.db.host>db.j.njsm.de</de.njsm.movielist.server.db.host>
+                <de.njsm.movielist.server.db.port>5432</de.njsm.movielist.server.db.port>
+                <de.njsm.movielist.server.db.name>movie-list-teamcity-rivendell</de.njsm.movielist.server.db.name>
+                <de.njsm.movielist.server.circuitbreaker.timeout>2000</de.njsm.movielist.server.circuitbreaker.timeout>
+                <de.njsm.movielist.server.db.postgres.user>movie-list-teamcity-rivendell</de.njsm.movielist.server.db.postgres.user>
+                <de.njsm.movielist.server.db.postgres.password>linux</de.njsm.movielist.server.db.postgres.password>
+                <de.njsm.movielist.server.db.postgres.ssl>true</de.njsm.movielist.server.db.postgres.ssl>
+                <de.njsm.movielist.server.db.postgres.sslmode>verify-ca</de.njsm.movielist.server.db.postgres.sslmode>
+                <de.njsm.movielist.server.db.postgres.sslcert>${user.home}/ssl/stocks@rivendell.j.njsm.de.crt</de.njsm.movielist.server.db.postgres.sslcert>
+                <de.njsm.movielist.server.db.postgres.sslkey>${user.home}/ssl/stocks@rivendell.j.njsm.de.pk8</de.njsm.movielist.server.db.postgres.sslkey>
+                <de.njsm.movielist.server.db.postgres.sslrootcert>${user.home}/ssl/ca.crt</de.njsm.movielist.server.db.postgres.sslrootcert>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <generatedSourcesDirectory>target/generated-sources/java</generatedSourcesDirectory>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <de.njsm.movielist.server.db.host>${de.njsm.movielist.server.db.host}</de.njsm.movielist.server.db.host>
+                        <de.njsm.movielist.server.db.port>${de.njsm.movielist.server.db.port}</de.njsm.movielist.server.db.port>
+                        <de.njsm.movielist.server.db.name>${de.njsm.movielist.server.db.name}</de.njsm.movielist.server.db.name>
+                        <de.njsm.movielist.server.circuitbreaker.timeout>${de.njsm.movielist.server.circuitbreaker.timeout}</de.njsm.movielist.server.circuitbreaker.timeout>
+                        <de.njsm.movielist.server.db.postgres.user>${de.njsm.movielist.server.db.postgres.user}</de.njsm.movielist.server.db.postgres.user>
+                        <de.njsm.movielist.server.db.postgres.password>${de.njsm.movielist.server.db.postgres.password}</de.njsm.movielist.server.db.postgres.password>
+                        <de.njsm.movielist.server.db.postgres.ssl>${de.njsm.movielist.server.db.postgres.ssl}</de.njsm.movielist.server.db.postgres.ssl>
+                        <de.njsm.movielist.server.db.postgres.sslmode>${de.njsm.movielist.server.db.postgres.sslmode}</de.njsm.movielist.server.db.postgres.sslmode>
+                        <de.njsm.movielist.server.db.postgres.sslcert>${de.njsm.movielist.server.db.postgres.sslcert}</de.njsm.movielist.server.db.postgres.sslcert>
+                        <de.njsm.movielist.server.db.postgres.sslkey>${de.njsm.movielist.server.db.postgres.sslkey}</de.njsm.movielist.server.db.postgres.sslkey>
+                        <de.njsm.movielist.server.db.postgres.sslrootcert>${de.njsm.movielist.server.db.postgres.sslrootcert}</de.njsm.movielist.server.db.postgres.sslrootcert>
+                        <de.njsm.movielist.internal.ticketValidityTimeInMinutes>${de.njsm.movielist.internal.ticketValidityTimeInMinutes}</de.njsm.movielist.internal.ticketValidityTimeInMinutes>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>3.11.3</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jdbc>
+                        <driver>org.postgresql.Driver</driver>
+                        <url>jdbc:postgresql://${de.njsm.movielist.server.db.host}:${de.njsm.movielist.server.db.port}/${de.njsm.movielist.server.db.name}</url>
+                        <properties>
+                            <property>
+                                <key>user</key>
+                                <value>${de.njsm.movielist.server.db.postgres.user}</value>
+                            </property>
+                            <property>
+                                <key>password</key>
+                                <value>${de.njsm.movielist.server.db.postgres.password}</value>
+                            </property>
+                            <property>
+                                <key>ssl</key>
+                                <value>${de.njsm.movielist.server.db.postgres.ssl}</value>
+                            </property>
+                            <property>
+                                <key>sslmode</key>
+                                <value>${de.njsm.movielist.server.db.postgres.sslmode}</value>
+                            </property>
+                            <property>
+                                <key>sslcert</key>
+                                <value>${de.njsm.movielist.server.db.postgres.sslcert}</value>
+                            </property>
+                            <property>
+                                <key>sslkey</key>
+                                <value>${de.njsm.movielist.server.db.postgres.sslkey}</value>
+                            </property>
+                            <property>
+                                <key>sslrootcert</key>
+                                <value>${de.njsm.movielist.server.db.postgres.sslrootcert}</value>
+                            </property>
+                        </properties>
+                    </jdbc>
+                    <generator>
+                        <name>org.jooq.codegen.JavaGenerator</name>
+                        <database>
+                            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                            <inputSchema>public</inputSchema>
+                            <includes>.*</includes>
+                            <properties>
+                                <property>
+                                    <key>dialect</key>
+                                    <value>POSTGRES</value>
+                                </property>
+                            </properties>
+                        </database>
+                        <target>
+                            <packageName>de.njsm.movielist.server.db.jooq</packageName>
+                            <directory>${basedir}/target/generated-sources/java</directory>
+                        </target>
+                    </generator>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.19.1</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>

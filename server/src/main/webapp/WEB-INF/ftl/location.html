@@ -1,0 +1,11 @@
+{% extends "movies/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load tz %}
+{% load bootstrap %}
+
+{% block content %}
+{% url "movies:add_location" as path %}
+${ trans("Add new location") }
+{% include "movies/widgets/basic_form.html" %}
+{% endblock %}

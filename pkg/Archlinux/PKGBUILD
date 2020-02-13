@@ -1,0 +1,70 @@
+# movie-list is a website to manage a large list of movies
+# Copyright (C) 2019  The movie-list developers
+#
+# This file is part of the movie-list program suite.
+#
+# movie-list is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# movie-list is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Maintainer: aliena <dairyman@njsm.de>
+pkgbase=movie-list
+pkgname=('movie-list' 'movie-list-static')
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Manages a large movie list"
+arch=('any')
+url="https://github.com/F1rst-Unicorn/movie-list"
+license=('GPL3')
+depends=('jre8-openjdk'
+         'java-environment'
+         'tomcat8')
+makedepends=('git'
+             'yarn'
+             'maven')
+install=movie-list.install
+backup=("etc/$pkgbase.properties")
+
+build() {
+    cd "$srcdir"
+
+    if [[ "$CI_SERVER" != "" ]] ; then
+        MVN_ARGS="-P teamcity"
+    fi
+
+    cd server
+    mvn $MVN_ARGS -Dmaven.test.skip=true clean package
+    cd ..
+
+    cd frontend
+    yarn
+    cd ..
+}
+
+package_movie-list() {
+    cd "$srcdir"
+
+    mkdir -p $pkgdir/usr/share/tomcat8/webapps/
+    install -D -m 444 server/target/server-*.war $pkgdir/usr/lib/$pkgbase/server.war
+    ln -s /usr/lib/$pkgbase/server.war           $pkgdir/usr/share/tomcat8/webapps/movie-list.war
+    install -D -m 444 pkg/schema.sql             $pkgdir/usr/share/$pkgbase/schema.sql
+    install -D -m 644 pkg/$pkgbase.properties    $pkgdir/etc/$pkgbase.properties
+    install -D -m 444 LICENSE.md                 $pkgdir/usr/share/licenses/$pkgbase/LICENSE.md
+}
+
+package_movie-list-static() {
+    cd "$srcdir"
+    mkdir -p $pkgdir/usr/share/$pkgbase/static
+    cp -r frontend/node_modules/* $pkgdir/usr/share/$pkgbase/static
+    cp -r frontend/css/* $pkgdir/usr/share/$pkgbase/static
+    cp -r frontend/images/* $pkgdir/usr/share/$pkgbase/static
+}

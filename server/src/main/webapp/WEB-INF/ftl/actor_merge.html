@@ -1,0 +1,10 @@
+{% extends "movies/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load tz %}
+{% load bootstrap %}
+
+{% block content %}
+{% url "movies:actor_merge" as path %}
+{% include "movies/widgets/basic_form.html" %}
+{% endblock %}

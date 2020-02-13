@@ -1,0 +1,17 @@
+{% extends "movies/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load tz %}
+{% load bootstrap %}
+
+{% block content %}
+{% if edit %}
+{% url "movies:actor_edit" as path %}
+${ trans("Edit actor") }
+{% include "movies/widgets/basic_form.html" %}
+{% else %}
+{% url "movies:add_actor" as path %}
+${ trans("Add new actor") }
+{% include "movies/widgets/basic_form.html" %}
+{% endif %}
+{% endblock %}

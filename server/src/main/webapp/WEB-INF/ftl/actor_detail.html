@@ -1,0 +1,26 @@
+{% extends "movies/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load tz %}
+
+{% block content %}
+<div class="row justify-content-between">
+    <div class="col">
+        <h2>{{ actor }}</h2>
+    </div>
+    <div class="col col-auto">
+        <a class="btn btn-success"
+           href="{% url 'movies:actor_edit' actor.id %}">
+            <img class="white-icon" src="{% static " movies/octicons/build/svg/pencil.svg"
+            %}"/>
+        </a>
+    </div>
+    <div class="col col-auto">
+        <a class="btn btn-warning"
+           href="{% url 'movies:actor_merge' actor.id %}">
+            <img src="{% static " movies/octicons/build/svg/git-merge.svg" %}"/>
+        </a>
+    </div>
+</div>
+{% include "movies/widgets/movie_table.html" %}
+{% endblock %}
