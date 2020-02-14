@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    movie-list is client-server program to manage a household's food stock
+    Copyright (C) 2019  The movie-list developers
+
+    This file is part of the movie-list program suite.
+
+    movie-list is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    movie-list is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see https://www.gnu.org/licenses/.
+-->
+
+
+<beans xmlns:security="http://www.springframework.org/schema/security"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true">
+
+    <security:http use-expressions="true">
+        <security:intercept-url pattern="/login" access="permitAll()"/>
+        <security:intercept-url pattern="/**" access="isAuthenticated()"/>
+        <security:form-login login-page="/login" />
+        <security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID"/>
+        <security:session-management invalid-session-url="/login" />
+        <security:remember-me key="movie-list" />
+    </security:http>
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="userService"/>
+    </security:authentication-manager>
+
+    <bean id="userService" class="de.njsm.movielist.server.db.UserHandler">
+        <constructor-arg index="0" ref="presistentConnectionFactory" />
+        <constructor-arg index="1" ref="circuitBreakerDatabase" />
+        <constructor-arg index="2" ref="circuitBreakerTimeout" />
+    </bean>
+
+</beans>

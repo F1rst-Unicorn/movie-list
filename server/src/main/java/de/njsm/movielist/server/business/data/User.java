@@ -1,19 +1,81 @@
 package de.njsm.movielist.server.business.data;
 
-public class User {
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-    public int id;
+import java.util.ArrayList;
+import java.util.Collection;
 
-    public String name;
+public class User implements UserDetails, Authentication {
 
-    public boolean authenticated;
+    private int id;
 
-    public User(String name, boolean authenticated) {
+    private String name;
+
+    private boolean authenticated;
+
+    public User(int id, String name) {
+        this.id = id;
         this.name = name;
-        this.authenticated = authenticated;
+        this.authenticated = true;
+    }
+
+    public User() {
+        this.authenticated = false;
     }
 
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Object getCredentials() {
+        return null;
+    }
+
+    @Override
+    public Object getDetails() {
+        return this;
+    }
+
+    @Override
+    public Object getPrincipal() {
         return name;
     }
 
@@ -21,7 +83,13 @@ public class User {
         return authenticated;
     }
 
-    public int getId() {
-        return 1;
+    @Override
+    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+        this.authenticated = isAuthenticated;
     }
+
+    public int getId() {
+        return id;
+    }
+
 }

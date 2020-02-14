@@ -124,9 +124,14 @@
                     <#if user.authenticated >
                         <img class="white-icon"
                              src="${ static("octicons/build/svg/person.svg") }"/>
-                        ${ user.name }
-                        <a class="btn btn-outline-primary"
-                           href="${ url('logout') }">Logout</a>
+                        ${ user.principal }
+                        <form style="display: inline" action="${ url("logout") }" method="post">
+                            <input class="btn btn-outline-primary" type="submit"
+                                   value="${ translate("Logout") }">
+                            <input type="hidden"
+                                   name="${ csrftoken.parameterName }"
+                                   value="${ csrftoken.token }"/>
+                        </form>
                     </#if>
                 </div>
             </nav>

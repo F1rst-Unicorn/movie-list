@@ -17,7 +17,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 CREATE TABLE public.auth_user (
-    id integer NOT NULL,
+    id serial not null unique,
     password character varying(128) NOT NULL,
     last_login timestamp with time zone,
     is_superuser boolean NOT NULL,
@@ -30,96 +30,33 @@ CREATE TABLE public.auth_user (
     date_joined timestamp with time zone NOT NULL
 );
 
-
-CREATE SEQUENCE public.auth_user_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.auth_user_id_seq OWNED BY public.auth_user.id;
-
 CREATE TABLE public.movies_actor (
-    id integer NOT NULL,
+    id serial not null unique,
     first_name character varying(300) NOT NULL,
     last_name character varying(300) NOT NULL
 );
 
-
-CREATE SEQUENCE public.movies_actor_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.movies_actor_id_seq OWNED BY public.movies_actor.id;
-
-
 CREATE TABLE public.movies_comment (
-    id integer NOT NULL,
+    id serial not null unique,
     content character varying(1000) NOT NULL,
     created_at timestamp with time zone NOT NULL,
     creator_id integer NOT NULL,
     movie_id integer NOT NULL
 );
 
-
-CREATE SEQUENCE public.movies_comment_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.movies_comment_id_seq OWNED BY public.movies_comment.id;
-
-
 CREATE TABLE public.movies_genre (
-    id integer NOT NULL,
+    id serial not null unique,
     name character varying(300) NOT NULL
 );
 
-
-CREATE SEQUENCE public.movies_genre_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.movies_genre_id_seq OWNED BY public.movies_genre.id;
-
-
 CREATE TABLE public.movies_location (
-    id integer NOT NULL,
+    id serial not null unique,
     name character varying(300) NOT NULL,
     index integer NOT NULL
 );
 
-
-CREATE SEQUENCE public.movies_location_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.movies_location_id_seq OWNED BY public.movies_location.id;
-
 CREATE TABLE public.movies_movie (
-    id integer NOT NULL,
+    id serial not null unique,
     name character varying(300) NOT NULL,
     description text NOT NULL,
     year integer NOT NULL,
@@ -130,93 +67,24 @@ CREATE TABLE public.movies_movie (
     link character varying(2000) NOT NULL
 );
 
-
 CREATE TABLE public.movies_movie_actors (
-    id integer NOT NULL,
+    id serial not null unique,
     movie_id integer NOT NULL,
     actor_id integer NOT NULL
 );
 
-
-CREATE SEQUENCE public.movies_movie_actors_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.movies_movie_actors_id_seq OWNED BY public.movies_movie_actors.id;
-
-
-CREATE SEQUENCE public.movies_movie_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.movies_movie_id_seq OWNED BY public.movies_movie.id;
-
-
 CREATE TABLE public.movies_moviesingenre (
-    id integer NOT NULL,
+    id serial not null unique,
     genre_id integer NOT NULL,
     movie_id integer NOT NULL
 );
 
-
-CREATE SEQUENCE public.movies_moviesingenre_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.movies_moviesingenre_id_seq OWNED BY public.movies_moviesingenre.id;
-
-
 CREATE TABLE public.movies_watchstatus (
-    id integer NOT NULL,
+    id serial not null unique,
     watched_on timestamp with time zone NOT NULL,
     movie_id integer NOT NULL,
     user_id integer NOT NULL
 );
-
-
-CREATE SEQUENCE public.movies_watchstatus_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.movies_watchstatus_id_seq OWNED BY public.movies_watchstatus.id;
-
-ALTER TABLE ONLY public.auth_user ALTER COLUMN id SET DEFAULT nextval('public.auth_user_id_seq'::regclass);
-
-ALTER TABLE ONLY public.movies_actor ALTER COLUMN id SET DEFAULT nextval('public.movies_actor_id_seq'::regclass);
-
-ALTER TABLE ONLY public.movies_comment ALTER COLUMN id SET DEFAULT nextval('public.movies_comment_id_seq'::regclass);
-
-ALTER TABLE ONLY public.movies_genre ALTER COLUMN id SET DEFAULT nextval('public.movies_genre_id_seq'::regclass);
-
-ALTER TABLE ONLY public.movies_location ALTER COLUMN id SET DEFAULT nextval('public.movies_location_id_seq'::regclass);
-
-ALTER TABLE ONLY public.movies_movie ALTER COLUMN id SET DEFAULT nextval('public.movies_movie_id_seq'::regclass);
-
-ALTER TABLE ONLY public.movies_movie_actors ALTER COLUMN id SET DEFAULT nextval('public.movies_movie_actors_id_seq'::regclass);
-
-ALTER TABLE ONLY public.movies_moviesingenre ALTER COLUMN id SET DEFAULT nextval('public.movies_moviesingenre_id_seq'::regclass);
-
-ALTER TABLE ONLY public.movies_watchstatus ALTER COLUMN id SET DEFAULT nextval('public.movies_watchstatus_id_seq'::regclass);
 
 ALTER TABLE ONLY public.auth_user
     ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    movie-list is client-server program to manage a household's food stock
+    Copyright (C) 2019  The movie-list developers
+
+    This file is part of the movie-list program suite.
+
+    movie-list is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    movie-list is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see https://www.gnu.org/licenses/.
+-->
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       default-lazy-init="true">
+
+    <bean name="driver" class="java.lang.Class" factory-method="forName"
+          lazy-init="false">
+        <constructor-arg index="0" value="org.postgresql.Driver"/>
+    </bean>
+
+    <bean name="circuitBreakerDatabase" class="java.lang.String">
+        <constructor-arg index="0" value="database"/>
+    </bean>
+
+    <bean name="propertiesFile"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>file:/etc/movie-list.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="config" class="de.njsm.movielist.server.Config">
+        <constructor-arg index="0" ref="propertiesFile"/>
+    </bean>
+
+    <bean name="dbAddress" factory-bean="config" factory-method="getDbAddress"/>
+
+    <bean name="dbPort" factory-bean="config" factory-method="getDbPort"/>
+
+    <bean name="dbName" factory-bean="config" factory-method="getDbName"/>
+
+    <bean name="basePath" factory-bean="config" factory-method="getBasePath"/>
+
+    <bean name="staticBasePath" factory-bean="config"
+          factory-method="getStaticBasePath"/>
+
+    <bean name="circuitBreakerTimeout" factory-bean="config"
+          factory-method="getCircuitBreakerTimeout"/>
+
+    <bean name="dbConfig" factory-bean="config"
+          factory-method="getDbProperties"/>
+
+    <bean name="dbUrl" class="java.lang.String" factory-method="format">
+        <constructor-arg index="0" value="jdbc:postgresql://%s:%s/%s"/>
+        <constructor-arg index="1" type="java.lang.Object[]">
+            <util:list>
+                <ref bean="dbAddress"/>
+                <ref bean="dbPort"/>
+                <ref bean="dbName"/>
+            </util:list>
+        </constructor-arg>
+    </bean>
+
+    <bean name="connectionFactory"
+          class="de.njsm.movielist.server.db.ConnectionFactory" scope="request">
+        <constructor-arg index="0" ref="dbUrl"/>
+        <constructor-arg index="1" ref="dbConfig"/>
+    </bean>
+
+    <bean name="presistentConnectionFactory"
+          class="de.njsm.movielist.server.db.ConnectionFactory">
+        <constructor-arg index="0" ref="dbUrl"/>
+        <constructor-arg index="1" ref="dbConfig"/>
+    </bean>
+</beans>
