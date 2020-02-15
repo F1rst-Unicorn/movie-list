@@ -21,7 +21,6 @@ public class PasswordEncoder {
         this.password = password;
     }
 
-
     public boolean matches(Object credentials) {
         if (credentials instanceof String) {
             String challenge = (String) credentials;
@@ -32,15 +31,13 @@ public class PasswordEncoder {
         }
     }
 
-    private byte[] encode(CharSequence rawPassword, byte[] salt) {
+    private byte[] encode(String rawPassword, byte[] salt) {
         try {
-            PBEKeySpec spec = new PBEKeySpec(rawPassword.toString().toCharArray(), salt, this.iterations, 256);
+            PBEKeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), salt, this.iterations, 256);
             SecretKeyFactory skf = SecretKeyFactory.getInstance(Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256.name());
             return skf.generateSecret(spec).getEncoded();
-        }
-        catch (GeneralSecurityException e) {
+        } catch (GeneralSecurityException e) {
             throw new IllegalStateException("Could not create hash", e);
         }
     }
-
 }

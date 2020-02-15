@@ -19,43 +19,57 @@
 
 package de.njsm.movielist.server.web;
 
+import de.njsm.movielist.server.business.MovieManager;
+import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.UserManager;
+import de.njsm.movielist.server.business.data.MovieDetails;
+import fj.data.Validation;
 import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 
-@Path("/")
-public class AuthEndpoint extends TemplateEndpoint {
+@Path("/movies/{movie: [0-9][0-9]*}")
+public class MovieEndpoint extends TemplateEndpoint {
 
-    public AuthEndpoint(Configuration configuration) {
+    private MovieManager manager;
+
+    private UserManager userManager;
+
+    public MovieEndpoint(Configuration configuration, MovieManager manager, UserManager userManager) {
         super(configuration);
+        this.manager = manager;
+        this.userManager = userManager;
     }
 
     @GET
-    @Path("login")
+    @Path("detail")
     @Produces(MediaType.TEXT_HTML)
     public void get(@Suspended AsyncResponse ar,
                     @Context HttpServletRequest req,
                     @Context HttpServletResponse r,
-                    @QueryParam("error") String error) {
+                    @PathParam("movie") int id) {
 
-        processRequest(req, r, ar, "login.html.ftl", (u, map) -> {
-            map.put("error", error != null);
+        processRequest(req, r, ar, "movie_detail.html.ftl", (u, map) -> {
+            Validation<StatusCode, MovieDetails> movie = manager.get(id);
+
+            if (movie.isSuccess())
+                map.put("movie", manager.get(id).success());
+            else {
+                r.setStatus(movie.fail().toHttpStatus().getStatusCode());
+                throw new IOException("Invalid ID");
+            }
+
+            map.put("users", userManager.get().success());
         });
-    }
-
-    @GET
-    @Path("create_account")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String createAccount() {
-        return "Account creation disabled!";
     }
 }

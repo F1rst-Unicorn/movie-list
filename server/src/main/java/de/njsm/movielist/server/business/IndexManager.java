@@ -56,4 +56,10 @@ public class IndexManager extends BusinessObject {
             return dbBackend.get(u, true, false);
         });
     }
+    public Validation<StatusCode, Stream<MovieOutline>> getLatest(AsyncResponse as, User u) {
+        return runFunction(as, () -> {
+            dbBackend.setReadOnly();
+            return dbBackend.getLatest(u);
+        });
+    }
 }

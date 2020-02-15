@@ -22,12 +22,15 @@ package de.njsm.movielist.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Properties;
 
 public class Config {
 
     private static final Logger LOG = LogManager.getLogger(Config.class);
+
+    public static final DateTimeFormatter USER_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yy");
 
     static final String DB_ADDRESS_KEY = "de.njsm.movielist.server.db.host";
     static final String DB_PORT_KEY = "de.njsm.movielist.server.db.port";

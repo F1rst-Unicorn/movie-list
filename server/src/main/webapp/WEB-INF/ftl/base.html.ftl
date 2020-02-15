@@ -1,7 +1,7 @@
 <#macro base>
     <#compress>
         <!DOCTYPE html>
-        <html lang="${lang}">
+        <html lang="${.lang}">
         <head>
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -124,7 +124,7 @@
                     <#if user.authenticated >
                         <img class="white-icon"
                              src="${ static("octicons/build/svg/person.svg") }"/>
-                        ${ user.principal }
+                        ${ user.username }
                         <form style="display: inline" action="${ url("logout") }" method="post">
                             <input class="btn btn-outline-primary" type="submit"
                                    value="${ translate("Logout") }">

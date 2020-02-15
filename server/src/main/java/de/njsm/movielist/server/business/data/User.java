@@ -15,10 +15,19 @@ public class User implements UserDetails, Authentication {
 
     private boolean authenticated;
 
+    private String password;
+
+    public User(int id, String name, String password) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.authenticated = true;
+    }
+
     public User(int id, String name) {
         this.id = id;
         this.name = name;
-        this.authenticated = true;
+        this.authenticated = false;
     }
 
     public User() {
@@ -36,7 +45,7 @@ public class User implements UserDetails, Authentication {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
@@ -76,7 +85,7 @@ public class User implements UserDetails, Authentication {
 
     @Override
     public Object getPrincipal() {
-        return name;
+        return this;
     }
 
     public boolean isAuthenticated() {

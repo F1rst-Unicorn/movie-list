@@ -29,18 +29,19 @@
 
     <security:http use-expressions="true">
         <security:intercept-url pattern="/login" access="permitAll()"/>
+        <security:intercept-url pattern="/create_account" access="permitAll()"/>
         <security:intercept-url pattern="/**" access="isAuthenticated()"/>
         <security:form-login login-page="/login" />
         <security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID"/>
         <security:session-management invalid-session-url="/login" />
-        <security:remember-me key="movie-list" />
+        <security:remember-me key="cUnvnUVcgR0WaY1Rbn3TeJaZb0yXbo6MikTbp25FSaWrwokXBFXbGtalZ7IkUUtS698mccPnaMI2J0a2M5rY1gcc" />
     </security:http>
 
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider ref="userService"/>
     </security:authentication-manager>
 
-    <bean id="userService" class="de.njsm.movielist.server.db.UserHandler">
+    <bean id="userService" class="de.njsm.movielist.server.db.AuthHandler">
         <constructor-arg index="0" ref="presistentConnectionFactory" />
         <constructor-arg index="1" ref="circuitBreakerDatabase" />
         <constructor-arg index="2" ref="circuitBreakerTimeout" />

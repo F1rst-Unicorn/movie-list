@@ -5,6 +5,7 @@ import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.User;
 import fj.data.Validation;
 import org.jooq.Record7;
+import org.jooq.SortField;
 import org.jooq.impl.DSL;
 
 import java.util.stream.Stream;
@@ -18,7 +19,15 @@ public class IndexHandler extends FailSafeDatabaseHandler {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 
+    public Validation<StatusCode, Stream<MovieOutline>> getLatest(User user) {
+        return getInternally(user, false, false, MOVIES_MOVIE.CREATED_AT.desc());
+    }
+
     public Validation<StatusCode, Stream<MovieOutline>> get(User user, boolean deleted, boolean toDelete) {
+        return getInternally(user, deleted, toDelete, MOVIES_MOVIE.NAME.asc());
+    }
+
+    public Validation<StatusCode, Stream<MovieOutline>> getInternally(User user, boolean deleted, boolean toDelete, SortField<?> orderByField) {
         return runFunction(context -> {
             Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result = Stream.of(1).flatMap(i ->
                     context.select(
@@ -41,7 +50,7 @@ public class IndexHandler extends FailSafeDatabaseHandler {
                             .leftOuterJoin(MOVIES_MOVIE_ACTORS).on(MOVIES_MOVIE_ACTORS.MOVIE_ID.eq(MOVIES_MOVIE.ID))
                             .leftOuterJoin(MOVIES_ACTOR).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
                             .where(MOVIES_MOVIE.DELETED.eq(deleted).and(MOVIES_MOVIE.TO_DELETE.eq(toDelete)))
-                            .orderBy(MOVIES_MOVIE.NAME)
+                            .orderBy(orderByField)
                             .fetchSize(1024)
                             .fetchLazy()
                             .stream());

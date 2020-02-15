@@ -1,0 +1,207 @@
+# Movie List translation
+# Copyright (C) 2019
+# This file is distributed under the same license as the movie-list package.
+# Jan Veen <jan.veen@posteo.de> 2019
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-17 10:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Actors"
+msgstr ""
+
+msgid "Genres"
+msgstr ""
+
+msgid "Query"
+msgstr ""
+
+msgid "Search in"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Comments"
+msgstr ""
+
+msgid "Include missing movies"
+msgstr ""
+
+msgid "New for"
+msgstr ""
+
+msgid "First name"
+msgstr ""
+
+msgid "Surname"
+msgstr ""
+
+msgid "Index"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "to delete"
+msgstr ""
+
+msgid "deleted"
+msgstr ""
+
+msgid "Created at"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Locations"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Movie"
+msgstr ""
+
+msgid "Watched on"
+msgstr ""
+
+msgid "Genre"
+msgstr ""
+
+msgid "Content"
+msgstr ""
+
+msgid "Author"
+msgstr ""
+
+msgid "Edit actor"
+msgstr ""
+
+msgid "Add new actor"
+msgstr ""
+
+msgid "Actor List"
+msgstr ""
+
+msgid "Movie Database"
+msgstr ""
+
+msgid "Browse"
+msgstr ""
+
+msgid "Movies"
+msgstr ""
+
+msgid "Newly recorded"
+msgstr ""
+
+msgid "Manage"
+msgstr ""
+
+msgid "Movies to remove"
+msgstr ""
+
+msgid "Absent movies"
+msgstr ""
+
+msgid "Advanced Search"
+msgstr ""
+
+msgid "Create account"
+msgstr ""
+
+msgid "Edit genre"
+msgstr ""
+
+msgid "Add new genre"
+msgstr ""
+
+msgid "Genre List"
+msgstr ""
+
+msgid "Movie List"
+msgstr ""
+
+msgid "Add new location"
+msgstr ""
+
+msgid "Edit movie"
+msgstr ""
+
+msgid "Add new movie"
+msgstr ""
+
+msgid "Record again"
+msgstr ""
+
+msgid "Keep anyway"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Recorded on"
+msgstr ""
+
+msgid "External information"
+msgstr ""
+
+msgid "Watched by"
+msgstr ""
+
+msgid "Leave a comment"
+msgstr ""
+
+msgid "Add comment"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Actor"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Number of movies"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Merge %s with"
+msgstr ""

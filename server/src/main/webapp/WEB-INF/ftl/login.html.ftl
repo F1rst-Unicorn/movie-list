@@ -3,7 +3,7 @@
     <h1>${ translate("Login") }</h1>
     <#if error>
         <div class="alert alert-danger"
-             role="alert">${ translate("Error during login!")}</div>
+             role="alert">${ translate("Username or password wrong!")}</div>
     </#if>
     <form action="${ url("login") }" method="post">
         <div class="form-group">
@@ -22,6 +22,8 @@
         </div>
         <input type="hidden" name="${ csrftoken.parameterName }"
                value="${ csrftoken.token }"/>
+        <input type="hidden" name="remember-me"
+               value="1"/>
         <input class="btn btn-success" type="submit"
                value="${ translate("Login") }">
     </form>

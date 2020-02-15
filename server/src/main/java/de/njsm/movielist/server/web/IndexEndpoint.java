@@ -21,13 +21,7 @@ package de.njsm.movielist.server.web;
 
 import de.njsm.movielist.server.business.IndexManager;
 import de.njsm.movielist.server.business.data.MovieOutline;
-import de.njsm.movielist.server.business.data.User;
 import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,21 +32,14 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
 
 @Path("/")
-public class IndexEndpoint extends Endpoint {
-
-    private static final Logger LOG = LogManager.getLogger(IndexEndpoint.class);
-
-    private Configuration configuration;
+public class IndexEndpoint extends TemplateEndpoint {
 
     private IndexManager manager;
 
     public IndexEndpoint(Configuration configuration, IndexManager manager) {
-        this.configuration = configuration;
+        super(configuration);
         this.manager = manager;
     }
 
@@ -61,44 +48,22 @@ public class IndexEndpoint extends Endpoint {
     public void get(@Suspended AsyncResponse ar,
                     @Context HttpServletRequest req,
                     @Context HttpServletResponse r) {
-        try (PrintWriter drain = r.getWriter()) {
-            Template template = configuration.getTemplate("index.html.ftl");
-            User u = (User) SecurityContextHolder.getContext().getAuthentication();
 
-            HashMap<String, Object> context = new HashMap<>();
-            context.put("user", u);
-            context.put("csrftoken", req.getAttribute("_csrf"));
-            context.put("movies", (Iterable<MovieOutline>) () -> manager.get(ar, u).success().iterator());
-            context.put("lang", "en");
-            template.process(context, drain);
-            ar.resume(new Object());
-            drain.flush();
-        } catch (IOException | TemplateException e) {
-            LOG.error(e);
-        }
+        processRequest(req, r, ar, "index.html.ftl", (u, map) -> {
+            map.put("movies", (Iterable<MovieOutline>) () -> manager.get(ar, u).success().iterator());
+        });
     }
 
     @GET
     @Path("to_delete")
     @Produces(MediaType.TEXT_HTML)
     public void getToDelete(@Suspended AsyncResponse ar,
-            @Context HttpServletRequest req,
-            @Context HttpServletResponse r) {
-        try (PrintWriter drain = r.getWriter()) {
-            Template template = configuration.getTemplate("index.html.ftl");
+                            @Context HttpServletRequest req,
+                            @Context HttpServletResponse r) {
 
-            User u = (User) SecurityContextHolder.getContext().getAuthentication();
-            HashMap<String, Object> context = new HashMap<>();
-            context.put("user", u);
-            context.put("csrftoken", req.getAttribute("_csrf"));
-            context.put("movies", (Iterable<MovieOutline>) () -> manager.getToDelete(ar, u).success().iterator());
-            context.put("lang", "en");
-            template.process(context, drain);
-            ar.resume(new Object());
-            drain.flush();
-        } catch (IOException | TemplateException e) {
-            LOG.error(e);
-        }
+        processRequest(req, r, ar, "index.html.ftl", (u, map) -> {
+            map.put("movies", (Iterable<MovieOutline>) () -> manager.getToDelete(ar, u).success().iterator());
+        });
     }
 
     @GET
@@ -107,20 +72,19 @@ public class IndexEndpoint extends Endpoint {
     public void getDeleted(@Suspended AsyncResponse ar,
                            @Context HttpServletRequest req,
                            @Context HttpServletResponse r) {
-        try (PrintWriter drain = r.getWriter()) {
-            Template template = configuration.getTemplate("index.html.ftl");
+        processRequest(req, r, ar, "index.html.ftl", (u, map) -> {
+            map.put("movies", (Iterable<MovieOutline>) () -> manager.getDeleted(ar, u).success().iterator());
+        });
+    }
 
-            User u = (User) SecurityContextHolder.getContext().getAuthentication();
-            HashMap<String, Object> context = new HashMap<>();
-            context.put("user", u);
-            context.put("csrftoken", req.getAttribute("_csrf"));
-            context.put("movies", (Iterable<MovieOutline>) () -> manager.getDeleted(ar, u).success().iterator());
-            context.put("lang", "en");
-            template.process(context, drain);
-            ar.resume(new Object());
-            drain.flush();
-        } catch (IOException | TemplateException e) {
-            LOG.error(e);
-        }
+    @GET
+    @Path("latest")
+    @Produces(MediaType.TEXT_HTML)
+    public void getLatest(@Suspended AsyncResponse ar,
+                           @Context HttpServletRequest req,
+                           @Context HttpServletResponse r) {
+        processRequest(req, r, ar, "index.html.ftl", (u, map) -> {
+            map.put("movies", (Iterable<MovieOutline>) () -> manager.getLatest(ar, u).success().iterator());
+        });
     }
 }

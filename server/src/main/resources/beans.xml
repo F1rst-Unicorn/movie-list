@@ -38,6 +38,16 @@
         <constructor-arg index="1" ref="circuitBreakerDatabase" />
         <constructor-arg index="2" ref="circuitBreakerTimeout"/>
     </bean>
+    <bean name="movieBackend" class="de.njsm.movielist.server.db.MovieHandler" scope="request">
+        <constructor-arg index="0" ref="connectionFactory" />
+        <constructor-arg index="1" ref="circuitBreakerDatabase" />
+        <constructor-arg index="2" ref="circuitBreakerTimeout"/>
+    </bean>
+    <bean name="userBackend" class="de.njsm.movielist.server.db.UserHandler" scope="request">
+        <constructor-arg index="0" ref="connectionFactory" />
+        <constructor-arg index="1" ref="circuitBreakerDatabase" />
+        <constructor-arg index="2" ref="circuitBreakerTimeout"/>
+    </bean>
 
     <!-- Business Layer -->
     <bean name="healthManager" class="de.njsm.movielist.server.business.HealthManager" scope="request">
@@ -46,19 +56,28 @@
     <bean name="indexManager" class="de.njsm.movielist.server.business.IndexManager" scope="request">
         <constructor-arg index="0" ref="indexBackend" />
     </bean>
+    <bean name="movieManager" class="de.njsm.movielist.server.business.MovieManager" scope="request">
+        <constructor-arg index="0" ref="movieBackend" />
+    </bean>
+    <bean name="userManager" class="de.njsm.movielist.server.business.UserManager" scope="request">
+        <constructor-arg index="0" ref="userBackend" />
+    </bean>
 
     <!-- Web Layer -->
     <bean name="healthEndpoint" class="de.njsm.movielist.server.web.HealthEndpoint" scope="request">
         <constructor-arg index="0" ref="healthManager" />
     </bean>
-
+    <bean name="authEndpoint" class="de.njsm.movielist.server.web.AuthEndpoint" scope="request">
+        <constructor-arg index="0" ref="freemarker" />
+    </bean>
     <bean name="indexEndpoint" class="de.njsm.movielist.server.web.IndexEndpoint" scope="request">
         <constructor-arg index="0" ref="freemarker" />
         <constructor-arg index="1" ref="indexManager" />
     </bean>
-
-    <bean name="authEndpoint" class="de.njsm.movielist.server.web.AuthEndpoint" scope="request">
+    <bean name="movieEndpoint" class="de.njsm.movielist.server.web.MovieEndpoint" scope="request">
         <constructor-arg index="0" ref="freemarker" />
+        <constructor-arg index="1" ref="movieManager" />
+        <constructor-arg index="2" ref="userManager" />
     </bean>
 
     <bean id="freemarker" factory-bean="freemarkerConfig" factory-method="getConfiguration" />
@@ -97,12 +116,12 @@
                                 <entry key="add_genre" value="add_genre" />
                                 <entry key="add_location" value="add_location" />
                                 <entry key="search" value="search" />
-                                <entry key="detail" value="%s/detail" />
-                                <entry key="edit" value="%s/edit" />
-                                <entry key="mark_removal" value="%s/mark_removal" />
-                                <entry key="mark_watched" value="1234/mark_watched/5678" />
-                                <entry key="delete" value="%s/delete" />
-                                <entry key="delete_comment" value="%s/%s/delete" />
+                                <entry key="detail" value="movies/%s/detail" />
+                                <entry key="edit" value="movies/%s/edit" />
+                                <entry key="mark_removal" value="movies/%s/mark_removal" />
+                                <entry key="mark_watched" value="movies/1234/mark_watched/5678" />
+                                <entry key="delete" value="movies/%s/delete" />
+                                <entry key="delete_comment" value="movies/%s/%s/delete" />
                                 <entry key="actors" value="actors" />
                                 <entry key="actor_detail" value="actors/%s/detail" />
                                 <entry key="actor_edit" value="actors/%s/edit" />
