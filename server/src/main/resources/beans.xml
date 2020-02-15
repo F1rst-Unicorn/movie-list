@@ -149,21 +149,22 @@
                                 <entry key="create_account" value="create_account" />
                                 <entry key="login" value="login" />
                                 <entry key="logout" value="logout" />
-                                <entry key="add_actor" value="add_actor" /> <!-- TODO -->
                                 <entry key="add_movie" value="add_movie" /> <!-- TODO -->
                                 <entry key="add_genre" value="add_genre" /> <!-- TODO -->
                                 <entry key="add_location" value="add_location" /> <!-- TODO -->
+                                <entry key="add_comment" value="movies/%s/add_comment" />
                                 <entry key="search" value="search" />
                                 <entry key="detail" value="movies/%s/detail" />
                                 <entry key="edit" value="movies/%s/edit" /> <!-- TODO -->
                                 <entry key="mark_removal" value="movies/%s/mark_removal" />
                                 <entry key="mark_watched" value="movies/1234/mark_watched/5678" />
                                 <entry key="delete" value="movies/%s/delete" />
-                                <entry key="delete_comment" value="movies/%s/%s/delete" /> <!-- TODO -->
+                                <entry key="delete_comment" value="movies/%s/%s/delete" />
                                 <entry key="actors" value="actors" />
+                                <entry key="add_actor" value="actors/add" />
                                 <entry key="actor_detail" value="actors/%s/detail" />
-                                <entry key="actor_edit" value="actors/%s/edit" /> <!-- TODO -->
-                                <entry key="actor_merge" value="actors/%s/merge" /> <!-- TODO -->
+                                <entry key="actor_edit" value="actors/%s/edit" />
+                                <entry key="actor_merge" value="actors/%s/merge" />
                                 <entry key="genres" value="genres" />
                                 <entry key="genre_detail" value="genres/%s/detail" />
                                 <entry key="genre_edit" value="genres/%s/edit" /> <!-- TODO -->

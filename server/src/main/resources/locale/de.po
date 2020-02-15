@@ -207,4 +207,4 @@ msgid "Logout"
 msgstr "Ausloggen"
 
 msgid "Merge %s with"
-msgstr "Vereine %(actor)s mit"
+msgstr "Vereine %s mit"

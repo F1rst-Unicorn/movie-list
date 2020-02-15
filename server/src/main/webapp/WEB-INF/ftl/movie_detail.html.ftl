@@ -38,7 +38,7 @@
                           action="${ url("delete", movie.id) }"
                           method="post">
                         <input class="btn btn-warning" type="submit"
-                               value="${ translate("Record again") }" >
+                               value="${ translate("Record again") }">
                         <input type="hidden"
                                name="${ csrftoken.parameterName }"
                                value="${ csrftoken.token }"/>
@@ -48,7 +48,7 @@
                           action="${ url("mark_removal", movie.id) }"
                           method="post">
                         <input class="btn btn-warning" type="submit"
-                               value="${ translate("Keep anyway") }" >
+                               value="${ translate("Keep anyway") }">
                         <input type="hidden"
                                name="${ csrftoken.parameterName }"
                                value="${ csrftoken.token }"/>
@@ -57,7 +57,7 @@
                           action="${ url("delete", movie.id) }"
                           method="post">
                         <input class="btn btn-danger" type="submit"
-                               value="${ translate("Remove") }" >
+                               value="${ translate("Remove") }">
                         <input type="hidden"
                                name="${ csrftoken.parameterName }"
                                value="${ csrftoken.token }"/>
@@ -140,20 +140,26 @@
                 <div class="col">
                     ${ comment.creator.username }: ${ comment.content }
                 </div>
-                <a class="col-auto"
-                   href="${ url('delete_comment', movie.id, comment.id) }">
-                    <img style="height: 25px" src="${ static("octicons/build/svg/trashcan.svg") }"/>
-                </a>
+                <form style="display: inline"
+                      action="${ url("delete_comment", movie.id, comment.id) }"
+                      method="post">
+                    <input type="image" class="btn btn-sm btn-warning"
+                           src="${ static("octicons/build/svg/trashcan.svg") }">
+                    <input type="hidden"
+                           name="${ csrftoken.parameterName }"
+                           value="${ csrftoken.token }"/>
+                </form>
             </div>
         </#list>
     </div>
     <div style="margin: 10px;">
         <form id="form" class="form-inline"
-              action="${ url('detail', movie.id) }" method="post">
+              action="${ url('add_comment', movie.id) }" method="post">
             <input type="hidden" name="${ csrftoken.parameterName }"
                    value="${ csrftoken.token }"/>
-            <textarea placeholder="${ translate("Leave a comment") }" form="form"
-                      class="form-control" rows="2" name="content"
+            <textarea placeholder="${ translate("Leave a comment") }"
+                      form="form"
+                      class="form-control" rows="2" name="comment"
                       hint="${ translate("Add comment") }"></textarea>
             <input class="btn btn-success" type="submit"
                    value="${ translate("Comment") }"/>

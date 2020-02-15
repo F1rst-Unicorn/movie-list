@@ -29,14 +29,13 @@ import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
 @Path("actors")
@@ -50,13 +49,31 @@ public class ActorEndpoint extends TemplateEndpoint {
     }
 
     @GET
+    @Path("add")
+    public void showAddActorForm(@Suspended AsyncResponse ar,
+                                 @Context HttpServletRequest req,
+                                 @Context HttpServletResponse r) {
+
+        processRequest(req, r, ar, "actor.html.ftl", (u, map) -> {
+            map.put("edit", false);
+        });
+    }
+
+    @POST
+    @Path("add")
+    public Response addActor(@BeanParam Actor a) {
+        manager.add(a);
+        return Response.seeOther(URI.create("")).build();
+    }
+
+    @GET
     @Produces(MediaType.TEXT_HTML)
     public void get(@Suspended AsyncResponse ar,
                     @Context HttpServletRequest req,
                     @Context HttpServletResponse r) {
 
         processRequest(req, r, ar, "actors.html.ftl", (u, map) -> {
-            Validation<StatusCode, List<MovieCount>> movie = manager.get();
+            Validation<StatusCode, List<MovieCount>> movie = manager.getMovieCounts();
             map.put("items", movie.success());
         });
     }
@@ -74,5 +91,49 @@ public class ActorEndpoint extends TemplateEndpoint {
             map.put("movies", (Iterable<MovieOutline>) () -> manager.getMovies(ar, u, id).success().iterator());
             map.put("actor", actor.success());
         });
+    }
+
+    @GET
+    @Path("{actor}/edit")
+    @Produces(MediaType.TEXT_HTML)
+    public void getEditForm(@Suspended AsyncResponse ar,
+                            @Context HttpServletRequest req,
+                            @Context HttpServletResponse r,
+                            @PathParam("actor") int id) {
+
+        processRequest(req, r, ar, "actor.html.ftl", (u, map) -> {
+            Validation<StatusCode, Actor> actor = manager.get(id);
+            map.put("actor", actor.success());
+            map.put("edit", true);
+        });
+    }
+
+    @POST
+    @Path("{actor}/edit")
+    public Response editActor(@BeanParam Actor a) {
+        manager.edit(a);
+        return Response.seeOther(URI.create("actors/" + a.getId() + "/detail")).build();
+    }
+
+    @GET
+    @Path("{actor}/merge")
+    @Produces(MediaType.TEXT_HTML)
+    public void getMergeForm(@Suspended AsyncResponse ar,
+                            @Context HttpServletRequest req,
+                            @Context HttpServletResponse r,
+                            @PathParam("actor") int id) {
+
+        processRequest(req, r, ar, "actor_merge.html.ftl", (u, map) -> {
+            Validation<StatusCode, Actor> actor = manager.get(id);
+            map.put("actor", actor.success());
+            map.put("actors", manager.get().success());
+        });
+    }
+
+    @POST
+    @Path("{actor}/merge")
+    public Response merge(@BeanParam Actor actor, @FormParam("other") int id) {
+        manager.merge(actor, id);
+        return Response.seeOther(URI.create("actors/" + actor.getId() + "/detail")).build();
     }
 }

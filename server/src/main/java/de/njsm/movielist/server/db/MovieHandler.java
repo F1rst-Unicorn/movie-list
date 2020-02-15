@@ -125,4 +125,28 @@ public class MovieHandler extends FailSafeDatabaseHandler {
             return (changedRows == 0 ? StatusCode.NOT_FOUND : StatusCode.SUCCESS);
         });
     }
+
+    public StatusCode addComment(int id, String comment, User user) {
+        return runCommand(context -> {
+            context.insertInto(MOVIES_COMMENT)
+                    .columns(MOVIES_COMMENT.MOVIE_ID, MOVIES_COMMENT.CREATOR_ID, MOVIES_COMMENT.CREATED_AT, MOVIES_COMMENT.CONTENT)
+                    .values(id, user.getId(), OffsetDateTime.now(), comment)
+                    .execute();
+
+            return StatusCode.SUCCESS;
+        });
+    }
+
+    public StatusCode deleteComment(int comment) {
+        return runCommand(context -> {
+            int result = context.deleteFrom(MOVIES_COMMENT)
+                    .where(MOVIES_COMMENT.ID.eq(comment))
+                    .execute();
+
+            if (result == 0)
+                return StatusCode.NOT_FOUND;
+            else
+                return StatusCode.SUCCESS;
+        });
+    }
 }

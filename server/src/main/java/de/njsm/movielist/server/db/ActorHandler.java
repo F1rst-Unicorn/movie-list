@@ -24,7 +24,58 @@ public class ActorHandler extends FailSafeDatabaseHandler {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 
-    public Validation<StatusCode, List<MovieCount>> get() {
+    public StatusCode add(Actor data) {
+        return runCommand(context -> {
+            context.insertInto(MOVIES_ACTOR)
+                    .columns(MOVIES_ACTOR.FIRST_NAME, MOVIES_ACTOR.LAST_NAME)
+                    .values(data.getFirstName(), data.getLastName())
+                    .execute();
+            return StatusCode.SUCCESS;
+        });
+    }
+
+    public StatusCode edit(Actor data) {
+        return runCommand(context -> {
+            int result = context.update(MOVIES_ACTOR)
+                    .set(MOVIES_ACTOR.FIRST_NAME, data.getFirstName())
+                    .set(MOVIES_ACTOR.LAST_NAME, data.getLastName())
+                    .where(MOVIES_ACTOR.ID.eq(data.getId()))
+                    .execute();
+
+            if (result == 1)
+                return StatusCode.SUCCESS;
+            else
+                return StatusCode.NOT_FOUND;
+        });
+    }
+
+    public StatusCode merge(Actor data, int other) {
+        return runCommand(context -> {
+            context.update(MOVIES_MOVIE_ACTORS)
+                    .set(MOVIES_MOVIE_ACTORS.ACTOR_ID, data.getId())
+                    .where(MOVIES_MOVIE_ACTORS.ACTOR_ID.eq(other))
+                    .execute();
+
+            int result = context.deleteFrom(MOVIES_ACTOR)
+                    .where(MOVIES_ACTOR.ID.eq(other))
+                    .execute();
+
+            if (result == 0)
+                return StatusCode.NOT_FOUND;
+            else
+                return StatusCode.SUCCESS;
+        });
+    }
+
+    public Validation<StatusCode, List<Actor>> get() {
+        return runFunction(context -> Validation.success(context.selectFrom(MOVIES_ACTOR)
+                .orderBy(MOVIES_ACTOR.LAST_NAME)
+                .stream()
+                .map(r -> new Actor(r.getId(), r.getFirstName(), r.getLastName()))
+                .collect(Collectors.toList())));
+    }
+
+    public Validation<StatusCode, List<MovieCount>> getCounts() {
         return runFunction(context -> Validation.success(
                 context.select(MOVIES_ACTOR.ID,
                         DSL.concat(MOVIES_ACTOR.FIRST_NAME, DSL.concat(" ", MOVIES_ACTOR.LAST_NAME)),

@@ -20,10 +20,29 @@ public class ActorManager extends BusinessObject {
         this.handler = dbHandler;
     }
 
-    public Validation<StatusCode, List<MovieCount>> get() {
+    public StatusCode add(Actor data) {
+        return runOperation(() -> {
+            return handler.add(data);
+        });
+    }
+
+    public StatusCode edit(Actor data) {
+        return runOperation(() -> handler.edit(data));
+    }
+
+    public StatusCode merge(Actor data, int other) {
+        return runOperation(() -> {
+            if (data.getId() != other)
+                return handler.merge(data, other);
+            else
+                return StatusCode.INVALID_ARGUMENT;
+        });
+    }
+
+    public Validation<StatusCode, List<MovieCount>> getMovieCounts() {
         return runFunction(() -> {
             handler.setReadOnly();
-            return handler.get();
+            return handler.getCounts();
         });
     }
 
@@ -38,6 +57,13 @@ public class ActorManager extends BusinessObject {
         return runFunction(() -> {
             handler.setReadOnly();
             return handler.get(id);
+        });
+    }
+
+    public Validation<StatusCode, List<Actor>> get() {
+        return runFunction(() -> {
+            handler.setReadOnly();
+            return handler.get();
         });
     }
 }

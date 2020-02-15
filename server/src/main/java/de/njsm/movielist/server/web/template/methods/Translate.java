@@ -24,10 +24,21 @@ public class Translate implements TemplateMethodModelEx {
 
     @Override
     public Object exec(List args) throws TemplateModelException {
-        if (args.size() != 1) {
+        if (args.size() < 1) {
             throw new TemplateModelException("Exactly one argument required");
         }
-        return translate(args.get(0).toString(), Environment.getCurrentEnvironment().getLocale());
+        String translation = translate(args.get(0).toString(), Environment.getCurrentEnvironment().getLocale());
+
+        switch (args.size()) {
+            case 1:
+                return translation;
+            case 2:
+                return String.format(Locale.US, translation, args.get(1).toString());
+            case 3:
+                return String.format(Locale.US, translation, args.get(1).toString(), args.get(2).toString());
+            default:
+                throw new TemplateModelException("You must support more arguments");
+        }
     }
 
     public String translate(String key, Locale locale) {

@@ -1,12 +1,20 @@
 package de.njsm.movielist.server.business.data;
 
+import javax.ws.rs.FormParam;
+import javax.ws.rs.PathParam;
+
 public class Actor {
 
+    @PathParam("actor")
     private int id;
 
+    @FormParam("firstname")
     private String firstName;
 
+    @FormParam("lastname")
     private String lastName;
+
+    public Actor() {}
 
     public Actor(int id, String firstName, String lastName) {
         this.id = id;

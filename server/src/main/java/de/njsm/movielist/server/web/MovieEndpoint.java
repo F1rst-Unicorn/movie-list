@@ -23,6 +23,7 @@ import de.njsm.movielist.server.business.MovieManager;
 import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.UserManager;
 import de.njsm.movielist.server.business.data.MovieDetails;
+import de.njsm.movielist.server.business.data.User;
 import fj.data.Validation;
 import freemarker.template.Configuration;
 
@@ -94,9 +95,28 @@ public class MovieEndpoint extends TemplateEndpoint {
     @POST
     @Path("delete")
     public Response delete(@Context HttpServletRequest req,
-                                @PathParam("movie") int id) {
+                           @PathParam("movie") int id) {
 
         manager.delete(id);
+        return Response.seeOther(URI.create(req.getHeader("referer"))).build();
+    }
+
+    @POST
+    @Path("add_comment")
+    public Response addComment(@Context HttpServletRequest req,
+                               @PathParam("movie") int id,
+                               @FormParam("comment") String comment) {
+
+        manager.addComment(id, comment, (User) req.getUserPrincipal());
+        return Response.seeOther(URI.create(req.getHeader("referer"))).build();
+    }
+
+    @POST
+    @Path("{comment}/delete")
+    public Response deleteComment(@Context HttpServletRequest req,
+                               @PathParam("comment") int comment) {
+
+        manager.deleteComment(comment);
         return Response.seeOther(URI.create(req.getHeader("referer"))).build();
     }
 }
