@@ -203,5 +203,8 @@ msgstr "Aktionen"
 msgid "Login"
 msgstr "Login"
 
+msgid "Logout"
+msgstr "Ausloggen"
+
 msgid "Merge %s with"
 msgstr "Vereine %(actor)s mit"

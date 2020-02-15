@@ -4,7 +4,9 @@ import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.*;
 import de.njsm.movielist.server.db.jooq.tables.records.MoviesMovieRecord;
 import fj.data.Validation;
+import org.jooq.impl.DSL;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,6 +81,48 @@ public class MovieHandler extends FailSafeDatabaseHandler {
             result.setComments(comments);
 
             return Validation.success(result);
+        });
+    }
+
+    public StatusCode markToRemove(int id) {
+        return runCommand(context -> {
+            int changedRows = context.update(MOVIES_MOVIE)
+                    .set(MOVIES_MOVIE.TO_DELETE, DSL.not(MOVIES_MOVIE.TO_DELETE))
+                    .where(MOVIES_MOVIE.ID.eq(id))
+                    .execute();
+
+            return (changedRows == 0 ? StatusCode.NOT_FOUND : StatusCode.SUCCESS);
+        });
+    }
+
+    public StatusCode markWatched(int id, int user) {
+        return runCommand(context -> {
+
+            int found = context.deleteFrom(MOVIES_WATCHSTATUS)
+                    .where(MOVIES_WATCHSTATUS.USER_ID.eq(user).and(MOVIES_WATCHSTATUS.MOVIE_ID.eq(id)))
+                    .execute();
+
+            if (found == 0) {
+                context.insertInto(MOVIES_WATCHSTATUS)
+                        .columns(MOVIES_WATCHSTATUS.MOVIE_ID, MOVIES_WATCHSTATUS.USER_ID, MOVIES_WATCHSTATUS.WATCHED_ON)
+                        .values(id, user, OffsetDateTime.now())
+                        .execute();
+            }
+
+            return StatusCode.SUCCESS;
+        });
+    }
+
+    public StatusCode delete(int id) {
+        return runCommand(context -> {
+            int changedRows = context.update(MOVIES_MOVIE)
+                    .set(MOVIES_MOVIE.TO_DELETE, false)
+                    .set(MOVIES_MOVIE.DELETED, DSL.not(MOVIES_MOVIE.DELETED))
+                    .set(MOVIES_MOVIE.CREATED_AT, OffsetDateTime.now())
+                    .where(MOVIES_MOVIE.ID.eq(id))
+                    .execute();
+
+            return (changedRows == 0 ? StatusCode.NOT_FOUND : StatusCode.SUCCESS);
         });
     }
 }

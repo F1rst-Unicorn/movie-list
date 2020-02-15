@@ -28,15 +28,14 @@ import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.net.URI;
 
 @Path("/movies/{movie: [0-9][0-9]*}")
 public class MovieEndpoint extends TemplateEndpoint {
@@ -63,7 +62,7 @@ public class MovieEndpoint extends TemplateEndpoint {
             Validation<StatusCode, MovieDetails> movie = manager.get(id);
 
             if (movie.isSuccess())
-                map.put("movie", manager.get(id).success());
+                map.put("movie", movie.success());
             else {
                 r.setStatus(movie.fail().toHttpStatus().getStatusCode());
                 throw new IOException("Invalid ID");
@@ -71,5 +70,33 @@ public class MovieEndpoint extends TemplateEndpoint {
 
             map.put("users", userManager.get().success());
         });
+    }
+
+    @POST
+    @Path("mark_watched/{user}")
+    public Response markWatched(@Context HttpServletRequest req,
+                                @PathParam("movie") int id,
+                                @PathParam("user") int user) {
+
+        manager.markWatched(id, user);
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("mark_removal")
+    public Response markRemoval(@Context HttpServletRequest req,
+                                @PathParam("movie") int id) {
+
+        manager.markToRemove(id);
+        return Response.seeOther(URI.create(req.getHeader("referer"))).build();
+    }
+
+    @POST
+    @Path("delete")
+    public Response delete(@Context HttpServletRequest req,
+                                @PathParam("movie") int id) {
+
+        manager.delete(id);
+        return Response.seeOther(URI.create(req.getHeader("referer"))).build();
     }
 }

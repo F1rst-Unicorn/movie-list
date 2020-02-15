@@ -18,7 +18,7 @@
                          aria-labelledby="Watched">
                         <#list users as user >
                             <div style="cursor: pointer" class="dropdown-item"
-                                 onclick="mark_watched(${ movie.id }, ${ user.id })">
+                                 onclick="mark_watched(${ movie.id?string.computer }, ${ user.id?string.computer })">
                                 ${ user.username }
                             </div>
                         </#list>
@@ -34,18 +34,44 @@
             </div>
             <div class="col col-auto">
                 <#if movie.deleted >
-                    <a href="${ url("delete", movie.id) }"
-                       class="btn btn-warning">${ translate("Record again") }</a>
+                    <form style="display: inline"
+                          action="${ url("delete", movie.id) }"
+                          method="post">
+                        <input class="btn btn-warning" type="submit"
+                               value="${ translate("Record again") }" >
+                        <input type="hidden"
+                               name="${ csrftoken.parameterName }"
+                               value="${ csrftoken.token }"/>
+                    </form>
                 <#elseif movie.toDelete >
-                    <a href="${ url("mark_removal", movie.id) }"
-                       class="btn btn-warning">${ translate("Keep anyway") }</a>
-                    <a href="${ url("delete", movie.id) }"
-                       class="btn btn-danger">${ translate("Remove") }</a>
+                    <form style="display: inline"
+                          action="${ url("mark_removal", movie.id) }"
+                          method="post">
+                        <input class="btn btn-warning" type="submit"
+                               value="${ translate("Keep anyway") }" >
+                        <input type="hidden"
+                               name="${ csrftoken.parameterName }"
+                               value="${ csrftoken.token }"/>
+                    </form>
+                    <form style="display: inline"
+                          action="${ url("delete", movie.id) }"
+                          method="post">
+                        <input class="btn btn-danger" type="submit"
+                               value="${ translate("Remove") }" >
+                        <input type="hidden"
+                               name="${ csrftoken.parameterName }"
+                               value="${ csrftoken.token }"/>
+                    </form>
                 <#else>
-                    <a href="${ url("mark_removal", movie.id) }"
-                       class="btn btn-warning"><img
-                                src="${ static("octicons/build/svg/trashcan.svg") }"/>
-                    </a>
+                    <form style="display: inline"
+                          action="${ url("mark_removal", movie.id) }"
+                          method="post">
+                        <input class="btn btn-warning" type="image"
+                               src="${ static("octicons/build/svg/trashcan.svg") }">
+                        <input type="hidden"
+                               name="${ csrftoken.parameterName }"
+                               value="${ csrftoken.token }"/>
+                    </form>
                 </#if>
             </div>
         </div>
@@ -126,7 +152,7 @@
               action="${ url('detail', movie.id) }" method="post">
             <input type="hidden" name="${ csrftoken.parameterName }"
                    value="${ csrftoken.token }"/>
-            <textarea placeholder="${ translate(" Leave a comment") }" form="form"
+            <textarea placeholder="${ translate("Leave a comment") }" form="form"
                       class="form-control" rows="2" name="content"
                       hint="${ translate("Add comment") }"></textarea>
             <input class="btn btn-success" type="submit"

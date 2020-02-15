@@ -26,18 +26,44 @@
                         </a>
                     </#if>
                     <#if movie.deleted >
-                        <a href="${ url("delete", movie.id) }"
-                           class="btn btn-warning">${ translate("Record again") }</a>
+                        <form style="display: inline"
+                              action="${ url("delete", movie.id) }"
+                              method="post">
+                            <input class="btn btn-warning" type="submit"
+                                   value="${ translate("Record again") }" >
+                            <input type="hidden"
+                                   name="${ csrftoken.parameterName }"
+                                   value="${ csrftoken.token }"/>
+                        </form>
                     <#elseif movie.toDelete >
-                        <a href="${ url("mark_removal", movie.id) }"
-                           class="btn btn-warning">${ translate("Keep anyway") }</a>
-                        <a href="${ url("delete", movie.id) }"
-                           class="btn btn-danger">${ translate("Remove") }</a>
+                        <form style="display: inline"
+                              action="${ url("mark_removal", movie.id) }"
+                              method="post">
+                            <input class="btn btn-warning" type="submit"
+                                   value="${ translate("Keep anyway") }" >
+                            <input type="hidden"
+                                   name="${ csrftoken.parameterName }"
+                                   value="${ csrftoken.token }"/>
+                        </form>
+                        <form style="display: inline"
+                              action="${ url("delete", movie.id) }"
+                              method="post">
+                            <input class="btn btn-danger" type="submit"
+                                   value="${ translate("Remove") }" >
+                            <input type="hidden"
+                                   name="${ csrftoken.parameterName }"
+                                   value="${ csrftoken.token }"/>
+                        </form>
                     <#else>
-                        <a href="${ url("mark_removal", movie.id) }"
-                           class="btn btn-sm btn-warning"><img
-                                    src="${ static("octicons/build/svg/trashcan.svg") }"/>
-                        </a>
+                        <form style="display: inline"
+                              action="${ url("mark_removal", movie.id) }"
+                              method="post">
+                            <input class="btn btn-warning" type="image"
+                                   src="${ static("octicons/build/svg/trashcan.svg") }">
+                            <input type="hidden"
+                                   name="${ csrftoken.parameterName }"
+                                   value="${ csrftoken.token }"/>
+                        </form>
                     </#if>
                 </td>
             </tr>

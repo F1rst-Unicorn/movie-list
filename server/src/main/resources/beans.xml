@@ -48,6 +48,16 @@
         <constructor-arg index="1" ref="circuitBreakerDatabase" />
         <constructor-arg index="2" ref="circuitBreakerTimeout"/>
     </bean>
+    <bean name="actorBackend" class="de.njsm.movielist.server.db.ActorHandler" scope="request">
+        <constructor-arg index="0" ref="connectionFactory" />
+        <constructor-arg index="1" ref="circuitBreakerDatabase" />
+        <constructor-arg index="2" ref="circuitBreakerTimeout"/>
+    </bean>
+    <bean name="genreBackend" class="de.njsm.movielist.server.db.GenreHandler" scope="request">
+        <constructor-arg index="0" ref="connectionFactory" />
+        <constructor-arg index="1" ref="circuitBreakerDatabase" />
+        <constructor-arg index="2" ref="circuitBreakerTimeout"/>
+    </bean>
 
     <!-- Business Layer -->
     <bean name="healthManager" class="de.njsm.movielist.server.business.HealthManager" scope="request">
@@ -61,6 +71,12 @@
     </bean>
     <bean name="userManager" class="de.njsm.movielist.server.business.UserManager" scope="request">
         <constructor-arg index="0" ref="userBackend" />
+    </bean>
+    <bean name="actorManager" class="de.njsm.movielist.server.business.ActorManager" scope="request">
+        <constructor-arg index="0" ref="actorBackend" />
+    </bean>
+    <bean name="genreManager" class="de.njsm.movielist.server.business.GenreManager" scope="request">
+        <constructor-arg index="0" ref="genreBackend" />
     </bean>
 
     <!-- Web Layer -->
@@ -78,6 +94,14 @@
         <constructor-arg index="0" ref="freemarker" />
         <constructor-arg index="1" ref="movieManager" />
         <constructor-arg index="2" ref="userManager" />
+    </bean>
+    <bean name="actorEndpoint" class="de.njsm.movielist.server.web.ActorEndpoint" scope="request">
+        <constructor-arg index="0" ref="freemarker" />
+        <constructor-arg index="1" ref="actorManager" />
+    </bean>
+    <bean name="genreEndpoint" class="de.njsm.movielist.server.web.GenreEndpoint" scope="request">
+        <constructor-arg index="0" ref="freemarker" />
+        <constructor-arg index="1" ref="genreManager" />
     </bean>
 
     <bean id="freemarker" factory-bean="freemarkerConfig" factory-method="getConfiguration" />
@@ -111,24 +135,24 @@
                                 <entry key="create_account" value="create_account" />
                                 <entry key="login" value="login" />
                                 <entry key="logout" value="logout" />
-                                <entry key="add_actor" value="add_actor" />
-                                <entry key="add_movie" value="add_movie" />
-                                <entry key="add_genre" value="add_genre" />
-                                <entry key="add_location" value="add_location" />
-                                <entry key="search" value="search" />
+                                <entry key="add_actor" value="add_actor" /> <!-- TODO -->
+                                <entry key="add_movie" value="add_movie" /> <!-- TODO -->
+                                <entry key="add_genre" value="add_genre" /> <!-- TODO -->
+                                <entry key="add_location" value="add_location" /> <!-- TODO -->
+                                <entry key="search" value="search" /> <!-- TODO -->
                                 <entry key="detail" value="movies/%s/detail" />
-                                <entry key="edit" value="movies/%s/edit" />
+                                <entry key="edit" value="movies/%s/edit" /> <!-- TODO -->
                                 <entry key="mark_removal" value="movies/%s/mark_removal" />
                                 <entry key="mark_watched" value="movies/1234/mark_watched/5678" />
                                 <entry key="delete" value="movies/%s/delete" />
-                                <entry key="delete_comment" value="movies/%s/%s/delete" />
+                                <entry key="delete_comment" value="movies/%s/%s/delete" /> <!-- TODO -->
                                 <entry key="actors" value="actors" />
                                 <entry key="actor_detail" value="actors/%s/detail" />
-                                <entry key="actor_edit" value="actors/%s/edit" />
-                                <entry key="actor_merge" value="actors/%s/merge" />
+                                <entry key="actor_edit" value="actors/%s/edit" /> <!-- TODO -->
+                                <entry key="actor_merge" value="actors/%s/merge" /> <!-- TODO -->
                                 <entry key="genres" value="genres" />
                                 <entry key="genre_detail" value="genres/%s/detail" />
-                                <entry key="genre_edit" value="genres/%s/edit" />
+                                <entry key="genre_edit" value="genres/%s/edit" /> <!-- TODO -->
                             </util:map>
                         </constructor-arg>
                     </bean>

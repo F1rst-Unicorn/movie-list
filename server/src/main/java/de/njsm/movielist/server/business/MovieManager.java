@@ -19,4 +19,25 @@ public class MovieManager extends BusinessObject {
             return handler.get(id);
         });
     }
+
+    public void markWatched(int id, int user) {
+        runOperation(() -> {
+            handler.markWatched(id, user);
+            return StatusCode.SUCCESS;
+        });
+    }
+
+    public void markToRemove(int id) {
+        runOperation(() -> {
+            handler.markToRemove(id);
+            return StatusCode.SUCCESS;
+        });
+    }
+
+    public void delete(int id) {
+        runOperation(() -> {
+            handler.delete(id);
+            return StatusCode.SUCCESS;
+        });
+    }
 }
