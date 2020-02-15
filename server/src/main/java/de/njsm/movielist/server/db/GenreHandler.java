@@ -24,7 +24,7 @@ public class GenreHandler extends FailSafeDatabaseHandler {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 
-    public Validation<StatusCode, List<MovieCount>> get() {
+    public Validation<StatusCode, List<MovieCount>> getCounts() {
         return runFunction(context -> Validation.success(
                 context.select(MOVIES_GENRE.ID,
                         MOVIES_GENRE.NAME,
@@ -50,6 +50,14 @@ public class GenreHandler extends FailSafeDatabaseHandler {
                         return Validation.success(new Genre(record.getId(), record.getName()));
                     }
                 }
+        );
+    }
+
+    public Validation<StatusCode, List<Genre>> get() {
+        return runFunction(context -> Validation.success(context.selectFrom(MOVIES_GENRE)
+                .stream()
+                .map(r -> new Genre(r.getId(), r.getName()))
+                .collect(Collectors.toList()))
         );
     }
 

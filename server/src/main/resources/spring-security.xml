@@ -35,6 +35,9 @@
         <security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID"/>
         <security:session-management invalid-session-url="/login" />
         <security:remember-me key="cUnvnUVcgR0WaY1Rbn3TeJaZb0yXbo6MikTbp25FSaWrwokXBFXbGtalZ7IkUUtS698mccPnaMI2J0a2M5rY1gcc" />
+        <security:headers>
+            <security:cache-control disabled="true" />
+        </security:headers>
     </security:http>
 
     <security:authentication-manager alias="authenticationManager">

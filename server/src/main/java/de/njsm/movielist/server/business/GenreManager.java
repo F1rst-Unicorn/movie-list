@@ -20,10 +20,17 @@ public class GenreManager extends BusinessObject {
         this.handler = dbHandler;
     }
 
-    public Validation<StatusCode, List<MovieCount>> get() {
+    public Validation<StatusCode, List<Genre>> get() {
         return runFunction(() -> {
             handler.setReadOnly();
             return handler.get();
+        });
+    }
+
+    public Validation<StatusCode, List<MovieCount>> getCounts() {
+        return runFunction(() -> {
+            handler.setReadOnly();
+            return handler.getCounts();
         });
     }
 

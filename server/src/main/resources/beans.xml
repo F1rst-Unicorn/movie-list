@@ -58,6 +58,11 @@
         <constructor-arg index="1" ref="circuitBreakerDatabase" />
         <constructor-arg index="2" ref="circuitBreakerTimeout"/>
     </bean>
+    <bean name="searchBackend" class="de.njsm.movielist.server.db.SearchHandler" scope="request">
+        <constructor-arg index="0" ref="connectionFactory" />
+        <constructor-arg index="1" ref="circuitBreakerDatabase" />
+        <constructor-arg index="2" ref="circuitBreakerTimeout"/>
+    </bean>
 
     <!-- Business Layer -->
     <bean name="healthManager" class="de.njsm.movielist.server.business.HealthManager" scope="request">
@@ -77,6 +82,9 @@
     </bean>
     <bean name="genreManager" class="de.njsm.movielist.server.business.GenreManager" scope="request">
         <constructor-arg index="0" ref="genreBackend" />
+    </bean>
+    <bean name="searchManager" class="de.njsm.movielist.server.business.SearchManager" scope="request">
+        <constructor-arg index="0" ref="searchBackend" />
     </bean>
 
     <!-- Web Layer -->
@@ -102,6 +110,12 @@
     <bean name="genreEndpoint" class="de.njsm.movielist.server.web.GenreEndpoint" scope="request">
         <constructor-arg index="0" ref="freemarker" />
         <constructor-arg index="1" ref="genreManager" />
+    </bean>
+    <bean name="searchEndpoint" class="de.njsm.movielist.server.web.SearchEndpoint" scope="request">
+        <constructor-arg index="0" ref="freemarker" />
+        <constructor-arg index="1" ref="genreManager" />
+        <constructor-arg index="2" ref="userManager" />
+        <constructor-arg index="3" ref="searchManager" />
     </bean>
 
     <bean id="freemarker" factory-bean="freemarkerConfig" factory-method="getConfiguration" />
@@ -139,7 +153,7 @@
                                 <entry key="add_movie" value="add_movie" /> <!-- TODO -->
                                 <entry key="add_genre" value="add_genre" /> <!-- TODO -->
                                 <entry key="add_location" value="add_location" /> <!-- TODO -->
-                                <entry key="search" value="search" /> <!-- TODO -->
+                                <entry key="search" value="search" />
                                 <entry key="detail" value="movies/%s/detail" />
                                 <entry key="edit" value="movies/%s/edit" /> <!-- TODO -->
                                 <entry key="mark_removal" value="movies/%s/mark_removal" />

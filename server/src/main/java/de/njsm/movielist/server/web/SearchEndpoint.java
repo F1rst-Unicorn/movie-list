@@ -20,60 +20,59 @@
 package de.njsm.movielist.server.web;
 
 import de.njsm.movielist.server.business.GenreManager;
-import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.Genre;
-import de.njsm.movielist.server.business.data.MovieCount;
+import de.njsm.movielist.server.business.SearchManager;
+import de.njsm.movielist.server.business.UserManager;
 import de.njsm.movielist.server.business.data.MovieOutline;
-import fj.data.Validation;
+import de.njsm.movielist.server.business.data.SearchQuery;
 import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
-@Path("genres")
-public class GenreEndpoint extends TemplateEndpoint {
+@Path("search")
+public class SearchEndpoint extends TemplateEndpoint {
 
-    private GenreManager manager;
+    private GenreManager genreManager;
 
-    public GenreEndpoint(Configuration configuration, GenreManager manager) {
+    private UserManager userManager;
+
+    private SearchManager searchManager;
+
+    public SearchEndpoint(Configuration configuration, GenreManager genreManager, UserManager userManager, SearchManager searchManager) {
         super(configuration);
-        this.manager = manager;
+        this.genreManager = genreManager;
+        this.userManager = userManager;
+        this.searchManager = searchManager;
     }
+
 
     @GET
     @Produces(MediaType.TEXT_HTML)
     public void get(@Suspended AsyncResponse ar,
                     @Context HttpServletRequest req,
                     @Context HttpServletResponse r) {
-
-        processRequest(req, r, ar, "genres.html.ftl", (u, map) -> {
-            Validation<StatusCode, List<MovieCount>> movie = manager.getCounts();
-            map.put("items", movie.success());
+        processRequest(req, r, ar, "search.html.ftl", (user, map) -> {
+            map.put("users", userManager.get().success());
+            map.put("genres", genreManager.getCounts().success());
         });
     }
 
-    @GET
-    @Path("{genre}/detail")
+    @POST
     @Produces(MediaType.TEXT_HTML)
-    public void getDetails(@Suspended AsyncResponse ar,
-                           @Context HttpServletRequest req,
-                           @Context HttpServletResponse r,
-                           @PathParam("genre") int id) {
-
-        processRequest(req, r, ar, "genre_detail.html.ftl", (u, map) -> {
-            Validation<StatusCode, Genre> genre = manager.get(id);
-            map.put("movies", (Iterable<MovieOutline>) () -> manager.getMovies(ar, u, id).success().iterator());
-            map.put("genre", genre.success());
+    public void search(@Suspended AsyncResponse ar,
+                       @Context HttpServletRequest req,
+                       @Context HttpServletResponse r,
+                       @BeanParam SearchQuery query) {
+        processRequest(req, r, ar, "search.html.ftl", (user, map) -> {
+            map.put("users", userManager.get().success());
+            map.put("genres", genreManager.getCounts().success());
+            map.put("movies", (Iterable<MovieOutline>) () -> searchManager.get(user, query).success().iterator());
         });
-    }
 
+    }
 }

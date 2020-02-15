@@ -29,7 +29,7 @@
                         <form style="display: inline"
                               action="${ url("delete", movie.id) }"
                               method="post">
-                            <input class="btn btn-warning" type="submit"
+                            <input class="btn btn-sm btn-warning" type="submit"
                                    value="${ translate("Record again") }" >
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"
@@ -39,7 +39,7 @@
                         <form style="display: inline"
                               action="${ url("mark_removal", movie.id) }"
                               method="post">
-                            <input class="btn btn-warning" type="submit"
+                            <input class="btn btn-sm btn-warning" type="submit"
                                    value="${ translate("Keep anyway") }" >
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"
@@ -48,7 +48,7 @@
                         <form style="display: inline"
                               action="${ url("delete", movie.id) }"
                               method="post">
-                            <input class="btn btn-danger" type="submit"
+                            <input class="btn btn-sm btn-danger" type="submit"
                                    value="${ translate("Remove") }" >
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"
@@ -58,7 +58,7 @@
                         <form style="display: inline"
                               action="${ url("mark_removal", movie.id) }"
                               method="post">
-                            <input class="btn btn-warning" type="image"
+                            <input class="btn btn-sm btn-warning" type="image"
                                    src="${ static("octicons/build/svg/trashcan.svg") }">
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"
