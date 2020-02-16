@@ -179,9 +179,6 @@ msgstr "Kommentar hinzufügen"
 msgid "Comment"
 msgstr "Kommentieren"
 
-msgid "Search"
-msgstr "Suchen"
-
 msgid "Save"
 msgstr "Speichern"
 
