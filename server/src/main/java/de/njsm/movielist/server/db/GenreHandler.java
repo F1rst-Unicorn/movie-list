@@ -1,10 +1,7 @@
 package de.njsm.movielist.server.db;
 
 import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.Genre;
-import de.njsm.movielist.server.business.data.MovieCount;
-import de.njsm.movielist.server.business.data.MovieOutline;
-import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.business.data.*;
 import de.njsm.movielist.server.db.jooq.tables.records.MoviesGenreRecord;
 import fj.data.Validation;
 import org.jooq.Record7;
@@ -24,13 +21,54 @@ public class GenreHandler extends FailSafeDatabaseHandler {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 
+    public StatusCode add(Genre data) {
+        return runCommand(context -> {
+            context.insertInto(MOVIES_GENRE)
+                    .columns(MOVIES_GENRE.NAME)
+                    .values(data.getName())
+                    .execute();
+            return StatusCode.SUCCESS;
+        });
+    }
+
+    public StatusCode edit(Genre data) {
+        return runCommand(context -> {
+            int result = context.update(MOVIES_GENRE)
+                    .set(MOVIES_GENRE.NAME, data.getName())
+                    .where(MOVIES_GENRE.ID.eq(data.getId()))
+                    .execute();
+
+            if (result == 1)
+                return StatusCode.SUCCESS;
+            else
+                return StatusCode.NOT_FOUND;
+        });
+    }
+
+    public Validation<StatusCode, List<Genre>> getWithMovie(int movieId) {
+        return runFunction(context -> Validation.success(context.select(
+                MOVIES_GENRE.ID,
+                MOVIES_GENRE.NAME,
+                DSL.case_().when(MOVIES_GENRE.ID.in(
+                        context.select(MOVIES_MOVIESINGENRE.GENRE_ID)
+                                .from(MOVIES_MOVIESINGENRE)
+                                .where(MOVIES_MOVIESINGENRE.MOVIE_ID.eq(movieId))), true)
+                        .otherwise(false)
+        )
+                .from(MOVIES_GENRE)
+                .orderBy(MOVIES_GENRE.NAME)
+                .stream()
+                .map(r -> new Genre(r.component1(), r.component2(), r.component3()))
+                .collect(Collectors.toList())));
+    }
+
     public Validation<StatusCode, List<MovieCount>> getCounts() {
         return runFunction(context -> Validation.success(
                 context.select(MOVIES_GENRE.ID,
                         MOVIES_GENRE.NAME,
-                        DSL.count())
+                        DSL.count(MOVIES_MOVIESINGENRE.ID))
                         .from(MOVIES_GENRE)
-                        .join(MOVIES_MOVIESINGENRE).on(MOVIES_GENRE.ID.eq(MOVIES_MOVIESINGENRE.GENRE_ID))
+                        .leftOuterJoin(MOVIES_MOVIESINGENRE).on(MOVIES_GENRE.ID.eq(MOVIES_MOVIESINGENRE.GENRE_ID))
                         .groupBy(MOVIES_GENRE.ID)
                         .orderBy(MOVIES_GENRE.NAME)
                         .stream()
@@ -55,6 +93,7 @@ public class GenreHandler extends FailSafeDatabaseHandler {
 
     public Validation<StatusCode, List<Genre>> get() {
         return runFunction(context -> Validation.success(context.selectFrom(MOVIES_GENRE)
+                .orderBy(MOVIES_GENRE.NAME)
                 .stream()
                 .map(r -> new Genre(r.getId(), r.getName()))
                 .collect(Collectors.toList()))

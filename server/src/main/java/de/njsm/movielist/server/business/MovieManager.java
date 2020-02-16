@@ -1,9 +1,12 @@
 package de.njsm.movielist.server.business;
 
+import de.njsm.movielist.server.business.data.Location;
 import de.njsm.movielist.server.business.data.MovieDetails;
 import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.MovieHandler;
 import fj.data.Validation;
+
+import java.util.List;
 
 public class MovieManager extends BusinessObject {
 
@@ -12,6 +15,14 @@ public class MovieManager extends BusinessObject {
     public MovieManager(MovieHandler dbHandler) {
         super(dbHandler);
         handler = dbHandler;
+    }
+
+    public Validation<StatusCode, Integer> add(MovieDetails movie, List<Integer> actors, List<Integer> genres) {
+        return runFunction(() -> handler.add(movie, actors, genres));
+    }
+
+    public StatusCode edit(MovieDetails movie, List<Integer> actors, List<Integer> genres) {
+        return runOperation(() -> handler.edit(movie, actors, genres));
     }
 
     public Validation<StatusCode, MovieDetails> get(int id) {
@@ -54,5 +65,13 @@ public class MovieManager extends BusinessObject {
             handler.deleteComment(comment);
             return StatusCode.SUCCESS;
         });
+    }
+
+    public Validation<StatusCode, List<Location>> getLocations() {
+        return runFunction(() -> handler.getLocations());
+    }
+
+    public Validation<StatusCode, List<Location>> getLocationsWithMovie(int id) {
+        return runFunction(() -> handler.getLocations(id));
     }
 }

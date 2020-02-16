@@ -20,18 +20,19 @@
 package de.njsm.movielist.server.web;
 
 import de.njsm.movielist.server.business.IndexManager;
+import de.njsm.movielist.server.business.data.Location;
 import de.njsm.movielist.server.business.data.MovieOutline;
 import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.net.URI;
 
 @Path("/")
 public class IndexEndpoint extends TemplateEndpoint {
@@ -87,4 +88,22 @@ public class IndexEndpoint extends TemplateEndpoint {
             map.put("movies", (Iterable<MovieOutline>) () -> manager.getLatest(ar, u).success().iterator());
         });
     }
+
+    @GET
+    @Path("add_location")
+    public void showAddActorForm(@Suspended AsyncResponse ar,
+                                 @Context HttpServletRequest req,
+                                 @Context HttpServletResponse r) {
+
+        processRequest(req, r, ar, "location.html.ftl", (u, map) -> {});
+    }
+
+    @POST
+    @Path("add_location")
+    public Response addActor(@BeanParam Location a) {
+        manager.addLocation(a);
+        return Response.seeOther(URI.create("")).build();
+    }
+
+
 }

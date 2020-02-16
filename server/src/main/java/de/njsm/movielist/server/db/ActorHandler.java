@@ -1,10 +1,7 @@
 package de.njsm.movielist.server.db;
 
 import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.Actor;
-import de.njsm.movielist.server.business.data.MovieCount;
-import de.njsm.movielist.server.business.data.MovieOutline;
-import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.business.data.*;
 import de.njsm.movielist.server.db.jooq.tables.records.MoviesActorRecord;
 import fj.data.Validation;
 import org.jooq.Record7;
@@ -79,9 +76,9 @@ public class ActorHandler extends FailSafeDatabaseHandler {
         return runFunction(context -> Validation.success(
                 context.select(MOVIES_ACTOR.ID,
                         DSL.concat(MOVIES_ACTOR.FIRST_NAME, DSL.concat(" ", MOVIES_ACTOR.LAST_NAME)),
-                        DSL.count())
+                        DSL.count(MOVIES_MOVIE_ACTORS.ID))
                         .from(MOVIES_ACTOR)
-                        .join(MOVIES_MOVIE_ACTORS).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
+                        .leftOuterJoin(MOVIES_MOVIE_ACTORS).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
                         .groupBy(MOVIES_ACTOR.ID)
                         .orderBy(MOVIES_ACTOR.LAST_NAME)
                         .stream()
@@ -136,4 +133,24 @@ public class ActorHandler extends FailSafeDatabaseHandler {
                 }
         );
     }
+
+    public Validation<StatusCode, List<Actor>> getWithMovie(int movieId) {
+        return runFunction(context -> Validation.success(context.select(
+                MOVIES_ACTOR.ID,
+                MOVIES_ACTOR.FIRST_NAME,
+                MOVIES_ACTOR.LAST_NAME,
+                DSL.case_().when(MOVIES_ACTOR.ID.in(
+                        context.select(MOVIES_MOVIE_ACTORS.ACTOR_ID)
+                                .from(MOVIES_MOVIE_ACTORS)
+                                .where(MOVIES_MOVIE_ACTORS.MOVIE_ID.eq(movieId))), true)
+                        .otherwise(false)
+        )
+                .from(MOVIES_ACTOR)
+                .orderBy(MOVIES_ACTOR.LAST_NAME)
+                .stream()
+                .map(r -> new Actor(r.component1(), r.component2(), r.component3(), r.component4()))
+                .collect(Collectors.toList())));
+    }
+
+
 }

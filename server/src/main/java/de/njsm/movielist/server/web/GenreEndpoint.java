@@ -29,14 +29,13 @@ import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
 @Path("genres")
@@ -47,6 +46,46 @@ public class GenreEndpoint extends TemplateEndpoint {
     public GenreEndpoint(Configuration configuration, GenreManager manager) {
         super(configuration);
         this.manager = manager;
+    }
+
+    @GET
+    @Path("add")
+    public void showAddGenreForm(@Suspended AsyncResponse ar,
+                                 @Context HttpServletRequest req,
+                                 @Context HttpServletResponse r) {
+
+        processRequest(req, r, ar, "genre.html.ftl", (u, map) -> {
+            map.put("edit", false);
+        });
+    }
+
+    @POST
+    @Path("add")
+    public Response addGenre(@BeanParam Genre a) {
+        manager.add(a);
+        return Response.seeOther(URI.create("")).build();
+    }
+
+    @GET
+    @Path("{genre}/edit")
+    @Produces(MediaType.TEXT_HTML)
+    public void getEditForm(@Suspended AsyncResponse ar,
+                            @Context HttpServletRequest req,
+                            @Context HttpServletResponse r,
+                            @PathParam("genre") int id) {
+
+        processRequest(req, r, ar, "genre.html.ftl", (u, map) -> {
+            Validation<StatusCode, Genre> genre = manager.get(id);
+            map.put("genre", genre.success());
+            map.put("edit", true);
+        });
+    }
+
+    @POST
+    @Path("{genre}/edit")
+    public Response editGenre(@BeanParam Genre a) {
+        manager.edit(a);
+        return Response.seeOther(URI.create("genres/" + a.getId() + "/detail")).build();
     }
 
     @GET

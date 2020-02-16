@@ -1,29 +1,32 @@
 package de.njsm.movielist.server.business.data;
 
 import javax.ws.rs.FormParam;
-import javax.ws.rs.PathParam;
 
-public class Genre {
+public class Location {
 
-    @PathParam("genre")
     private int id;
 
     @FormParam("name")
     private String name;
 
+    @FormParam("index")
+    private int index;
+
     private boolean selected;
 
-    public Genre() {
+    public Location() {
     }
 
-    public Genre(int id, String name) {
+    public Location(int id, String name, int index) {
         this.id = id;
         this.name = name;
+        this.index = index;
     }
 
-    public Genre(int id, String name, boolean selected) {
+    public Location(int id, String name, int index, boolean selected) {
         this.id = id;
         this.name = name;
+        this.index = index;
         this.selected = selected;
     }
 
@@ -35,12 +38,19 @@ public class Genre {
         return name;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     public boolean isSelected() {
         return selected;
     }
 
     @Override
     public String toString() {
-        return name;
+        if (index == 0)
+            return name;
+        else
+            return name + " " + index;
     }
 }

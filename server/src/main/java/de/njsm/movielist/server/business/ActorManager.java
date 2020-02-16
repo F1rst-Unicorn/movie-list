@@ -1,9 +1,6 @@
 package de.njsm.movielist.server.business;
 
-import de.njsm.movielist.server.business.data.Actor;
-import de.njsm.movielist.server.business.data.MovieCount;
-import de.njsm.movielist.server.business.data.MovieOutline;
-import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.business.data.*;
 import de.njsm.movielist.server.db.ActorHandler;
 import fj.data.Validation;
 
@@ -21,9 +18,7 @@ public class ActorManager extends BusinessObject {
     }
 
     public StatusCode add(Actor data) {
-        return runOperation(() -> {
-            return handler.add(data);
-        });
+        return runOperation(() -> handler.add(data));
     }
 
     public StatusCode edit(Actor data) {
@@ -65,5 +60,9 @@ public class ActorManager extends BusinessObject {
             handler.setReadOnly();
             return handler.get();
         });
+    }
+
+    public Validation<StatusCode, List<Actor>> getWithMovie(int movieId) {
+        return runFunction(() -> handler.getWithMovie(movieId));
     }
 }

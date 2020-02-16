@@ -102,6 +102,8 @@
         <constructor-arg index="0" ref="freemarker" />
         <constructor-arg index="1" ref="movieManager" />
         <constructor-arg index="2" ref="userManager" />
+        <constructor-arg index="3" ref="actorManager" />
+        <constructor-arg index="4" ref="genreManager" />
     </bean>
     <bean name="actorEndpoint" class="de.njsm.movielist.server.web.ActorEndpoint" scope="request">
         <constructor-arg index="0" ref="freemarker" />
@@ -149,13 +151,12 @@
                                 <entry key="create_account" value="create_account" />
                                 <entry key="login" value="login" />
                                 <entry key="logout" value="logout" />
-                                <entry key="add_movie" value="add_movie" /> <!-- TODO -->
-                                <entry key="add_genre" value="add_genre" /> <!-- TODO -->
-                                <entry key="add_location" value="add_location" /> <!-- TODO -->
+                                <entry key="add_movie" value="movies/add" />
+                                <entry key="add_location" value="add_location" />
                                 <entry key="add_comment" value="movies/%s/add_comment" />
                                 <entry key="search" value="search" />
                                 <entry key="detail" value="movies/%s/detail" />
-                                <entry key="edit" value="movies/%s/edit" /> <!-- TODO -->
+                                <entry key="edit" value="movies/%s/edit" />
                                 <entry key="mark_removal" value="movies/%s/mark_removal" />
                                 <entry key="mark_watched" value="movies/1234/mark_watched/5678" />
                                 <entry key="delete" value="movies/%s/delete" />
@@ -166,8 +167,9 @@
                                 <entry key="actor_edit" value="actors/%s/edit" />
                                 <entry key="actor_merge" value="actors/%s/merge" />
                                 <entry key="genres" value="genres" />
+                                <entry key="add_genre" value="genres/add" />
                                 <entry key="genre_detail" value="genres/%s/detail" />
-                                <entry key="genre_edit" value="genres/%s/edit" /> <!-- TODO -->
+                                <entry key="genre_edit" value="genres/%s/edit" />
                             </util:map>
                         </constructor-arg>
                     </bean>

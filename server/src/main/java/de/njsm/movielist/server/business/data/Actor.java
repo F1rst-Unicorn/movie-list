@@ -14,12 +14,21 @@ public class Actor {
     @FormParam("lastname")
     private String lastName;
 
+    private boolean selected;
+
     public Actor() {}
 
     public Actor(int id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Actor(int id, String firstName, String lastName, boolean selected) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.selected = selected;
     }
 
     public int getId() {
@@ -32,6 +41,10 @@ public class Actor {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public boolean isSelected() {
+        return selected;
     }
 
     @Override

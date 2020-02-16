@@ -19,6 +19,7 @@
 
 package de.njsm.movielist.server.business;
 
+import de.njsm.movielist.server.business.data.Location;
 import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.IndexHandler;
@@ -56,10 +57,17 @@ public class IndexManager extends BusinessObject {
             return dbBackend.get(u, true, false);
         });
     }
+
     public Validation<StatusCode, Stream<MovieOutline>> getLatest(AsyncResponse as, User u) {
         return runFunction(as, () -> {
             dbBackend.setReadOnly();
             return dbBackend.getLatest(u);
+        });
+    }
+
+    public StatusCode addLocation(Location data) {
+        return runOperation(() -> {
+            return dbBackend.addLocation(data);
         });
     }
 }

@@ -82,7 +82,7 @@
                 <dl class="dl-horizontal">
                     <#if movie.year != 0>
                         <dt>${ translate("Year") }</dt>
-                        <dd>${ movie.year }</dd>
+                        <dd>${ movie.year?string.computer }</dd>
                     </#if>
                     <dt>${ translate("Recorded on") }</dt>
                     <dd>${ movie.createdAt }</dd>

@@ -114,7 +114,7 @@
                             <li class="nav-item">
                                 <a class="nav-link"
                                    href="${ url('search') }">
-                                    ${ translate("Advanced Search") }
+                                    ${ translate("Search") }
                                 </a>
                             </li>
                         </ul>

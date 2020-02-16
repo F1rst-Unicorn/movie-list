@@ -4,6 +4,7 @@ import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.*;
 import de.njsm.movielist.server.db.jooq.tables.records.MoviesMovieRecord;
 import fj.data.Validation;
+import org.jooq.InsertValuesStep2;
 import org.jooq.impl.DSL;
 
 import java.time.OffsetDateTime;
@@ -19,6 +20,83 @@ public class MovieHandler extends FailSafeDatabaseHandler {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 
+    public Validation<StatusCode, Integer> add(MovieDetails movie, List<Integer> actors, List<Integer> genres) {
+        return runFunction(context -> {
+            int newMovieId = context.insertInto(MOVIES_MOVIE)
+                    .columns(
+                            MOVIES_MOVIE.NAME,
+                            MOVIES_MOVIE.DESCRIPTION,
+                            MOVIES_MOVIE.LINK,
+                            MOVIES_MOVIE.YEAR,
+                            MOVIES_MOVIE.TO_DELETE,
+                            MOVIES_MOVIE.DELETED,
+                            MOVIES_MOVIE.CREATED_AT,
+                            MOVIES_MOVIE.LOCATION_ID
+                    ).values(
+                            movie.getName(),
+                            movie.getDescription(),
+                            movie.getLink(),
+                            movie.getYear(),
+                            false,
+                            false,
+                            OffsetDateTime.now(),
+                            movie.getLocation()
+                    ).returning(MOVIES_MOVIE.ID)
+                    .fetch()
+                    .getValue(0, MOVIES_MOVIE.ID);
+
+            InsertValuesStep2<?, Integer, Integer> stmt = context.insertInto(MOVIES_MOVIE_ACTORS)
+                    .columns(MOVIES_MOVIE_ACTORS.ACTOR_ID, MOVIES_MOVIE_ACTORS.MOVIE_ID);
+            for (int actor : actors) {
+                stmt.values(actor, newMovieId);
+            }
+            stmt.execute();
+
+            stmt = context.insertInto(MOVIES_MOVIESINGENRE)
+                    .columns(MOVIES_MOVIESINGENRE.GENRE_ID, MOVIES_MOVIESINGENRE.MOVIE_ID);
+            for (int genre : genres) {
+                stmt.values(genre, newMovieId);
+            }
+            stmt.execute();
+
+            return Validation.success(newMovieId);
+        });
+    }
+
+    public StatusCode edit(MovieDetails movie, List<Integer> actors, List<Integer> genres) {
+        return runCommand(context -> {
+            context.update(MOVIES_MOVIE)
+                    .set(MOVIES_MOVIE.NAME, movie.getName())
+                    .set(MOVIES_MOVIE.DESCRIPTION, movie.getDescription())
+                    .set(MOVIES_MOVIE.YEAR, movie.getYear())
+                    .set(MOVIES_MOVIE.LOCATION_ID, movie.getLocation())
+                    .set(MOVIES_MOVIE.LINK, movie.getLink())
+                    .where(MOVIES_MOVIE.ID.eq(movie.getId()))
+                    .execute();
+
+            context.deleteFrom(MOVIES_MOVIE_ACTORS)
+                    .where(MOVIES_MOVIE_ACTORS.MOVIE_ID.eq(movie.getId()))
+                    .execute();
+            InsertValuesStep2<?, Integer, Integer> stmt = context.insertInto(MOVIES_MOVIE_ACTORS)
+                    .columns(MOVIES_MOVIE_ACTORS.ACTOR_ID, MOVIES_MOVIE_ACTORS.MOVIE_ID);
+            for (int actor : actors) {
+                stmt.values(actor, movie.getId());
+            }
+            stmt.execute();
+
+            context.deleteFrom(MOVIES_MOVIESINGENRE)
+                    .where(MOVIES_MOVIESINGENRE.MOVIE_ID.eq(movie.getId()))
+                    .execute();
+            stmt = context.insertInto(MOVIES_MOVIESINGENRE)
+                    .columns(MOVIES_MOVIESINGENRE.GENRE_ID, MOVIES_MOVIESINGENRE.MOVIE_ID);
+            for (int genre : genres) {
+                stmt.values(genre, movie.getId());
+            }
+            stmt.execute();
+
+            return StatusCode.SUCCESS;
+        });
+    }
 
     public Validation<StatusCode, MovieDetails> get(int id) {
         return runFunction(context -> {
@@ -148,5 +226,31 @@ public class MovieHandler extends FailSafeDatabaseHandler {
             else
                 return StatusCode.SUCCESS;
         });
+    }
+
+    public Validation<StatusCode, List<Location>> getLocations() {
+        return runFunction(context -> Validation.success(context.selectFrom(MOVIES_LOCATION)
+                .orderBy(MOVIES_LOCATION.NAME, MOVIES_LOCATION.INDEX)
+                .stream()
+                .map(r -> new Location(r.getId(), r.getName(), r.getIndex()))
+                .collect(Collectors.toList())));
+    }
+
+    public Validation<StatusCode, List<Location>> getLocations(int movieId) {
+        return runFunction(context -> Validation.success(context.select(
+                MOVIES_LOCATION.ID,
+                MOVIES_LOCATION.NAME,
+                MOVIES_LOCATION.INDEX,
+                DSL.case_().when(MOVIES_LOCATION.ID.eq(
+                        context.select(MOVIES_MOVIE.LOCATION_ID)
+                                .from(MOVIES_MOVIE)
+                                .where(MOVIES_MOVIE.ID.eq(movieId))), true)
+                        .otherwise(false)
+        )
+                .from(MOVIES_LOCATION)
+                .orderBy(MOVIES_LOCATION.NAME, MOVIES_LOCATION.INDEX)
+                .stream()
+                .map(r -> new Location(r.component1(), r.component2(), r.component3(), r.component4()))
+                .collect(Collectors.toList())));
     }
 }

@@ -125,7 +125,7 @@ msgstr ""
 msgid "Absent movies"
 msgstr ""
 
-msgid "Advanced Search"
+msgid "Search"
 msgstr ""
 
 msgid "Create account"

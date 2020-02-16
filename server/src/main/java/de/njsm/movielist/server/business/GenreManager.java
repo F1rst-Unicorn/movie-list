@@ -1,9 +1,6 @@
 package de.njsm.movielist.server.business;
 
-import de.njsm.movielist.server.business.data.Genre;
-import de.njsm.movielist.server.business.data.MovieCount;
-import de.njsm.movielist.server.business.data.MovieOutline;
-import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.business.data.*;
 import de.njsm.movielist.server.db.GenreHandler;
 import fj.data.Validation;
 
@@ -18,6 +15,14 @@ public class GenreManager extends BusinessObject {
     public GenreManager(GenreHandler dbHandler) {
         super(dbHandler);
         this.handler = dbHandler;
+    }
+
+    public StatusCode add(Genre data) {
+        return runOperation(() -> handler.add(data));
+    }
+
+    public StatusCode edit(Genre data) {
+        return runOperation(() -> handler.edit(data));
     }
 
     public Validation<StatusCode, List<Genre>> get() {
@@ -46,5 +51,9 @@ public class GenreManager extends BusinessObject {
             handler.setReadOnly();
             return handler.get(u, id);
         });
+    }
+
+    public Validation<StatusCode, List<Genre>> getWithMovie(int movieId) {
+        return runFunction(() -> handler.getWithMovie(movieId));
     }
 }

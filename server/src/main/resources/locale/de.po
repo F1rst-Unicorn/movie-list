@@ -125,8 +125,8 @@ msgstr "Zu löschende Filme"
 msgid "Absent movies"
 msgstr "Fehlende Filme"
 
-msgid "Advanced Search"
-msgstr "Erweiterte Suche"
+msgid "Search"
+msgstr "Suche"
 
 msgid "Create account"
 msgstr "Konto erstellen"

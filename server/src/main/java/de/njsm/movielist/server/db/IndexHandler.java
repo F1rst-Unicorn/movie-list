@@ -1,6 +1,7 @@
 package de.njsm.movielist.server.db;
 
 import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.data.Location;
 import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.User;
 import fj.data.Validation;
@@ -17,6 +18,16 @@ public class IndexHandler extends FailSafeDatabaseHandler {
 
     public IndexHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
+    }
+
+    public StatusCode addLocation(Location data) {
+        return runCommand(context -> {
+            context.insertInto(MOVIES_LOCATION)
+                    .columns(MOVIES_LOCATION.NAME, MOVIES_LOCATION.INDEX)
+                    .values(data.getName(), data.getIndex())
+                    .execute();
+            return StatusCode.SUCCESS;
+        });
     }
 
     public Validation<StatusCode, Stream<MovieOutline>> getLatest(User user) {

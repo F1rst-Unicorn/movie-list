@@ -2,27 +2,37 @@ package de.njsm.movielist.server.business.data;
 
 import de.njsm.movielist.server.Config;
 
+import javax.ws.rs.FormParam;
+import javax.ws.rs.PathParam;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.TimeZone;
 
 public class MovieDetails {
 
-    private long id;
+    @PathParam("movie")
+    private int id;
 
+    @FormParam("name")
     private String name;
 
     private boolean deleted;
 
     private boolean toDelete;
 
+    @FormParam("year")
     private int year;
 
     private OffsetDateTime createdAt;
 
+    @FormParam("link")
     private String link;
 
+    @FormParam("description")
     private String description;
+
+    @FormParam("location")
+    private int location;
 
     private List<Genre> genres;
 
@@ -32,7 +42,9 @@ public class MovieDetails {
 
     private List<Comment> comments;
 
-    public MovieDetails(long id, String name, boolean deleted, boolean toDelete, int year, OffsetDateTime createdAt, String link, String description) {
+    public MovieDetails() {}
+
+    public MovieDetails(int id, String name, boolean deleted, boolean toDelete, int year, OffsetDateTime createdAt, String link, String description) {
         this.id = id;
         this.name = name;
         this.deleted = deleted;
@@ -43,7 +55,7 @@ public class MovieDetails {
         this.description = description;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -105,5 +117,9 @@ public class MovieDetails {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public int getLocation() {
+        return location;
     }
 }
