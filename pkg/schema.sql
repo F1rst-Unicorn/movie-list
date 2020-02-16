@@ -1,168 +1,118 @@
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
+set statement_timeout = 0;
+set lock_timeout = 0;
+set idle_in_transaction_session_timeout = 0;
+set client_encoding = 'UTF8';
+set standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+set check_function_bodies = false;
+set xmloption = content;
+set client_min_messages = warning;
+set row_security = off;
 
-CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
-COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+create extension IF not EXISTS pg_trgm WITH SCHEMA public;
+COMMENT on extension pg_trgm IS 'text similarity measurement and index searching based on trigrams';
 
 
-SET default_tablespace = '';
-SET default_table_access_method = heap;
+set default_tablespace = '';
+set default_table_access_method = heap;
 
-CREATE TABLE public.auth_user (
-    id serial not null unique,
-    password character varying(128) NOT NULL,
-    last_login timestamp with time zone,
-    is_superuser boolean NOT NULL,
-    username character varying(150) NOT NULL,
-    first_name character varying(30) NOT NULL,
-    last_name character varying(150) NOT NULL,
-    email character varying(254) NOT NULL,
-    is_staff boolean NOT NULL,
-    is_active boolean NOT NULL,
-    date_joined timestamp with time zone NOT NULL
+create table public.auth_user
+(
+    id       serial primary key unique,
+    password character varying(128) not null,
+    username character varying(150) not null unique
 );
 
-CREATE TABLE public.movies_actor (
-    id serial not null unique,
-    first_name character varying(300) NOT NULL,
-    last_name character varying(300) NOT NULL
+create table public.movies_actor
+(
+    id         serial primary key unique,
+    first_name character varying(300) not null,
+    last_name  character varying(300) not null
 );
 
-CREATE TABLE public.movies_comment (
-    id serial not null unique,
-    content character varying(1000) NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    creator_id integer NOT NULL,
-    movie_id integer NOT NULL
+create table public.movies_comment
+(
+    id         serial primary key unique,
+    content    character varying(1000)  not null,
+    created_at timestamp with time zone not null default now(),
+    creator_id integer                  not null,
+    movie_id   integer                  not null,
+    foreign key (creator_id) references public.auth_user (id) on update cascade on delete cascade deferrable initially deferred,
+    foreign key (movie_id) references public.movies_movie (id) on update cascade on delete cascade deferrable initially deferred
 );
 
-CREATE TABLE public.movies_genre (
-    id serial not null unique,
-    name character varying(300) NOT NULL
+create table public.movies_genre
+(
+    id   serial primary key unique,
+    name character varying(300) not null
 );
 
-CREATE TABLE public.movies_location (
-    id serial not null unique,
-    name character varying(300) NOT NULL,
-    index integer NOT NULL
+create table public.movies_location
+(
+    id    serial primary key unique,
+    name  character varying(300) not null,
+    index integer                not null
 );
 
-CREATE TABLE public.movies_movie (
-    id serial not null unique,
-    name character varying(300) NOT NULL,
-    description text NOT NULL,
-    year integer NOT NULL,
-    to_delete boolean NOT NULL,
-    deleted boolean NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    location_id integer NOT NULL,
-    link character varying(2000) NOT NULL
+create table public.movies_movie
+(
+    id          serial primary key unique,
+    name        character varying(300)   not null,
+    description text                     not null,
+    year        integer                  not null,
+    to_delete   boolean                  not null,
+    deleted     boolean                  not null,
+    created_at  timestamp with time zone not null default now(),
+    location_id integer                  not null,
+    link        character varying(2000)  not null,
+    foreign key (location_id) references public.movies_location (id) on update cascade on delete cascade deferrable initially deferred
 );
 
-CREATE TABLE public.movies_movie_actors (
-    id serial not null unique,
-    movie_id integer NOT NULL,
-    actor_id integer NOT NULL
+create table public.movies_movie_actors
+(
+    id       serial primary key unique,
+    movie_id integer not null,
+    actor_id integer not null,
+    foreign key (actor_id) references public.movies_actor (id) on update cascade on delete cascade deferrable initially deferred,
+    foreign key (movie_id) references public.movies_movie (id) on update cascade on delete cascade deferrable initially deferred,
+    constraint movies_movie_actors_movie_id_actor_id_73463e17_uniq UNIQUE (movie_id, actor_id)
 );
 
-CREATE TABLE public.movies_moviesingenre (
-    id serial not null unique,
-    genre_id integer NOT NULL,
-    movie_id integer NOT NULL
+create table public.movies_moviesingenre
+(
+    id       serial primary key unique,
+    genre_id integer not null,
+    movie_id integer not null,
+    foreign key (genre_id) references public.movies_genre (id) on update cascade on delete cascade deferrable initially deferred,
+    foreign key (movie_id) references public.movies_movie (id) on update cascade on delete cascade deferrable initially deferred
 );
 
-CREATE TABLE public.movies_watchstatus (
-    id serial not null unique,
-    watched_on timestamp with time zone NOT NULL,
-    movie_id integer NOT NULL,
-    user_id integer NOT NULL
+create table public.movies_watchstatus
+(
+    id         serial primary key unique,
+    watched_on timestamp with time zone not null default now(),
+    movie_id   integer                  not null,
+    user_id    integer                  not null,
+    foreign key (movie_id) references public.movies_movie (id) on update cascade on delete cascade deferrable initially deferred,
+    foreign key (user_id) references public.auth_user (id) on update cascade on delete cascade deferrable initially deferred
 );
 
-ALTER TABLE ONLY public.auth_user
-    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+create index auth_user_username_6821ab7c_like on public.auth_user using btree (username varchar_pattern_ops);
 
-ALTER TABLE ONLY public.auth_user
-    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+create index movies_comment_creator_id_470d0a84 on public.movies_comment using btree (creator_id);
 
-ALTER TABLE ONLY public.movies_actor
-    ADD CONSTRAINT movies_actor_pkey PRIMARY KEY (id);
+create index movies_comment_movie_id_967cba99 on public.movies_comment using btree (movie_id);
 
-ALTER TABLE ONLY public.movies_comment
-    ADD CONSTRAINT movies_comment_pkey PRIMARY KEY (id);
+create index movies_movie_actors_actor_id_44828aa1 on public.movies_movie_actors using btree (actor_id);
 
-ALTER TABLE ONLY public.movies_genre
-    ADD CONSTRAINT movies_genre_pkey PRIMARY KEY (id);
+create index movies_movie_actors_movie_id_baed65f3 on public.movies_movie_actors using btree (movie_id);
 
-ALTER TABLE ONLY public.movies_location
-    ADD CONSTRAINT movies_location_pkey PRIMARY KEY (id);
+create index movies_movie_location_id_07f5fc13 on public.movies_movie using btree (location_id);
 
-ALTER TABLE ONLY public.movies_movie_actors
-    ADD CONSTRAINT movies_movie_actors_movie_id_actor_id_73463e17_uniq UNIQUE (movie_id, actor_id);
+create index movies_moviesingenre_genre_id_a7baf703 on public.movies_moviesingenre using btree (genre_id);
 
-ALTER TABLE ONLY public.movies_movie_actors
-    ADD CONSTRAINT movies_movie_actors_pkey PRIMARY KEY (id);
+create index movies_moviesingenre_movie_id_8efdcb88 on public.movies_moviesingenre using btree (movie_id);
 
-ALTER TABLE ONLY public.movies_movie
-    ADD CONSTRAINT movies_movie_pkey PRIMARY KEY (id);
+create index movies_watchstatus_movie_id_50ee87cb on public.movies_watchstatus using btree (movie_id);
 
-ALTER TABLE ONLY public.movies_moviesingenre
-    ADD CONSTRAINT movies_moviesingenre_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY public.movies_watchstatus
-    ADD CONSTRAINT movies_watchstatus_pkey PRIMARY KEY (id);
-
-CREATE INDEX auth_user_username_6821ab7c_like ON public.auth_user USING btree (username varchar_pattern_ops);
-
-CREATE INDEX movies_comment_creator_id_470d0a84 ON public.movies_comment USING btree (creator_id);
-
-CREATE INDEX movies_comment_movie_id_967cba99 ON public.movies_comment USING btree (movie_id);
-
-CREATE INDEX movies_movie_actors_actor_id_44828aa1 ON public.movies_movie_actors USING btree (actor_id);
-
-CREATE INDEX movies_movie_actors_movie_id_baed65f3 ON public.movies_movie_actors USING btree (movie_id);
-
-CREATE INDEX movies_movie_location_id_07f5fc13 ON public.movies_movie USING btree (location_id);
-
-CREATE INDEX movies_moviesingenre_genre_id_a7baf703 ON public.movies_moviesingenre USING btree (genre_id);
-
-CREATE INDEX movies_moviesingenre_movie_id_8efdcb88 ON public.movies_moviesingenre USING btree (movie_id);
-
-CREATE INDEX movies_watchstatus_movie_id_50ee87cb ON public.movies_watchstatus USING btree (movie_id);
-
-CREATE INDEX movies_watchstatus_user_id_da4273c7 ON public.movies_watchstatus USING btree (user_id);
-
-ALTER TABLE ONLY public.movies_comment
-    ADD CONSTRAINT movies_comment_creator_id_470d0a84_fk_auth_user_id FOREIGN KEY (creator_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.movies_comment
-    ADD CONSTRAINT movies_comment_movie_id_967cba99_fk_movies_movie_id FOREIGN KEY (movie_id) REFERENCES public.movies_movie(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.movies_movie_actors
-    ADD CONSTRAINT movies_movie_actors_actor_id_44828aa1_fk_movies_actor_id FOREIGN KEY (actor_id) REFERENCES public.movies_actor(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.movies_movie_actors
-    ADD CONSTRAINT movies_movie_actors_movie_id_baed65f3_fk_movies_movie_id FOREIGN KEY (movie_id) REFERENCES public.movies_movie(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.movies_movie
-    ADD CONSTRAINT movies_movie_location_id_07f5fc13_fk_movies_location_id FOREIGN KEY (location_id) REFERENCES public.movies_location(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.movies_moviesingenre
-    ADD CONSTRAINT movies_moviesingenre_genre_id_a7baf703_fk_movies_genre_id FOREIGN KEY (genre_id) REFERENCES public.movies_genre(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.movies_moviesingenre
-    ADD CONSTRAINT movies_moviesingenre_movie_id_8efdcb88_fk_movies_movie_id FOREIGN KEY (movie_id) REFERENCES public.movies_movie(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.movies_watchstatus
-    ADD CONSTRAINT movies_watchstatus_movie_id_50ee87cb_fk_movies_movie_id FOREIGN KEY (movie_id) REFERENCES public.movies_movie(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.movies_watchstatus
-    ADD CONSTRAINT movies_watchstatus_user_id_da4273c7_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
-
+create index movies_watchstatus_user_id_da4273c7 on public.movies_watchstatus using btree (user_id);

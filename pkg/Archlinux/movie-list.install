@@ -18,11 +18,11 @@
 
 ## arg 1:  the new package version
 post_install() {
-    chown -R tomcat8:tomcat8 /var/log/movie-list
+    echo -n
 }
 
 ## arg 1:  the new package version
 ## arg 2:  the old package version
 post_upgrade() {
-    chown -R tomcat8:tomcat8 /var/log/movie-list
+    echo -n
 }
