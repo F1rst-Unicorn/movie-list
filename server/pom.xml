@@ -244,8 +244,8 @@
                 <de.njsm.movielist.server.db.postgres.password>linux</de.njsm.movielist.server.db.postgres.password>
                 <de.njsm.movielist.server.db.postgres.ssl>true</de.njsm.movielist.server.db.postgres.ssl>
                 <de.njsm.movielist.server.db.postgres.sslmode>verify-ca</de.njsm.movielist.server.db.postgres.sslmode>
-                <de.njsm.movielist.server.db.postgres.sslcert>${user.home}/ssl/stocks@rivendell.j.njsm.de.crt</de.njsm.movielist.server.db.postgres.sslcert>
-                <de.njsm.movielist.server.db.postgres.sslkey>${user.home}/ssl/stocks@rivendell.j.njsm.de.pk8</de.njsm.movielist.server.db.postgres.sslkey>
+                <de.njsm.movielist.server.db.postgres.sslcert>${user.home}/ssl/db.j.njsm.de.crt</de.njsm.movielist.server.db.postgres.sslcert>
+                <de.njsm.movielist.server.db.postgres.sslkey>${user.home}/ssl/db.j.njsm.de.pk8</de.njsm.movielist.server.db.postgres.sslkey>
                 <de.njsm.movielist.server.db.postgres.sslrootcert>${user.home}/ssl/ca.crt</de.njsm.movielist.server.db.postgres.sslrootcert>
             </properties>
         </profile>

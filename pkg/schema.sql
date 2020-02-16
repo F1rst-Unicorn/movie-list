@@ -30,23 +30,6 @@ create table public.movies_actor
     last_name  character varying(300) not null
 );
 
-create table public.movies_comment
-(
-    id         serial primary key unique,
-    content    character varying(1000)  not null,
-    created_at timestamp with time zone not null default now(),
-    creator_id integer                  not null,
-    movie_id   integer                  not null,
-    foreign key (creator_id) references public.auth_user (id) on update cascade on delete cascade deferrable initially deferred,
-    foreign key (movie_id) references public.movies_movie (id) on update cascade on delete cascade deferrable initially deferred
-);
-
-create table public.movies_genre
-(
-    id   serial primary key unique,
-    name character varying(300) not null
-);
-
 create table public.movies_location
 (
     id    serial primary key unique,
@@ -66,6 +49,23 @@ create table public.movies_movie
     location_id integer                  not null,
     link        character varying(2000)  not null,
     foreign key (location_id) references public.movies_location (id) on update cascade on delete cascade deferrable initially deferred
+);
+
+create table public.movies_comment
+(
+    id         serial primary key unique,
+    content    character varying(1000)  not null,
+    created_at timestamp with time zone not null default now(),
+    creator_id integer                  not null,
+    movie_id   integer                  not null,
+    foreign key (creator_id) references public.auth_user (id) on update cascade on delete cascade deferrable initially deferred,
+    foreign key (movie_id) references public.movies_movie (id) on update cascade on delete cascade deferrable initially deferred
+);
+
+create table public.movies_genre
+(
+    id   serial primary key unique,
+    name character varying(300) not null
 );
 
 create table public.movies_movie_actors
