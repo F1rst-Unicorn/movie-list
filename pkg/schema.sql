@@ -1,16 +1,4 @@
-set statement_timeout = 0;
-set lock_timeout = 0;
-set idle_in_transaction_session_timeout = 0;
-set client_encoding = 'UTF8';
-set standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-set check_function_bodies = false;
-set xmloption = content;
-set client_min_messages = warning;
-set row_security = off;
-
-create extension IF not EXISTS pg_trgm WITH SCHEMA public;
-COMMENT on extension pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+create extension IF not EXISTS pg_trgm;
 
 
 set default_tablespace = '';

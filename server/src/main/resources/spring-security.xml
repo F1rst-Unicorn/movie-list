@@ -30,6 +30,7 @@
     <security:http use-expressions="true">
         <security:intercept-url pattern="/login" access="permitAll()"/>
         <security:intercept-url pattern="/create_account" access="permitAll()"/>
+        <security:intercept-url pattern="/metrics" access="permitAll()"/>
         <security:intercept-url pattern="/**" access="isAuthenticated()"/>
         <security:form-login login-page="/login" />
         <security:logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID"/>

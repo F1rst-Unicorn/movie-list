@@ -222,15 +222,15 @@
             <properties>
                 <de.njsm.movielist.server.db.host>localhost</de.njsm.movielist.server.db.host>
                 <de.njsm.movielist.server.db.port>5432</de.njsm.movielist.server.db.port>
-                <de.njsm.movielist.server.db.name>movie-list</de.njsm.movielist.server.db.name>
+                <de.njsm.movielist.server.db.name>movie_list</de.njsm.movielist.server.db.name>
                 <de.njsm.movielist.server.circuitbreaker.timeout>2000</de.njsm.movielist.server.circuitbreaker.timeout>
-                <de.njsm.movielist.server.db.postgres.user>movie-list</de.njsm.movielist.server.db.postgres.user>
+                <de.njsm.movielist.server.db.postgres.user>movie_list</de.njsm.movielist.server.db.postgres.user>
                 <de.njsm.movielist.server.db.postgres.password>linux</de.njsm.movielist.server.db.postgres.password>
                 <de.njsm.movielist.server.db.postgres.ssl>false</de.njsm.movielist.server.db.postgres.ssl>
                 <de.njsm.movielist.server.db.postgres.sslmode>disable</de.njsm.movielist.server.db.postgres.sslmode>
-                <de.njsm.movielist.server.db.postgres.sslcert></de.njsm.movielist.server.db.postgres.sslcert>
-                <de.njsm.movielist.server.db.postgres.sslkey></de.njsm.movielist.server.db.postgres.sslkey>
-                <de.njsm.movielist.server.db.postgres.sslrootcert></de.njsm.movielist.server.db.postgres.sslrootcert>
+                <de.njsm.movielist.server.db.postgres.sslcert>dummy</de.njsm.movielist.server.db.postgres.sslcert>
+                <de.njsm.movielist.server.db.postgres.sslkey>dummy</de.njsm.movielist.server.db.postgres.sslkey>
+                <de.njsm.movielist.server.db.postgres.sslrootcert>dummy</de.njsm.movielist.server.db.postgres.sslrootcert>
             </properties>
         </profile>
         <profile>

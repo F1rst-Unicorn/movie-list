@@ -86,7 +86,7 @@
                     </#if>
                     <dt>${ translate("Recorded on") }</dt>
                     <dd>${ movie.createdAt }</dd>
-                    <#if movie.link?? >
+                    <#if movie.link?? && ! movie.link?matches("^$") >
                         <a href="${ movie.link }">${ translate("External information") }</a>
                     </#if>
                     <#list movie.genres as genre >

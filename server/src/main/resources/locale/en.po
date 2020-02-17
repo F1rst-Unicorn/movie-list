@@ -205,3 +205,6 @@ msgstr ""
 
 msgid "Merge %s with"
 msgstr ""
+
+msgid "Username or password wrong!"
+msgstr ""
