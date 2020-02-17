@@ -6,6 +6,7 @@ import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.SearchHandler;
 import fj.data.Validation;
 
+import javax.ws.rs.container.AsyncResponse;
 import java.util.stream.Stream;
 
 public class SearchManager extends BusinessObject {
@@ -17,8 +18,8 @@ public class SearchManager extends BusinessObject {
         handler = dbHandler;
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> get(User user, SearchQuery query) {
-        return runFunction(() -> {
+    public Validation<StatusCode, Stream<MovieOutline>> get(AsyncResponse ar, User user, SearchQuery query) {
+        return runFunction(ar, () -> {
             handler.setReadOnly();
             return handler.get(user, query);
         });

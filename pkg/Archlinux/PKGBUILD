@@ -19,8 +19,8 @@
 # Maintainer: aliena <dairyman@njsm.de>
 pkgbase=movie-list
 pkgname=('movie-list' 'movie-list-static')
-pkgver=2.0.2
-pkgrel=3
+pkgver=2.0.3
+pkgrel=1
 pkgdesc="Manages a large movie list"
 arch=('any')
 url="https://github.com/F1rst-Unicorn/movie-list"
@@ -54,7 +54,7 @@ package_movie-list() {
 
     mkdir -p $pkgdir/var/lib/tomcat8/webapp
     chmod 0775 $pkgdir/var/lib/tomcat8
-    chmod 0775 $pkgdir/var/lib/tomcat8/webapp
+    chmod 0755 $pkgdir/var/lib/tomcat8/webapp
 
     install -D -m 444 server/target/server-*.war $pkgdir/usr/lib/$pkgbase/server.war
     ln -s /usr/lib/$pkgbase/server.war           $pkgdir/var/lib/tomcat8/webapp/movie-list.war

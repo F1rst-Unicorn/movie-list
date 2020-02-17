@@ -30,6 +30,7 @@ public class AuthHandler extends FailSafeDatabaseHandler implements UserDetailsS
         if (authentication.isAuthenticated())
             return authentication;
 
+        setReadOnly();
         Validation<StatusCode, Authentication> r = runFunction(context -> {
 
             Record5<Integer, String, String, String, byte[]> e = context.select(AUTH_USER.ID,
@@ -55,7 +56,7 @@ public class AuthHandler extends FailSafeDatabaseHandler implements UserDetailsS
             }
         });
 
-
+        commit();
         if (r.isSuccess())
             return r.success();
         else

@@ -71,7 +71,7 @@ public class SearchEndpoint extends TemplateEndpoint {
         processRequest(req, r, ar, "search.html.ftl", (user, map) -> {
             map.put("users", userManager.get().success());
             map.put("genres", genreManager.getCounts().success());
-            map.put("movies", (Iterable<MovieOutline>) () -> searchManager.get(user, query).success().iterator());
+            map.put("movies", (Iterable<MovieOutline>) () -> searchManager.get(ar, user, query).success().iterator());
         });
 
     }
