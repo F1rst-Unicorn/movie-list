@@ -46,7 +46,7 @@ create table public.movies_comment
     created_at timestamp with time zone not null default now(),
     creator_id integer                  not null,
     movie_id   integer                  not null,
-    foreign key (creator_id) references public.auth_user (id) on update cascade on delete cascade deferrable initially deferred,
+    foreign key (creator_id) references public.auth_user (id) on update cascade on delete restrict deferrable initially deferred,
     foreign key (movie_id) references public.movies_movie (id) on update cascade on delete cascade deferrable initially deferred
 );
 
@@ -63,7 +63,7 @@ create table public.movies_movie_actors
     actor_id integer not null,
     foreign key (actor_id) references public.movies_actor (id) on update cascade on delete cascade deferrable initially deferred,
     foreign key (movie_id) references public.movies_movie (id) on update cascade on delete cascade deferrable initially deferred,
-    constraint movies_movie_actors_movie_id_actor_id_73463e17_uniq UNIQUE (movie_id, actor_id)
+    constraint movies_movie_actors_movie_id_actor_id_73462e17_uniq UNIQUE (movie_id, actor_id)
 );
 
 create table public.movies_moviesingenre
@@ -103,4 +103,4 @@ create index movies_moviesingenre_movie_id_8efdcb88 on public.movies_moviesingen
 
 create index movies_watchstatus_movie_id_50ee87cb on public.movies_watchstatus using btree (movie_id);
 
-create index movies_watchstatus_user_id_da4273c7 on public.movies_watchstatus using btree (user_id);
+create index movies_watchstatus_user_id_da4272c7 on public.movies_watchstatus using btree (user_id);

@@ -19,8 +19,8 @@
 # Maintainer: aliena <dairyman@njsm.de>
 pkgbase=movie-list
 pkgname=('movie-list' 'movie-list-static')
-pkgver=2.0.0
-pkgrel=3
+pkgver=2.0.2
+pkgrel=2
 pkgdesc="Manages a large movie list"
 arch=('any')
 url="https://github.com/F1rst-Unicorn/movie-list"

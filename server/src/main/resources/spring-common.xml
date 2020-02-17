@@ -27,11 +27,6 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
        default-lazy-init="true">
 
-    <bean name="driver" class="java.lang.Class" factory-method="forName"
-          lazy-init="false">
-        <constructor-arg index="0" value="org.postgresql.Driver"/>
-    </bean>
-
     <bean name="circuitBreakerDatabase" class="java.lang.String">
         <constructor-arg index="0" value="database"/>
     </bean>
@@ -77,15 +72,27 @@
         </constructor-arg>
     </bean>
 
+    <bean name="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="acquireIncrement" value="3" />
+        <property name="driverClass" value="org.postgresql.Driver" />
+        <property name="idleConnectionTestPeriod" value="60" />
+        <property name="testConnectionOnCheckin" value="true" />
+        <property name="initialPoolSize" value="2" />
+        <property name="maxPoolSize" value="16" />
+        <property name="minPoolSize" value="2" />
+        <property name="maxIdleTimeExcessConnections" value="900" />
+        <property name="jdbcUrl" ref="dbUrl" />
+        <property name="properties" ref="dbConfig" />
+        <property name="unreturnedConnectionTimeout" value="15" />
+    </bean>
+
     <bean name="connectionFactory"
           class="de.njsm.movielist.server.db.ConnectionFactory" scope="request">
-        <constructor-arg index="0" ref="dbUrl"/>
-        <constructor-arg index="1" ref="dbConfig"/>
+        <constructor-arg index="0" ref="datasource" />
     </bean>
 
     <bean name="presistentConnectionFactory"
           class="de.njsm.movielist.server.db.ConnectionFactory">
-        <constructor-arg index="0" ref="dbUrl"/>
-        <constructor-arg index="1" ref="dbConfig"/>
+        <constructor-arg index="0" ref="datasource" />
     </bean>
 </beans>
