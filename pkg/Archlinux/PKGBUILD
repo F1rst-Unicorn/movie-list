@@ -20,7 +20,7 @@
 pkgbase=movie-list
 pkgname=('movie-list' 'movie-list-static')
 pkgver=2.0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="Manages a large movie list"
 arch=('any')
 url="https://github.com/F1rst-Unicorn/movie-list"

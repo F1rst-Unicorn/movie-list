@@ -1,14 +1,14 @@
-/* stocks is client-server program to manage a household's food stock
- * Copyright (C) 2019  The stocks developers
+/* movielist is client-server program to manage a household's food stock
+ * Copyright (C) 2019  The movielist developers
  *
- * This file is part of the stocks program suite.
+ * This file is part of the movielist program suite.
  *
- * stocks is free software: you can redistribute it and/or modify
+ * movielist is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * stocks is distributed in the hope that it will be useful,
+ * movielist is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
