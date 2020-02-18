@@ -109,8 +109,11 @@ public class ActorHandler extends FailSafeDatabaseHandler {
                             .join(MOVIES_LOCATION).on(MOVIES_MOVIE.LOCATION_ID.eq(MOVIES_LOCATION.ID))
                             .leftOuterJoin(MOVIES_MOVIE_ACTORS).on(MOVIES_MOVIE_ACTORS.MOVIE_ID.eq(MOVIES_MOVIE.ID))
                             .leftOuterJoin(MOVIES_ACTOR).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
-                            .where(MOVIES_MOVIE.DELETED.eq(false).and(MOVIES_MOVIE.TO_DELETE.eq(false)).and(MOVIES_ACTOR.ID.eq(id)))
-                            .orderBy(MOVIES_MOVIE.NAME)
+                            .where(MOVIES_MOVIE.DELETED.eq(false).and(MOVIES_MOVIE.TO_DELETE.eq(false)).and(
+                                    MOVIES_MOVIE.ID.in(context.select(MOVIES_MOVIE_ACTORS.MOVIE_ID)
+                                            .from(MOVIES_MOVIE_ACTORS)
+                                            .where(MOVIES_MOVIE_ACTORS.ACTOR_ID.eq(id)))))
+                            .orderBy(MOVIES_MOVIE.NAME, MOVIES_MOVIE.ID)
                             .fetchSize(1024)
                             .fetchLazy()
                             .stream());

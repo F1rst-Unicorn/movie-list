@@ -51,7 +51,13 @@ public interface HystrixWrapper<I, E extends Exception> {
             return producer.execute();
         } catch (HystrixRuntimeException e) {
             LOG.error("circuit breaker '{}' has error: {}", getResourceIdentifier(), e.getFailureType());
-            LOG.debug("", e);
+
+            if (e.getFailureType() == HystrixRuntimeException.FailureType.COMMAND_EXCEPTION ||
+                e.getFailureType() == HystrixRuntimeException.FailureType.BAD_REQUEST_EXCEPTION)
+                LOG.error("", e);
+            else
+                LOG.debug("", e);
+
             CIRCUIT_BREAKER_EVENTS.labels(getResourceIdentifier()).inc();
             return Validation.fail(getDefaultErrorCode());
         }
