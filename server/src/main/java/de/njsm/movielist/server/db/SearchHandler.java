@@ -41,7 +41,8 @@ public class SearchHandler extends FailSafeDatabaseHandler {
 
             Iterator<Integer> x = scopes.iterator();
             int i = x.next();
-            SelectOrderByStep<Record17<Integer, String, String, Integer, Boolean, Boolean, OffsetDateTime, Integer, Boolean, Integer, Integer, String, Integer, String, String, String, String>> table = selectInternalColumns(i, user, context)
+            SelectOrderByStep<Record17<Integer, String, String, Integer, Boolean, Boolean, OffsetDateTime, Integer, Boolean, Integer, Integer, String, Integer, String, String, String, String>>
+                    table = selectInternalColumns(i, user, context)
                     .where(
                             DSL.and(
                                     MOVIES_MOVIE.DELETED.eq(query.isIncludeMissing()),
@@ -79,14 +80,15 @@ public class SearchHandler extends FailSafeDatabaseHandler {
                                             DSL.field("mdeleted", Boolean.class),
                                             DSL.field("mto_delete", Boolean.class),
                                             DSL.field("aname", String.class)
-                                    ).from(table.orderBy(DSL.field("kind").asc(), MOVIES_MOVIE.CREATED_AT.desc()))
+                                    ).from(table.orderBy(DSL.field("kind").asc(), MOVIES_MOVIE.CREATED_AT.desc(), DSL.field("mid")))
                                             .stream()
                                             .iterator()), false)
             );
         });
     }
 
-    private SelectOnConditionStep<Record17<Integer, String, String, Integer, Boolean, Boolean, OffsetDateTime, Integer, Boolean, Integer, Integer, String, Integer, String, String, String, String>> selectInternalColumns(int kind, User user, DSLContext context) {
+    private SelectOnConditionStep<Record17<Integer, String, String, Integer, Boolean, Boolean, OffsetDateTime, Integer, Boolean, Integer, Integer, String, Integer, String, String, String, String>>
+    selectInternalColumns(int kind, User user, DSLContext context) {
         return context.selectDistinct(
                 MOVIES_MOVIE.ID.as("mid"),
                 MOVIES_MOVIE.NAME.as("mname"),

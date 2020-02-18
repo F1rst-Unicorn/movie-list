@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.njsm.movielist</groupId>
-    <artifactId>movie-list-master</artifactId>
+    <artifactId>movie-list</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
 

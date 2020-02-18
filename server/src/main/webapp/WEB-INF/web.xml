@@ -30,6 +30,10 @@
         <param-value>classpath:spring.xml</param-value>
     </context-param>
 
+    <session-config>
+        <session-timeout>525600</session-timeout>
+    </session-config>
+
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>

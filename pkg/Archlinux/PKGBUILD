@@ -19,7 +19,7 @@
 # Maintainer: aliena <dairyman@njsm.de>
 pkgbase=movie-list
 pkgname=('movie-list' 'movie-list-static')
-pkgver=2.0.3
+pkgver=2.0.4
 pkgrel=1
 pkgdesc="Manages a large movie list"
 arch=('any')
@@ -65,6 +65,7 @@ package_movie-list() {
 
 package_movie-list-static() {
     cd "$srcdir"
+    backup=()
     mkdir -p $pkgdir/usr/share/$pkgbase/static
     cp -r frontend/node_modules/* $pkgdir/usr/share/$pkgbase/static
     cp -r frontend/css/* $pkgdir/usr/share/$pkgbase/static
