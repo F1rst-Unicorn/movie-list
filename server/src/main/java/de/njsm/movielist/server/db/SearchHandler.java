@@ -133,8 +133,8 @@ public class SearchHandler extends FailSafeDatabaseHandler {
                 DSL.concat(MOVIES_ACTOR.FIRST_NAME, DSL.concat(" ", MOVIES_ACTOR.LAST_NAME)).as("aname")
         )
                 .from(MOVIES_MOVIE)
-                .join(MOVIES_MOVIESINGENRE).on(MOVIES_MOVIE.ID.eq(MOVIES_MOVIESINGENRE.MOVIE_ID))
                 .join(MOVIES_LOCATION).on(MOVIES_LOCATION.ID.eq(MOVIES_MOVIE.LOCATION_ID))
+                .leftOuterJoin(MOVIES_MOVIESINGENRE).on(MOVIES_MOVIE.ID.eq(MOVIES_MOVIESINGENRE.MOVIE_ID))
                 .leftOuterJoin(MOVIES_MOVIE_ACTORS).on(MOVIES_MOVIE_ACTORS.MOVIE_ID.eq(MOVIES_MOVIE.ID))
                 .leftOuterJoin(MOVIES_ACTOR).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
                 .leftOuterJoin(MOVIES_COMMENT).on(MOVIES_MOVIE.ID.eq(MOVIES_COMMENT.CREATOR_ID));

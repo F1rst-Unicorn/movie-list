@@ -45,8 +45,7 @@
                         </a>
                     </#if>
                     <#if movie.deleted >
-                        <form style="display: inline"
-                              action="${ url("delete", movie.id) }"
+                        <form action="${ url("delete", movie.id) }"
                               method="post">
                             <input class="btn btn-sm btn-warning" type="submit"
                                    value="${ translate("Record again") }" >
@@ -74,8 +73,7 @@
                                    value="${ csrftoken.token }"/>
                         </form>
                     <#else>
-                        <form style="display: inline"
-                              action="${ url("mark_removal", movie.id) }"
+                        <form action="${ url("mark_removal", movie.id) }"
                               method="post">
                             <input class="btn btn-sm btn-warning" type="image"
                                    src="${ static("octicons/build/svg/trashcan.svg") }">
