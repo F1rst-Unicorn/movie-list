@@ -34,7 +34,7 @@ public class User implements UserDetails, Authentication {
 
     private boolean authenticated;
 
-    private String password;
+    private transient String password;
 
     public User(int id, String name, String password) {
         this.id = id;
