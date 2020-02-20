@@ -25,6 +25,7 @@ import org.glassfish.jersey.internal.guava.Preconditions;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import rx.schedulers.Schedulers;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -85,6 +86,6 @@ public class ServletCleaner implements ServletContextListener {
         } catch(Exception e) {
             sce.getServletContext().log("Failed to clean hystrix thread-locals", e);
         }
-
+        Schedulers.shutdown();
     }
 }
