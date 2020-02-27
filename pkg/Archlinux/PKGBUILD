@@ -19,7 +19,7 @@
 # Maintainer: aliena <dairyman@njsm.de>
 pkgbase=movie-list
 pkgname=('movie-list' 'movie-list-static')
-pkgver=2.0.8
+pkgver=2.0.9
 pkgrel=1
 pkgdesc="Manages a large movie list"
 arch=('any')
