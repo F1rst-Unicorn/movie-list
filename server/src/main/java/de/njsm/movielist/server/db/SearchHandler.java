@@ -47,6 +47,7 @@ public class SearchHandler extends FailSafeDatabaseHandler {
     public Validation<StatusCode, Stream<MovieOutline>> get(User user, SearchQuery query) {
         return runFunction(context -> {
 
+            Condition includeMissing = (query.isIncludeMissing() ? DSL.trueCondition() : MOVIES_MOVIE.DELETED.eq(false).and(MOVIES_MOVIE.TO_DELETE.eq(false)));
             Condition genreCondition = (query.getGenres().isEmpty() ? DSL.trueCondition() : MOVIES_MOVIESINGENRE.GENRE_ID.in(query.getGenres()));
             Condition userCondition = (query.getUsers().isEmpty() ? DSL.trueCondition() : MOVIES_MOVIE.ID.notIn(context.select(MOVIES_WATCHSTATUS.MOVIE_ID)
                     .from(MOVIES_WATCHSTATUS)
@@ -63,8 +64,7 @@ public class SearchHandler extends FailSafeDatabaseHandler {
                     table = selectInternalColumns(i, user, context)
                     .where(
                             DSL.and(
-                                    MOVIES_MOVIE.DELETED.eq(query.isIncludeMissing()),
-                                    MOVIES_MOVIE.TO_DELETE.eq(query.isIncludeMissing()),
+                                    includeMissing,
                                     genreCondition,
                                     userCondition,
                                     fulltextConditions[i]
@@ -76,8 +76,7 @@ public class SearchHandler extends FailSafeDatabaseHandler {
                 table.union(selectInternalColumns(i, user, context)
                         .where(
                                 DSL.and(
-                                        MOVIES_MOVIE.DELETED.eq(query.isIncludeMissing()),
-                                        MOVIES_MOVIE.TO_DELETE.eq(query.isIncludeMissing()),
+                                        includeMissing,
                                         genreCondition,
                                         userCondition,
                                         fulltextConditions[i]

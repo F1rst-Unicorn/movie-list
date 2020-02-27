@@ -31,7 +31,7 @@ public class SearchQuery {
     private List<Integer> scopes;
 
     @FormParam("deleted_movies")
-    private boolean includeMissing;
+    private String includeMissing;
 
     @FormParam("genres")
     private List<Integer> genres;
@@ -48,7 +48,7 @@ public class SearchQuery {
     }
 
     public boolean isIncludeMissing() {
-        return includeMissing;
+        return includeMissing != null && includeMissing.equals("on");
     }
 
     public List<Integer> getGenres() {
