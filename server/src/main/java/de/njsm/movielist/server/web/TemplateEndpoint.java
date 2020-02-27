@@ -19,8 +19,9 @@
 
 package de.njsm.movielist.server.web;
 
+import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.User;
-import de.njsm.movielist.server.util.BiConsumerWithExceptions;
+import fj.data.Validation;
 import freemarker.core.Environment;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -32,10 +33,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.MediaType;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TemplateEndpoint extends Endpoint {
+public class TemplateEndpoint {
 
     private static final Logger LOG = LogManager.getLogger(TemplateEndpoint.class);
 
@@ -46,23 +48,39 @@ public class TemplateEndpoint extends Endpoint {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response,
-                                  AsyncResponse asyncResponse, String templateName, BiConsumerWithExceptions<User, Map<String, Object>, Exception> logic) {
+                                  AsyncResponse asyncResponse, String templateName) {
+        processRequest(request, response, asyncResponse, templateName, Collections.emptyMap());
+    }
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response,
+                                  AsyncResponse asyncResponse, String templateName, Map<String, Object> context) {
+        processRequest(request, response, asyncResponse, templateName, Validation.success(context));
+    }
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response,
+                                  AsyncResponse asyncResponse, String templateName, Validation<StatusCode, Map<String, Object>> businessContext) {
         try (PrintWriter drain = response.getWriter()) {
+
             Template template = configuration.getTemplate(templateName);
-            User u = (User) request.getUserPrincipal();
-            if (u == null) {
-                u = new User();
-            }
+            User user = getUser(request);
 
             HashMap<String, Object> context = new HashMap<>();
-            context.put("user", u);
+            context.put("user", user);
             context.put("csrftoken", request.getAttribute("_csrf"));
-            logic.accept(u, context);
+
+            if (businessContext.isFail()) {
+                int statusCode = businessContext.fail().toHttpStatus().getStatusCode();
+                response.setStatus(statusCode);
+                template = configuration.getTemplate("error_" + statusCode + ".html.ftl");
+            } else {
+                context.putAll(businessContext.success());
+            }
 
             response.setContentType(MediaType.TEXT_HTML);
             Environment env = template.createProcessingEnvironment(context, drain);
             env.setLocale(request.getLocale());
             env.process();
+
             asyncResponse.resume(new Object());
             drain.flush();
         } catch (Exception e) {
@@ -73,5 +91,11 @@ public class TemplateEndpoint extends Endpoint {
 
     }
 
-
+    protected User getUser(HttpServletRequest request) {
+        User user = (User) request.getUserPrincipal();
+        if (user == null)
+            return new User();
+        else
+            return user;
+    }
 }

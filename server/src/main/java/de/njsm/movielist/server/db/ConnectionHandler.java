@@ -117,7 +117,7 @@ public class ConnectionHandler implements HystrixWrapper<Connection, SQLExceptio
         throw e;
     }
 
-    static <O> boolean isSerialisationConflict(SQLException cause) {
+    static boolean isSerialisationConflict(SQLException cause) {
         String sqlState = cause.getSQLState();
 
         if (sqlState != null && sqlState.equals(SERIALISATION_FAILURE_SQL_STATE)) {

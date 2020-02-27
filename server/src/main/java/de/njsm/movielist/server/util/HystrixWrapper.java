@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 
 public interface HystrixWrapper<I, E extends Exception> {
 
-    static final Counter CIRCUIT_BREAKER_EVENTS = Counter.build()
+    Counter CIRCUIT_BREAKER_EVENTS = Counter.build()
             .name("movie_list_circuit_breaker_trigger")
             .labelNames("resource")
             .help("Number of circuit breaker open events")

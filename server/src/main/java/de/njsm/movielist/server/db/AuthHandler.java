@@ -38,7 +38,6 @@ import static de.njsm.movielist.server.db.jooq.Tables.AUTH_USER;
 
 public class AuthHandler extends FailSafeDatabaseHandler implements UserDetailsService, AuthenticationProvider {
 
-
     public AuthHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
@@ -77,12 +76,15 @@ public class AuthHandler extends FailSafeDatabaseHandler implements UserDetailsS
         commit();
         if (r.isSuccess())
             return r.success();
-        else
-            throw new BadCredentialsException("test");
+        else if (r.fail() == StatusCode.NOT_FOUND) {
+            throw new UsernameNotFoundException("");
+        } else {
+            throw new BadCredentialsException("");
+        }
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         Validation<StatusCode, UserDetails> r = runFunction(context -> {
             Record2<Integer, String> e = context.select(AUTH_USER.ID,
                     AUTH_USER.USERNAME)
@@ -100,7 +102,7 @@ public class AuthHandler extends FailSafeDatabaseHandler implements UserDetailsS
         if (r.isSuccess()) {
             return r.success();
         } else
-            throw new BadCredentialsException("test");
+            throw new UsernameNotFoundException("");
     }
 
     @Override

@@ -19,10 +19,7 @@
 
 package de.njsm.movielist.server.web;
 
-import de.njsm.movielist.server.business.GenreManager;
 import de.njsm.movielist.server.business.SearchManager;
-import de.njsm.movielist.server.business.UserManager;
-import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.SearchQuery;
 import freemarker.template.Configuration;
 
@@ -37,16 +34,10 @@ import javax.ws.rs.core.MediaType;
 @Path("search")
 public class SearchEndpoint extends TemplateEndpoint {
 
-    private GenreManager genreManager;
-
-    private UserManager userManager;
-
     private SearchManager searchManager;
 
-    public SearchEndpoint(Configuration configuration, GenreManager genreManager, UserManager userManager, SearchManager searchManager) {
+    public SearchEndpoint(Configuration configuration, SearchManager searchManager) {
         super(configuration);
-        this.genreManager = genreManager;
-        this.userManager = userManager;
         this.searchManager = searchManager;
     }
 
@@ -56,10 +47,7 @@ public class SearchEndpoint extends TemplateEndpoint {
     public void get(@Suspended AsyncResponse ar,
                     @Context HttpServletRequest req,
                     @Context HttpServletResponse r) {
-        processRequest(req, r, ar, "search.html.ftl", (user, map) -> {
-            map.put("users", userManager.get().success());
-            map.put("genres", genreManager.getCounts().success());
-        });
+        processRequest(req, r, ar, "search.html.ftl", searchManager.getFormContent(ar));
     }
 
     @POST
@@ -68,11 +56,6 @@ public class SearchEndpoint extends TemplateEndpoint {
                        @Context HttpServletRequest req,
                        @Context HttpServletResponse r,
                        @BeanParam SearchQuery query) {
-        processRequest(req, r, ar, "search.html.ftl", (user, map) -> {
-            map.put("users", userManager.get().success());
-            map.put("genres", genreManager.getCounts().success());
-            map.put("movies", (Iterable<MovieOutline>) () -> searchManager.get(ar, user, query).success().iterator());
-        });
-
+        processRequest(req, r, ar, "search.html.ftl", searchManager.search(ar, getUser(req), query));
     }
 }

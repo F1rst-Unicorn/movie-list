@@ -20,11 +20,7 @@
 package de.njsm.movielist.server.web;
 
 import de.njsm.movielist.server.business.GenreManager;
-import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.Genre;
-import de.njsm.movielist.server.business.data.MovieCount;
-import de.njsm.movielist.server.business.data.MovieOutline;
-import fj.data.Validation;
 import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +32,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.List;
+import java.util.Collections;
 
 @Path("genres")
 public class GenreEndpoint extends TemplateEndpoint {
@@ -54,16 +50,15 @@ public class GenreEndpoint extends TemplateEndpoint {
                                  @Context HttpServletRequest req,
                                  @Context HttpServletResponse r) {
 
-        processRequest(req, r, ar, "genre.html.ftl", (u, map) -> {
-            map.put("edit", false);
-        });
+        processRequest(req, r, ar, "genre.html.ftl", Collections.singletonMap("edit", false));
     }
 
     @POST
     @Path("add")
     public Response addGenre(@BeanParam Genre a) {
         manager.add(a);
-        return Response.seeOther(URI.create("")).build();
+        return Response.seeOther(URI.create(""))
+                .build();
     }
 
     @GET
@@ -74,18 +69,15 @@ public class GenreEndpoint extends TemplateEndpoint {
                             @Context HttpServletResponse r,
                             @PathParam("genre") int id) {
 
-        processRequest(req, r, ar, "genre.html.ftl", (u, map) -> {
-            Validation<StatusCode, Genre> genre = manager.get(id);
-            map.put("genre", genre.success());
-            map.put("edit", true);
-        });
+        processRequest(req, r, ar, "genre.html.ftl", manager.getGenreForEditing(id));
     }
 
     @POST
     @Path("{genre}/edit")
     public Response editGenre(@BeanParam Genre a) {
         manager.edit(a);
-        return Response.seeOther(URI.create("genres/" + a.getId() + "/detail")).build();
+        return Response.seeOther(URI.create("genres/" + a.getId() + "/detail"))
+                .build();
     }
 
     @GET
@@ -94,10 +86,7 @@ public class GenreEndpoint extends TemplateEndpoint {
                     @Context HttpServletRequest req,
                     @Context HttpServletResponse r) {
 
-        processRequest(req, r, ar, "genres.html.ftl", (u, map) -> {
-            Validation<StatusCode, List<MovieCount>> movie = manager.getCounts();
-            map.put("items", movie.success());
-        });
+        processRequest(req, r, ar, "genres.html.ftl", manager.getCounts(ar));
     }
 
     @GET
@@ -108,11 +97,7 @@ public class GenreEndpoint extends TemplateEndpoint {
                            @Context HttpServletResponse r,
                            @PathParam("genre") int id) {
 
-        processRequest(req, r, ar, "genre_detail.html.ftl", (u, map) -> {
-            Validation<StatusCode, Genre> genre = manager.get(id);
-            map.put("movies", (Iterable<MovieOutline>) () -> manager.getMovies(ar, u, id).success().iterator());
-            map.put("genre", genre.success());
-        });
+        processRequest(req, r, ar, "genre_detail.html.ftl", manager.get(ar, id, getUser(req)));
     }
 
 }

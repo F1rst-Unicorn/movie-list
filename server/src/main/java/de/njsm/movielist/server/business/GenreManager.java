@@ -19,13 +19,17 @@
 
 package de.njsm.movielist.server.business;
 
-import de.njsm.movielist.server.business.data.*;
+import de.njsm.movielist.server.business.data.Genre;
+import de.njsm.movielist.server.business.data.MovieCount;
+import de.njsm.movielist.server.business.data.MovieOutline;
+import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.GenreHandler;
 import fj.data.Validation;
 
 import javax.ws.rs.container.AsyncResponse;
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GenreManager extends BusinessObject {
 
@@ -44,35 +48,39 @@ public class GenreManager extends BusinessObject {
         return runOperation(() -> handler.edit(data));
     }
 
-    public Validation<StatusCode, List<Genre>> get() {
+    public Validation<StatusCode, Map<String, Object>> getGenreForEditing(int genre) {
         return runFunction(() -> {
+            Map<String, Object> result = new HashMap<>();
             handler.setReadOnly();
-            return handler.get();
+            return handler.get(genre)
+                    .map(d -> {
+                        result.put("edit", true);
+                        result.put("genre", d);
+                        return result;
+                    });
         });
     }
 
-    public Validation<StatusCode, List<MovieCount>> getCounts() {
-        return runFunction(() -> {
+    public Validation<StatusCode, Map<String, Object>> getCounts(AsyncResponse ar) {
+        return runAsynchronously(ar, () -> {
             handler.setReadOnly();
-            return handler.getCounts();
+            return handler.getCounts()
+                    .map(d -> Collections.singletonMap("items", (Iterable<MovieCount>) d::iterator));
         });
     }
 
-    public Validation<StatusCode, Genre> get(int id) {
-        return runFunction(() -> {
+    public Validation<StatusCode, Map<String, Object>> get(AsyncResponse ar, int id, User u) {
+        return runAsynchronously(ar, () -> {
             handler.setReadOnly();
-            return handler.get(id);
+            Map<String, Object> result = new HashMap<>();
+            return handler.get(id)
+                    .bind(d -> {
+                        result.put("genre", d);
+                        return handler.getMoviesInGenre(u, id);
+                    }).map(d -> {
+                        result.put("movies", (Iterable<MovieOutline>) d::iterator);
+                        return result;
+                    });
         });
-    }
-
-    public Validation<StatusCode, Stream<MovieOutline>> getMovies(AsyncResponse ar, User u, int id) {
-        return runFunction(ar, () -> {
-            handler.setReadOnly();
-            return handler.get(u, id);
-        });
-    }
-
-    public Validation<StatusCode, List<Genre>> getWithMovie(int movieId) {
-        return runFunction(() -> handler.getWithMovie(movieId));
     }
 }

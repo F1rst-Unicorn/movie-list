@@ -19,78 +19,131 @@
 
 package de.njsm.movielist.server.business;
 
-import de.njsm.movielist.server.business.data.Location;
-import de.njsm.movielist.server.business.data.MovieDetails;
-import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.business.data.*;
+import de.njsm.movielist.server.db.ActorHandler;
+import de.njsm.movielist.server.db.GenreHandler;
 import de.njsm.movielist.server.db.MovieHandler;
+import de.njsm.movielist.server.db.UserHandler;
 import fj.data.Validation;
 
+import javax.ws.rs.container.AsyncResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MovieManager extends BusinessObject {
 
     private MovieHandler handler;
 
-    public MovieManager(MovieHandler dbHandler) {
+    private ActorHandler actorHandler;
+
+    private GenreHandler genreHandler;
+
+    private UserHandler userHandler;
+
+    public MovieManager(MovieHandler dbHandler, ActorHandler actorHandler, GenreHandler genreHandler, UserHandler userHandler) {
         super(dbHandler);
         handler = dbHandler;
+        this.actorHandler = actorHandler;
+        this.genreHandler = genreHandler;
+        this.userHandler = userHandler;
     }
 
     public Validation<StatusCode, Integer> add(MovieDetails movie, List<Integer> actors, List<Integer> genres) {
         return runFunction(() -> handler.add(movie, actors, genres));
     }
 
+    public Validation<StatusCode, Map<String, Object>> getContextForMovieForm(AsyncResponse ar) {
+        return runAsynchronously(ar, () -> {
+            handler.setReadOnly();
+            Map<String, Object> result = new HashMap<>();
+            return actorHandler.get()
+                    .bind(d -> {
+                        result.put("actors", (Iterable<Actor>) d::iterator);
+                        return genreHandler.get();
+                    }).bind(d -> {
+                        result.put("genres", (Iterable<Genre>) d::iterator);
+                        return handler.getLocations();
+                    }).map(d -> {
+                        result.put("locations", d);
+                        return result;
+                    });
+        });
+    }
+
     public StatusCode edit(MovieDetails movie, List<Integer> actors, List<Integer> genres) {
         return runOperation(() -> handler.edit(movie, actors, genres));
     }
 
-    public Validation<StatusCode, MovieDetails> get(int id) {
+    public Validation<StatusCode, Map<String, Object>> getDetails(int id) {
         return runFunction(() -> {
             handler.setReadOnly();
-            return handler.get(id);
+            Map<String, Object> result = new HashMap<>();
+            return handler.get(id)
+                    .bind(d -> {
+                        result.put("movie", d);
+                        return userHandler.get();
+                    }).map(d -> {
+                        result.put("users", d);
+                        return result;
+                    });
         });
     }
 
-    public void markWatched(int id, int user) {
-        runOperation(() -> {
+    public Validation<StatusCode, Map<String, Object>> getEditFormContext(AsyncResponse ar, int movie) {
+        return runAsynchronously(ar, () -> {
+            handler.setReadOnly();
+            Map<String, Object> result = new HashMap<>();
+            return handler.get(movie)
+                    .bind(d -> {
+                        result.put("movie", d);
+                        return actorHandler.getActorsParticipatingIn(movie);
+                    }).bind(d -> {
+                        result.put("actors", d);
+                        return genreHandler.getWithMovie(movie);
+                    }).bind(d -> {
+                        result.put("genres", (Iterable<Genre>) d::iterator);
+                        return handler.getLocations(movie);
+                    }).map(d -> {
+                        result.put("locations", d);
+                        result.put("edit", true);
+                        return result;
+                    });
+        });
+    }
+
+    public StatusCode markWatched(int id, int user) {
+        return runOperation(() -> {
             handler.markWatched(id, user);
             return StatusCode.SUCCESS;
         });
     }
 
-    public void markToRemove(int id) {
-        runOperation(() -> {
+    public StatusCode markToRemove(int id) {
+        return runOperation(() -> {
             handler.markToRemove(id);
             return StatusCode.SUCCESS;
         });
     }
 
-    public void delete(int id) {
-        runOperation(() -> {
+    public StatusCode delete(int id) {
+        return runOperation(() -> {
             handler.delete(id);
             return StatusCode.SUCCESS;
         });
     }
 
-    public void addComment(int id, String comment, User user) {
-        runOperation(() -> {
+    public StatusCode addComment(int id, String comment, User user) {
+        return runOperation(() -> {
             handler.addComment(id, comment, user);
             return StatusCode.SUCCESS;
         });
     }
 
-    public void deleteComment(int comment) {
-        runOperation(() -> {
+    public StatusCode deleteComment(int comment) {
+        return runOperation(() -> {
             handler.deleteComment(comment);
             return StatusCode.SUCCESS;
         });
-    }
-
-    public Validation<StatusCode, List<Location>> getLocations() {
-        return runFunction(() -> handler.getLocations());
-    }
-
-    public Validation<StatusCode, List<Location>> getLocationsWithMovie(int id) {
-        return runFunction(() -> handler.getLocations(id));
     }
 }

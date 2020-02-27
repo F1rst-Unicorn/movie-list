@@ -73,6 +73,9 @@
     </bean>
     <bean name="movieManager" class="de.njsm.movielist.server.business.MovieManager" scope="request">
         <constructor-arg index="0" ref="movieBackend" />
+        <constructor-arg index="1" ref="actorBackend" />
+        <constructor-arg index="2" ref="genreBackend" />
+        <constructor-arg index="3" ref="userBackend" />
     </bean>
     <bean name="userManager" class="de.njsm.movielist.server.business.UserManager" scope="request">
         <constructor-arg index="0" ref="userBackend" />
@@ -85,6 +88,8 @@
     </bean>
     <bean name="searchManager" class="de.njsm.movielist.server.business.SearchManager" scope="request">
         <constructor-arg index="0" ref="searchBackend" />
+        <constructor-arg index="1" ref="userBackend" />
+        <constructor-arg index="2" ref="genreBackend" />
     </bean>
 
     <!-- Web Layer -->
@@ -101,9 +106,6 @@
     <bean name="movieEndpoint" class="de.njsm.movielist.server.web.MovieEndpoint" scope="request">
         <constructor-arg index="0" ref="freemarker" />
         <constructor-arg index="1" ref="movieManager" />
-        <constructor-arg index="2" ref="userManager" />
-        <constructor-arg index="3" ref="actorManager" />
-        <constructor-arg index="4" ref="genreManager" />
     </bean>
     <bean name="actorEndpoint" class="de.njsm.movielist.server.web.ActorEndpoint" scope="request">
         <constructor-arg index="0" ref="freemarker" />
@@ -115,9 +117,7 @@
     </bean>
     <bean name="searchEndpoint" class="de.njsm.movielist.server.web.SearchEndpoint" scope="request">
         <constructor-arg index="0" ref="freemarker" />
-        <constructor-arg index="1" ref="genreManager" />
-        <constructor-arg index="2" ref="userManager" />
-        <constructor-arg index="3" ref="searchManager" />
+        <constructor-arg index="1" ref="searchManager" />
     </bean>
 
     <bean id="freemarker" factory-bean="freemarkerConfig" factory-method="getConfiguration" />

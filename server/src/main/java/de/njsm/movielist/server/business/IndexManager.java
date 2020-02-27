@@ -26,7 +26,8 @@ import de.njsm.movielist.server.db.IndexHandler;
 import fj.data.Validation;
 
 import javax.ws.rs.container.AsyncResponse;
-import java.util.stream.Stream;
+import java.util.Collections;
+import java.util.Map;
 
 public class IndexManager extends BusinessObject {
 
@@ -37,37 +38,39 @@ public class IndexManager extends BusinessObject {
         this.dbBackend = dbBackend;
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> get(AsyncResponse as, User u) {
-        return runFunction(as, () -> {
+    public Validation<StatusCode, Map<String, Object>> get(AsyncResponse as, User u) {
+        return runAsynchronously(as, () -> {
             dbBackend.setReadOnly();
-            return dbBackend.get(u, false, false);
+            return dbBackend.get(u, false, false).map(
+                    stream -> Collections.singletonMap("movies", (Iterable<MovieOutline>) stream::iterator));
         });
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> getToDelete(AsyncResponse as, User u) {
-        return runFunction(as, () -> {
+    public Validation<StatusCode, Map<String, Object>> getToDelete(AsyncResponse as, User u) {
+        return runAsynchronously(as, () -> {
             dbBackend.setReadOnly();
-            return dbBackend.get(u, false, true);
+            return dbBackend.get(u, false, true).map(
+                    stream -> Collections.singletonMap("movies", (Iterable<MovieOutline>) stream::iterator));
         });
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> getDeleted(AsyncResponse as, User u) {
-        return runFunction(as, () -> {
+    public Validation<StatusCode, Map<String, Object>> getDeleted(AsyncResponse as, User u) {
+        return runAsynchronously(as, () -> {
             dbBackend.setReadOnly();
-            return dbBackend.get(u, true, false);
+            return dbBackend.get(u, true, false).map(
+                    stream -> Collections.singletonMap("movies", (Iterable<MovieOutline>) stream::iterator));
         });
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> getLatest(AsyncResponse as, User u) {
-        return runFunction(as, () -> {
+    public Validation<StatusCode, Map<String, Object>> getLatest(AsyncResponse as, User u) {
+        return runAsynchronously(as, () -> {
             dbBackend.setReadOnly();
-            return dbBackend.getLatest(u);
+            return dbBackend.getLatest(u).map(
+                    stream -> Collections.singletonMap("movies", (Iterable<MovieOutline>) stream::iterator));
         });
     }
 
     public StatusCode addLocation(Location data) {
-        return runOperation(() -> {
-            return dbBackend.addLocation(data);
-        });
+        return runOperation(() -> dbBackend.addLocation(data));
     }
 }

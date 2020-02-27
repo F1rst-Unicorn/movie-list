@@ -57,7 +57,7 @@ public class IndexHandler extends FailSafeDatabaseHandler {
         return getInternally(user, deleted, toDelete, MOVIES_MOVIE.NAME.asc());
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> getInternally(User user, boolean deleted, boolean toDelete, SortField<?> orderByField) {
+    private Validation<StatusCode, Stream<MovieOutline>> getInternally(User user, boolean deleted, boolean toDelete, SortField<?> orderByField) {
         return runFunction(context -> {
             Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result = Stream.of(1).flatMap(i ->
                     context.select(
@@ -81,8 +81,6 @@ public class IndexHandler extends FailSafeDatabaseHandler {
                             .leftOuterJoin(MOVIES_ACTOR).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
                             .where(MOVIES_MOVIE.DELETED.eq(deleted).and(MOVIES_MOVIE.TO_DELETE.eq(toDelete)))
                             .orderBy(orderByField)
-                            .fetchSize(1024)
-                            .fetchLazy()
                             .stream());
 
 

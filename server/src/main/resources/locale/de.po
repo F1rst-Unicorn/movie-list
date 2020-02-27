@@ -209,3 +209,17 @@ msgstr "Vereine %s mit"
 msgid "Username or password wrong!"
 msgstr "Benutzername oder Passwort falsch!"
 
+msgid "An unexpected error has occured"
+msgstr "Ein unerwarteter Fehler ist aufgetreten"
+
+msgid "Object not found"
+msgstr "Objekt wurde nicht gefunden"
+
+msgid "You are not allowed to do this"
+msgstr "Du darfst das nicht tun"
+
+msgid "You sent an invalid request to the server"
+msgstr "Du hast eine ungültige Anfrage an den Server geschickt"
+
+msgid "No error has occured"
+msgstr "Es ist kein Fehler aufgetreten"

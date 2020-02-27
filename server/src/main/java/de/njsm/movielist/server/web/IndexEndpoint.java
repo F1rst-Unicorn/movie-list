@@ -21,7 +21,6 @@ package de.njsm.movielist.server.web;
 
 import de.njsm.movielist.server.business.IndexManager;
 import de.njsm.movielist.server.business.data.Location;
-import de.njsm.movielist.server.business.data.MovieOutline;
 import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,9 +49,7 @@ public class IndexEndpoint extends TemplateEndpoint {
                     @Context HttpServletRequest req,
                     @Context HttpServletResponse r) {
 
-        processRequest(req, r, ar, "index.html.ftl", (u, map) -> {
-            map.put("movies", (Iterable<MovieOutline>) () -> manager.get(ar, u).success().iterator());
-        });
+        processRequest(req, r, ar, "index.html.ftl", manager.get(ar, getUser(req)));
     }
 
     @GET
@@ -62,9 +59,7 @@ public class IndexEndpoint extends TemplateEndpoint {
                             @Context HttpServletRequest req,
                             @Context HttpServletResponse r) {
 
-        processRequest(req, r, ar, "index.html.ftl", (u, map) -> {
-            map.put("movies", (Iterable<MovieOutline>) () -> manager.getToDelete(ar, u).success().iterator());
-        });
+        processRequest(req, r, ar, "index.html.ftl", manager.getToDelete(ar, getUser(req)));
     }
 
     @GET
@@ -73,20 +68,16 @@ public class IndexEndpoint extends TemplateEndpoint {
     public void getDeleted(@Suspended AsyncResponse ar,
                            @Context HttpServletRequest req,
                            @Context HttpServletResponse r) {
-        processRequest(req, r, ar, "index.html.ftl", (u, map) -> {
-            map.put("movies", (Iterable<MovieOutline>) () -> manager.getDeleted(ar, u).success().iterator());
-        });
+        processRequest(req, r, ar, "index.html.ftl", manager.getDeleted(ar, getUser(req)));
     }
 
     @GET
     @Path("latest")
     @Produces(MediaType.TEXT_HTML)
     public void getLatest(@Suspended AsyncResponse ar,
-                           @Context HttpServletRequest req,
-                           @Context HttpServletResponse r) {
-        processRequest(req, r, ar, "index.html.ftl", (u, map) -> {
-            map.put("movies", (Iterable<MovieOutline>) () -> manager.getLatest(ar, u).success().iterator());
-        });
+                          @Context HttpServletRequest req,
+                          @Context HttpServletResponse r) {
+        processRequest(req, r, ar, "index.html.ftl", manager.getLatest(ar, getUser(req)));
     }
 
     @GET
@@ -95,7 +86,7 @@ public class IndexEndpoint extends TemplateEndpoint {
                                  @Context HttpServletRequest req,
                                  @Context HttpServletResponse r) {
 
-        processRequest(req, r, ar, "location.html.ftl", (u, map) -> {});
+        processRequest(req, r, ar, "location.html.ftl");
     }
 
     @POST

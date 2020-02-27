@@ -82,7 +82,6 @@ public class SearchHandler extends FailSafeDatabaseHandler {
                                         userCondition,
                                         fulltextConditions[i]
                                 )
-
                         )
                 );
             }

@@ -23,12 +23,8 @@ import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandProperties;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class HystrixProducer<I, O, E extends Exception> extends HystrixCommand<O> {
-
-    private static final Logger LOG = LogManager.getLogger(HystrixProducer.class);
 
     private FunctionWithExceptions<I, O, E> client;
 

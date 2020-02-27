@@ -67,14 +67,14 @@ public class MovieHandler extends FailSafeDatabaseHandler {
             InsertValuesStep2<?, Integer, Integer> stmt = context.insertInto(MOVIES_MOVIE_ACTORS)
                     .columns(MOVIES_MOVIE_ACTORS.ACTOR_ID, MOVIES_MOVIE_ACTORS.MOVIE_ID);
             for (int actor : actors) {
-                stmt.values(actor, newMovieId);
+                stmt = stmt.values(actor, newMovieId);
             }
             stmt.execute();
 
             stmt = context.insertInto(MOVIES_MOVIESINGENRE)
                     .columns(MOVIES_MOVIESINGENRE.GENRE_ID, MOVIES_MOVIESINGENRE.MOVIE_ID);
             for (int genre : genres) {
-                stmt.values(genre, newMovieId);
+                stmt = stmt.values(genre, newMovieId);
             }
             stmt.execute();
 
@@ -99,7 +99,7 @@ public class MovieHandler extends FailSafeDatabaseHandler {
             InsertValuesStep2<?, Integer, Integer> stmt = context.insertInto(MOVIES_MOVIE_ACTORS)
                     .columns(MOVIES_MOVIE_ACTORS.ACTOR_ID, MOVIES_MOVIE_ACTORS.MOVIE_ID);
             for (int actor : actors) {
-                stmt.values(actor, movie.getId());
+                stmt = stmt.values(actor, movie.getId());
             }
             stmt.execute();
 
@@ -109,7 +109,7 @@ public class MovieHandler extends FailSafeDatabaseHandler {
             stmt = context.insertInto(MOVIES_MOVIESINGENRE)
                     .columns(MOVIES_MOVIESINGENRE.GENRE_ID, MOVIES_MOVIESINGENRE.MOVIE_ID);
             for (int genre : genres) {
-                stmt.values(genre, movie.getId());
+                stmt = stmt.values(genre, movie.getId());
             }
             stmt.execute();
 
@@ -188,7 +188,10 @@ public class MovieHandler extends FailSafeDatabaseHandler {
                     .where(MOVIES_MOVIE.ID.eq(id))
                     .execute();
 
-            return (changedRows == 0 ? StatusCode.NOT_FOUND : StatusCode.SUCCESS);
+            if (changedRows == 0)
+                return StatusCode.NOT_FOUND;
+            else
+                return StatusCode.SUCCESS;
         });
     }
 

@@ -19,16 +19,11 @@
 
 package de.njsm.movielist.server.db;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
-
-    private static final Logger LOG = LogManager.getLogger(ConnectionFactory.class);
 
     private Connection connection;
 

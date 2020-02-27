@@ -19,28 +19,64 @@
 
 package de.njsm.movielist.server.business;
 
+import de.njsm.movielist.server.business.data.MovieCount;
 import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.SearchQuery;
 import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.db.GenreHandler;
 import de.njsm.movielist.server.db.SearchHandler;
+import de.njsm.movielist.server.db.UserHandler;
 import fj.data.Validation;
 
 import javax.ws.rs.container.AsyncResponse;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SearchManager extends BusinessObject {
 
     private SearchHandler handler;
 
-    public SearchManager(SearchHandler dbHandler) {
+    private UserHandler userHandler;
+
+    private GenreHandler genreHandler;
+
+    public SearchManager(SearchHandler dbHandler, UserHandler userHandler, GenreHandler genreHandler) {
         super(dbHandler);
         handler = dbHandler;
+        this.userHandler = userHandler;
+        this.genreHandler = genreHandler;
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> get(AsyncResponse ar, User user, SearchQuery query) {
-        return runFunction(ar, () -> {
+    public Validation<StatusCode, Map<String, Object>> getFormContent(AsyncResponse ar) {
+        return runAsynchronously(ar, () -> {
             handler.setReadOnly();
-            return handler.get(user, query);
+            Map<String, Object> result = new HashMap<>();
+            return userHandler.get()
+                    .bind(d -> {
+                        result.put("users", d);
+                        return genreHandler.getCounts();
+                    }).map(d -> {
+                        result.put("genres", (Iterable<MovieCount>) d::iterator);
+                        return result;
+                    });
+        });
+    }
+
+    public Validation<StatusCode, Map<String, Object>> search(AsyncResponse ar, User u, SearchQuery query) {
+        return runAsynchronously(ar, () -> {
+            handler.setReadOnly();
+            Map<String, Object> result = new HashMap<>();
+            return userHandler.get()
+                    .bind(d -> {
+                        result.put("users", d);
+                        return handler.get(u, query);
+                    }).bind(d -> {
+                        result.put("movies", (Iterable<MovieOutline>) d::iterator);
+                        return genreHandler.getCounts();
+                    }).map(d -> {
+                        result.put("genres", (Iterable<MovieCount>) d::iterator);
+                        return result;
+                    });
         });
     }
 }

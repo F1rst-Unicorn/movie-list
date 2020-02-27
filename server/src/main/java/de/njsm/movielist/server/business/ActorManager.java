@@ -19,12 +19,16 @@
 
 package de.njsm.movielist.server.business;
 
-import de.njsm.movielist.server.business.data.*;
+import de.njsm.movielist.server.business.data.Actor;
+import de.njsm.movielist.server.business.data.MovieOutline;
+import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.ActorHandler;
 import fj.data.Validation;
 
 import javax.ws.rs.container.AsyncResponse;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class ActorManager extends BusinessObject {
@@ -53,35 +57,61 @@ public class ActorManager extends BusinessObject {
         });
     }
 
-    public Validation<StatusCode, List<MovieCount>> getMovieCounts() {
-        return runFunction(() -> {
+    public Validation<StatusCode, Map<String, Object>> getMovieCounts(AsyncResponse ar) {
+        return runAsynchronously(ar, () -> {
             handler.setReadOnly();
-            return handler.getCounts();
+            return handler.getActorsWithMovieCounts()
+                    .map(d -> Collections.singletonMap("items", d));
         });
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> getMovies(AsyncResponse ar, User u, int id) {
-        return runFunction(ar, () -> {
+    public Validation<StatusCode, Map<String, Object>> get(AsyncResponse ar, User u, int id) {
+        return runAsynchronously(ar, () -> {
             handler.setReadOnly();
-            return handler.get(u, id);
+            Map<String, Object> result = new HashMap<>();
+            return handler.get(id)
+                    .bind(d -> {
+                        result.put("actor", d);
+                        return handler.getMoviesOfActor(u, id);
+                    }).map(d -> {
+                        result.put("movies", (Iterable<MovieOutline>) d::iterator);
+                        return result;
+                    });
         });
     }
 
-    public Validation<StatusCode, Actor> get(int id) {
-        return runFunction(() -> {
-            handler.setReadOnly();
-            return handler.get(id);
-        });
-    }
-
-    public Validation<StatusCode, List<Actor>> get() {
-        return runFunction(() -> {
+    public Validation<StatusCode, Stream<Actor>> get(AsyncResponse ar) {
+        return runAsynchronously(ar, () -> {
             handler.setReadOnly();
             return handler.get();
         });
     }
 
-    public Validation<StatusCode, List<Actor>> getWithMovie(int movieId) {
-        return runFunction(() -> handler.getWithMovie(movieId));
+    public Validation<StatusCode, Map<String, Object>> getEditForm(int actor) {
+        return runFunction(() -> {
+            handler.setReadOnly();
+            Map<String, Object> result = new HashMap<>();
+            return handler.get(actor)
+                    .map(d -> {
+                        result.put("actor", d);
+                        result.put("edit", true);
+                        return result;
+                    });
+        });
+    }
+
+    public Validation<StatusCode, Map<String, Object>> getMergeForm(AsyncResponse ar, int actor) {
+        return runAsynchronously(ar, () -> {
+            handler.setReadOnly();
+            Map<String, Object> result = new HashMap<>();
+            return handler.get(actor)
+                    .bind(d -> {
+                        result.put("actor", d);
+                        return handler.get();
+                    }).map(d -> {
+                        result.put("actors", d);
+                        return result;
+                    });
+        });
     }
 }

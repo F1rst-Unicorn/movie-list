@@ -33,10 +33,15 @@ public class Config {
     public static final DateTimeFormatter USER_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yy");
 
     static final String DB_ADDRESS_KEY = "de.njsm.movielist.server.db.host";
+
     static final String DB_PORT_KEY = "de.njsm.movielist.server.db.port";
+
     static final String DB_NAME_KEY = "de.njsm.movielist.server.db.name";
+
     static final String DB_CIRCUIT_BREAKER_TIMEOUT_KEY = "de.njsm.movielist.server.circuitbreaker.timeout";
+
     static final String HTTP_BASE_PATH = "de.njsm.movielist.server.web.base";
+
     static final String HTTP_STATIC_BASE_PATH = "de.njsm.movielist.server.web.staticbase";
 
     static final String POSTGRESQL_CONFIG_PREFIX = "de.njsm.movielist.server.db.postgres.";

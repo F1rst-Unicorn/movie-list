@@ -33,7 +33,6 @@ import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -42,18 +41,10 @@ public class MovieEndpoint extends TemplateEndpoint {
 
     private MovieManager manager;
 
-    private UserManager userManager;
 
-    private ActorManager actorManager;
-
-    private GenreManager genreManager;
-
-    public MovieEndpoint(Configuration configuration, MovieManager manager, UserManager userManager, ActorManager actorManager, GenreManager genreManager) {
+    public MovieEndpoint(Configuration configuration, MovieManager manager) {
         super(configuration);
         this.manager = manager;
-        this.userManager = userManager;
-        this.actorManager = actorManager;
-        this.genreManager = genreManager;
     }
 
     @GET
@@ -63,11 +54,7 @@ public class MovieEndpoint extends TemplateEndpoint {
                            @Context HttpServletRequest req,
                            @Context HttpServletResponse r) {
 
-        processRequest(req, r, ar, "movie.html.ftl", (u, map) -> {
-            map.put("actors", actorManager.get().success());
-            map.put("genres", genreManager.get().success());
-            map.put("locations", manager.getLocations().success());
-        });
+        processRequest(req, r, ar, "movie.html.ftl", manager.getContextForMovieForm(ar));
     }
 
     @POST
@@ -79,7 +66,12 @@ public class MovieEndpoint extends TemplateEndpoint {
                              @FormParam("genres") List<Integer> genres) {
 
         Validation<StatusCode, Integer> newMovieId = manager.add(movie, actors, genres);
-        return Response.seeOther(URI.create("movies/" + newMovieId.success() + "/detail")).build();
+        if (newMovieId.isSuccess()) {
+            return Response.seeOther(URI.create("movies/" + newMovieId.success() + "/detail")).build();
+        } else {
+            return Response.seeOther(URI.create(""))
+                    .build();
+        }
     }
 
     @GET
@@ -90,18 +82,7 @@ public class MovieEndpoint extends TemplateEndpoint {
                     @Context HttpServletResponse r,
                     @PathParam("movie") int id) {
 
-        processRequest(req, r, ar, "movie_detail.html.ftl", (u, map) -> {
-            Validation<StatusCode, MovieDetails> movie = manager.get(id);
-
-            if (movie.isSuccess())
-                map.put("movie", movie.success());
-            else {
-                r.setStatus(movie.fail().toHttpStatus().getStatusCode());
-                throw new IOException("Invalid ID");
-            }
-
-            map.put("users", userManager.get().success());
-        });
+        processRequest(req, r, ar, "movie_detail.html.ftl", manager.getDetails(id));
     }
 
     @GET
@@ -112,13 +93,7 @@ public class MovieEndpoint extends TemplateEndpoint {
                             @Context HttpServletResponse r,
                             @PathParam("movie") int id) {
 
-        processRequest(req, r, ar, "movie.html.ftl", (u, map) -> {
-            map.put("movie", manager.get(id).success());
-            map.put("actors", actorManager.getWithMovie(id).success());
-            map.put("genres", genreManager.getWithMovie(id).success());
-            map.put("locations", manager.getLocationsWithMovie(id).success());
-            map.put("edit", true);
-        });
+        processRequest(req, r, ar, "movie.html.ftl", manager.getEditFormContext(ar, id));
     }
 
     @POST
@@ -130,7 +105,8 @@ public class MovieEndpoint extends TemplateEndpoint {
                          @FormParam("genres") List<Integer> genres) {
 
         manager.edit(movie, actors, genres);
-        return Response.seeOther(URI.create("movies/" + movie.getId() + "/detail")).build();
+        return Response.seeOther(URI.create("movies/" + movie.getId() + "/detail"))
+                .build();
     }
 
     @POST
@@ -140,7 +116,8 @@ public class MovieEndpoint extends TemplateEndpoint {
                                 @PathParam("user") int user) {
 
         manager.markWatched(id, user);
-        return Response.noContent().build();
+        return Response.noContent()
+                .build();
     }
 
     @POST
@@ -149,7 +126,8 @@ public class MovieEndpoint extends TemplateEndpoint {
                                 @PathParam("movie") int id) {
 
         manager.markToRemove(id);
-        return Response.seeOther(URI.create(req.getHeader("referer"))).build();
+        return Response.seeOther(URI.create(req.getHeader("referer")))
+                .build();
     }
 
     @POST
@@ -158,7 +136,8 @@ public class MovieEndpoint extends TemplateEndpoint {
                            @PathParam("movie") int id) {
 
         manager.delete(id);
-        return Response.seeOther(URI.create(req.getHeader("referer"))).build();
+        return Response.seeOther(URI.create(req.getHeader("referer")))
+                .build();
     }
 
     @POST
@@ -168,7 +147,8 @@ public class MovieEndpoint extends TemplateEndpoint {
                                @FormParam("comment") String comment) {
 
         manager.addComment(id, comment, (User) req.getUserPrincipal());
-        return Response.seeOther(URI.create(req.getHeader("referer"))).build();
+        return Response.seeOther(URI.create(req.getHeader("referer")))
+                .build();
     }
 
     @POST
@@ -177,6 +157,7 @@ public class MovieEndpoint extends TemplateEndpoint {
                                   @PathParam("comment") int comment) {
 
         manager.deleteComment(comment);
-        return Response.seeOther(URI.create(req.getHeader("referer"))).build();
+        return Response.seeOther(URI.create(req.getHeader("referer")))
+                .build();
     }
 }

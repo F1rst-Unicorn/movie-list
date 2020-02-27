@@ -19,8 +19,8 @@
 
 package de.njsm.movielist.server.web.template.methods;
 
-import de.njsm.movielist.util.locale.Messages_de;
-import de.njsm.movielist.util.locale.Messages_en;
+import de.njsm.movielist.server.util.locale.Messages_de;
+import de.njsm.movielist.server.util.locale.Messages_en;
 import freemarker.core.Environment;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModelException;

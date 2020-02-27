@@ -35,7 +35,6 @@ import static de.njsm.movielist.server.db.jooq.Tables.*;
 
 public class ActorHandler extends FailSafeDatabaseHandler {
 
-
     public ActorHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
@@ -76,22 +75,21 @@ public class ActorHandler extends FailSafeDatabaseHandler {
                     .where(MOVIES_ACTOR.ID.eq(other))
                     .execute();
 
-            if (result == 0)
-                return StatusCode.NOT_FOUND;
-            else
+            if (result == 1)
                 return StatusCode.SUCCESS;
+            else
+                return StatusCode.NOT_FOUND;
         });
     }
 
-    public Validation<StatusCode, List<Actor>> get() {
+    public Validation<StatusCode, Stream<Actor>> get() {
         return runFunction(context -> Validation.success(context.selectFrom(MOVIES_ACTOR)
                 .orderBy(MOVIES_ACTOR.LAST_NAME)
                 .stream()
-                .map(r -> new Actor(r.getId(), r.getFirstName(), r.getLastName()))
-                .collect(Collectors.toList())));
+                .map(r -> new Actor(r.getId(), r.getFirstName(), r.getLastName()))));
     }
 
-    public Validation<StatusCode, List<MovieCount>> getCounts() {
+    public Validation<StatusCode, Stream<MovieCount>> getActorsWithMovieCounts() {
         return runFunction(context -> Validation.success(
                 context.select(MOVIES_ACTOR.ID,
                         DSL.concat(MOVIES_ACTOR.FIRST_NAME, DSL.concat(" ", MOVIES_ACTOR.LAST_NAME)),
@@ -101,14 +99,12 @@ public class ActorHandler extends FailSafeDatabaseHandler {
                         .groupBy(MOVIES_ACTOR.ID)
                         .orderBy(MOVIES_ACTOR.LAST_NAME)
                         .stream()
-                        .map(r -> new MovieCount(r.component1(), r.component2(), r.component3()))
-                        .collect(Collectors.toList())
-        ));
+                        .map(r -> new MovieCount(r.component1(), r.component2(), r.component3()))));
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> get(User user, int id) {
+    public Validation<StatusCode, Stream<MovieOutline>> getMoviesOfActor(User user, int id) {
         return runFunction(context -> {
-            Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result = Stream.of(1).flatMap(i ->
+            Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result =
                     context.select(
                             MOVIES_MOVIE.ID,
                             MOVIES_MOVIE.NAME,
@@ -133,9 +129,7 @@ public class ActorHandler extends FailSafeDatabaseHandler {
                                             .from(MOVIES_MOVIE_ACTORS)
                                             .where(MOVIES_MOVIE_ACTORS.ACTOR_ID.eq(id)))))
                             .orderBy(MOVIES_MOVIE.NAME, MOVIES_MOVIE.ID)
-                            .fetchSize(1024)
-                            .fetchLazy()
-                            .stream());
+                            .stream();
 
 
             return Validation.success(StreamSupport.stream(new MovieOutline.Spliterator(result.iterator()), false));
@@ -156,7 +150,7 @@ public class ActorHandler extends FailSafeDatabaseHandler {
         );
     }
 
-    public Validation<StatusCode, List<Actor>> getWithMovie(int movieId) {
+    public Validation<StatusCode, List<Actor>> getActorsParticipatingIn(int movie) {
         return runFunction(context -> Validation.success(context.select(
                 MOVIES_ACTOR.ID,
                 MOVIES_ACTOR.FIRST_NAME,
@@ -164,7 +158,7 @@ public class ActorHandler extends FailSafeDatabaseHandler {
                 DSL.case_().when(MOVIES_ACTOR.ID.in(
                         context.select(MOVIES_MOVIE_ACTORS.ACTOR_ID)
                                 .from(MOVIES_MOVIE_ACTORS)
-                                .where(MOVIES_MOVIE_ACTORS.MOVIE_ID.eq(movieId))), true)
+                                .where(MOVIES_MOVIE_ACTORS.MOVIE_ID.eq(movie))), true)
                         .otherwise(false)
         )
                 .from(MOVIES_ACTOR)

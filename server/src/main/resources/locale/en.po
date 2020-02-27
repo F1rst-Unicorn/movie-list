@@ -208,3 +208,18 @@ msgstr ""
 
 msgid "Username or password wrong!"
 msgstr ""
+
+msgid "An unexpected error has occured"
+msgstr ""
+
+msgid "Object not found"
+msgstr ""
+
+msgid "You are not allowed to do this"
+msgstr ""
+
+msgid "You sent an invalid request to the server"
+msgstr ""
+
+msgid "No error has occured"
+msgstr ""

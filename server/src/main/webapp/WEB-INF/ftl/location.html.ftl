@@ -36,7 +36,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label"
-                       for="id_index">${ translate("Name")}
+                       for="id_index">${ translate("Index")}
                 </label>
                 <input type="number" name="index" class="form-control"
                        id="id_index">

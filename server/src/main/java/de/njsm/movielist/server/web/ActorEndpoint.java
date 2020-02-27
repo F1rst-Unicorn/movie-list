@@ -20,11 +20,7 @@
 package de.njsm.movielist.server.web;
 
 import de.njsm.movielist.server.business.ActorManager;
-import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.Actor;
-import de.njsm.movielist.server.business.data.MovieCount;
-import de.njsm.movielist.server.business.data.MovieOutline;
-import fj.data.Validation;
 import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +32,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.List;
+import java.util.Collections;
 
 @Path("actors")
 public class ActorEndpoint extends TemplateEndpoint {
@@ -54,16 +50,15 @@ public class ActorEndpoint extends TemplateEndpoint {
                                  @Context HttpServletRequest req,
                                  @Context HttpServletResponse r) {
 
-        processRequest(req, r, ar, "actor.html.ftl", (u, map) -> {
-            map.put("edit", false);
-        });
+        processRequest(req, r, ar, "actor.html.ftl", Collections.singletonMap("edit", false));
     }
 
     @POST
     @Path("add")
     public Response addActor(@BeanParam Actor a) {
         manager.add(a);
-        return Response.seeOther(URI.create("")).build();
+        return Response.seeOther(URI.create(""))
+                .build();
     }
 
     @GET
@@ -72,10 +67,7 @@ public class ActorEndpoint extends TemplateEndpoint {
                     @Context HttpServletRequest req,
                     @Context HttpServletResponse r) {
 
-        processRequest(req, r, ar, "actors.html.ftl", (u, map) -> {
-            Validation<StatusCode, List<MovieCount>> movie = manager.getMovieCounts();
-            map.put("items", movie.success());
-        });
+        processRequest(req, r, ar, "actors.html.ftl", manager.getMovieCounts(ar));
     }
 
     @GET
@@ -86,11 +78,7 @@ public class ActorEndpoint extends TemplateEndpoint {
                            @Context HttpServletResponse r,
                            @PathParam("actor") int id) {
 
-        processRequest(req, r, ar, "actor_detail.html.ftl", (u, map) -> {
-            Validation<StatusCode, Actor> actor = manager.get(id);
-            map.put("movies", (Iterable<MovieOutline>) () -> manager.getMovies(ar, u, id).success().iterator());
-            map.put("actor", actor.success());
-        });
+        processRequest(req, r, ar, "actor_detail.html.ftl", manager.get(ar, getUser(req), id));
     }
 
     @GET
@@ -101,39 +89,33 @@ public class ActorEndpoint extends TemplateEndpoint {
                             @Context HttpServletResponse r,
                             @PathParam("actor") int id) {
 
-        processRequest(req, r, ar, "actor.html.ftl", (u, map) -> {
-            Validation<StatusCode, Actor> actor = manager.get(id);
-            map.put("actor", actor.success());
-            map.put("edit", true);
-        });
+        processRequest(req, r, ar, "actor.html.ftl", manager.getEditForm(id));
     }
 
     @POST
     @Path("{actor}/edit")
     public Response editActor(@BeanParam Actor a) {
         manager.edit(a);
-        return Response.seeOther(URI.create("actors/" + a.getId() + "/detail")).build();
+        return Response.seeOther(URI.create("actors/" + a.getId() + "/detail"))
+                .build();
     }
 
     @GET
     @Path("{actor}/merge")
     @Produces(MediaType.TEXT_HTML)
     public void getMergeForm(@Suspended AsyncResponse ar,
-                            @Context HttpServletRequest req,
-                            @Context HttpServletResponse r,
-                            @PathParam("actor") int id) {
+                             @Context HttpServletRequest req,
+                             @Context HttpServletResponse r,
+                             @PathParam("actor") int id) {
 
-        processRequest(req, r, ar, "actor_merge.html.ftl", (u, map) -> {
-            Validation<StatusCode, Actor> actor = manager.get(id);
-            map.put("actor", actor.success());
-            map.put("actors", manager.get().success());
-        });
+        processRequest(req, r, ar, "actor_merge.html.ftl", manager.getMergeForm(ar, id));
     }
 
     @POST
     @Path("{actor}/merge")
     public Response merge(@BeanParam Actor actor, @FormParam("other") int id) {
         manager.merge(actor, id);
-        return Response.seeOther(URI.create("actors/" + actor.getId() + "/detail")).build();
+        return Response.seeOther(URI.create("actors/" + actor.getId() + "/detail"))
+                .build();
     }
 }

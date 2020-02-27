@@ -19,6 +19,7 @@
 
 package de.njsm.movielist.server.web;
 
+import fj.data.Validation;
 import freemarker.template.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.util.Collections;
 
 @Path("/")
 public class AuthEndpoint extends TemplateEndpoint {
@@ -47,9 +49,8 @@ public class AuthEndpoint extends TemplateEndpoint {
                     @Context HttpServletResponse r,
                     @QueryParam("error") String error) {
 
-        processRequest(req, r, ar, "login.html.ftl", (u, map) -> {
-            map.put("error", error != null);
-        });
+        processRequest(req, r, ar, "login.html.ftl",
+                Validation.success(Collections.singletonMap("error", error != null)));
     }
 
     @GET

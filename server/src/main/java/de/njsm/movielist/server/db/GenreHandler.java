@@ -20,14 +20,15 @@
 package de.njsm.movielist.server.db;
 
 import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.*;
+import de.njsm.movielist.server.business.data.Genre;
+import de.njsm.movielist.server.business.data.MovieCount;
+import de.njsm.movielist.server.business.data.MovieOutline;
+import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.jooq.tables.records.MoviesGenreRecord;
 import fj.data.Validation;
 import org.jooq.Record7;
 import org.jooq.impl.DSL;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -64,24 +65,23 @@ public class GenreHandler extends FailSafeDatabaseHandler {
         });
     }
 
-    public Validation<StatusCode, List<Genre>> getWithMovie(int movieId) {
+    public Validation<StatusCode, Stream<Genre>> getWithMovie(int movie) {
         return runFunction(context -> Validation.success(context.select(
                 MOVIES_GENRE.ID,
                 MOVIES_GENRE.NAME,
                 DSL.case_().when(MOVIES_GENRE.ID.in(
                         context.select(MOVIES_MOVIESINGENRE.GENRE_ID)
                                 .from(MOVIES_MOVIESINGENRE)
-                                .where(MOVIES_MOVIESINGENRE.MOVIE_ID.eq(movieId))), true)
+                                .where(MOVIES_MOVIESINGENRE.MOVIE_ID.eq(movie))), true)
                         .otherwise(false)
         )
                 .from(MOVIES_GENRE)
                 .orderBy(MOVIES_GENRE.NAME)
                 .stream()
-                .map(r -> new Genre(r.component1(), r.component2(), r.component3()))
-                .collect(Collectors.toList())));
+                .map(r -> new Genre(r.component1(), r.component2(), r.component3()))));
     }
 
-    public Validation<StatusCode, List<MovieCount>> getCounts() {
+    public Validation<StatusCode, Stream<MovieCount>> getCounts() {
         return runFunction(context -> Validation.success(
                 context.select(MOVIES_GENRE.ID,
                         MOVIES_GENRE.NAME,
@@ -92,7 +92,6 @@ public class GenreHandler extends FailSafeDatabaseHandler {
                         .orderBy(MOVIES_GENRE.NAME)
                         .stream()
                         .map(r -> new MovieCount(r.component1(), r.component2(), r.component3()))
-                        .collect(Collectors.toList())
         ));
     }
 
@@ -110,16 +109,15 @@ public class GenreHandler extends FailSafeDatabaseHandler {
         );
     }
 
-    public Validation<StatusCode, List<Genre>> get() {
+    public Validation<StatusCode, Stream<Genre>> get() {
         return runFunction(context -> Validation.success(context.selectFrom(MOVIES_GENRE)
                 .orderBy(MOVIES_GENRE.NAME)
                 .stream()
                 .map(r -> new Genre(r.getId(), r.getName()))
-                .collect(Collectors.toList()))
-        );
+        ));
     }
 
-    public Validation<StatusCode, Stream<MovieOutline>> get(User user, int id) {
+    public Validation<StatusCode, Stream<MovieOutline>> getMoviesInGenre(User user, int genre) {
         return runFunction(context -> {
             Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result = Stream.of(1).flatMap(i ->
                     context.select(
@@ -143,10 +141,8 @@ public class GenreHandler extends FailSafeDatabaseHandler {
                             .leftOuterJoin(MOVIES_ACTOR).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
                             .leftOuterJoin(MOVIES_MOVIESINGENRE).on(MOVIES_MOVIE.ID.eq(MOVIES_MOVIESINGENRE.MOVIE_ID))
                             .leftOuterJoin(MOVIES_GENRE).on(MOVIES_GENRE.ID.eq(MOVIES_MOVIESINGENRE.GENRE_ID))
-                            .where(MOVIES_MOVIE.DELETED.eq(false).and(MOVIES_MOVIE.TO_DELETE.eq(false)).and(MOVIES_GENRE.ID.eq(id)))
+                            .where(MOVIES_MOVIE.DELETED.eq(false).and(MOVIES_MOVIE.TO_DELETE.eq(false)).and(MOVIES_GENRE.ID.eq(genre)))
                             .orderBy(MOVIES_MOVIE.NAME)
-                            .fetchSize(1024)
-                            .fetchLazy()
                             .stream());
 
 
