@@ -59,8 +59,7 @@ public class IndexHandler extends FailSafeDatabaseHandler {
 
     private Validation<StatusCode, Stream<MovieOutline>> getInternally(User user, boolean deleted, boolean toDelete, SortField<?> orderByField) {
         return runFunction(context -> {
-            Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result = Stream.of(1).flatMap(i ->
-                    context.select(
+            Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result = context.select(
                             MOVIES_MOVIE.ID,
                             MOVIES_MOVIE.NAME,
                             DSL.case_().when(MOVIES_LOCATION.INDEX.eq(0), MOVIES_LOCATION.NAME)
@@ -81,7 +80,7 @@ public class IndexHandler extends FailSafeDatabaseHandler {
                             .leftOuterJoin(MOVIES_ACTOR).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
                             .where(MOVIES_MOVIE.DELETED.eq(deleted).and(MOVIES_MOVIE.TO_DELETE.eq(toDelete)))
                             .orderBy(orderByField)
-                            .stream());
+                            .stream();
 
 
             return Validation.success(StreamSupport.stream(new MovieOutline.Spliterator(result.iterator()), false));

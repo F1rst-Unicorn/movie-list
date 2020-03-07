@@ -119,8 +119,7 @@ public class GenreHandler extends FailSafeDatabaseHandler {
 
     public Validation<StatusCode, Stream<MovieOutline>> getMoviesInGenre(User user, int genre) {
         return runFunction(context -> {
-            Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result = Stream.of(1).flatMap(i ->
-                    context.select(
+            Stream<Record7<Integer, String, String, Boolean, Boolean, Boolean, String>> result = context.select(
                             MOVIES_MOVIE.ID,
                             MOVIES_MOVIE.NAME,
                             DSL.case_().when(MOVIES_LOCATION.INDEX.eq(0), MOVIES_LOCATION.NAME)
@@ -143,7 +142,7 @@ public class GenreHandler extends FailSafeDatabaseHandler {
                             .leftOuterJoin(MOVIES_GENRE).on(MOVIES_GENRE.ID.eq(MOVIES_MOVIESINGENRE.GENRE_ID))
                             .where(MOVIES_MOVIE.DELETED.eq(false).and(MOVIES_MOVIE.TO_DELETE.eq(false)).and(MOVIES_GENRE.ID.eq(genre)))
                             .orderBy(MOVIES_MOVIE.NAME)
-                            .stream());
+                            .stream();
 
 
             return Validation.success(StreamSupport.stream(new MovieOutline.Spliterator(result.iterator()), false));
