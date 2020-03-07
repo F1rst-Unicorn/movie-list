@@ -23,6 +23,7 @@ import de.njsm.movielist.server.business.ActorManager;
 import de.njsm.movielist.server.business.data.Actor;
 import freemarker.template.Configuration;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -39,6 +40,7 @@ public class ActorEndpoint extends TemplateEndpoint {
 
     private ActorManager manager;
 
+    @Inject
     public ActorEndpoint(Configuration configuration, ActorManager manager) {
         super(configuration);
         this.manager = manager;

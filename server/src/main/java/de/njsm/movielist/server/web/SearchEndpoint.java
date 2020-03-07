@@ -23,6 +23,7 @@ import de.njsm.movielist.server.business.SearchManager;
 import de.njsm.movielist.server.business.data.SearchQuery;
 import freemarker.template.Configuration;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -34,6 +35,7 @@ import javax.ws.rs.core.MediaType;
 @Path("search")
 public class SearchEndpoint extends TemplateEndpoint {
 
+    @Inject
     private SearchManager searchManager;
 
     public SearchEndpoint(Configuration configuration, SearchManager searchManager) {

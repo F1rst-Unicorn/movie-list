@@ -19,12 +19,14 @@
 
 package de.njsm.movielist.server.web;
 
-import de.njsm.movielist.server.business.*;
+import de.njsm.movielist.server.business.MovieManager;
+import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.MovieDetails;
 import de.njsm.movielist.server.business.data.User;
 import fj.data.Validation;
 import freemarker.template.Configuration;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -41,7 +43,7 @@ public class MovieEndpoint extends TemplateEndpoint {
 
     private MovieManager manager;
 
-
+    @Inject
     public MovieEndpoint(Configuration configuration, MovieManager manager) {
         super(configuration);
         this.manager = manager;

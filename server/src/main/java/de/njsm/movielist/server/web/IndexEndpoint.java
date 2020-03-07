@@ -23,6 +23,7 @@ import de.njsm.movielist.server.business.IndexManager;
 import de.njsm.movielist.server.business.data.Location;
 import freemarker.template.Configuration;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -38,6 +39,7 @@ public class IndexEndpoint extends TemplateEndpoint {
 
     private IndexManager manager;
 
+    @Inject
     public IndexEndpoint(Configuration configuration, IndexManager manager) {
         super(configuration);
         this.manager = manager;

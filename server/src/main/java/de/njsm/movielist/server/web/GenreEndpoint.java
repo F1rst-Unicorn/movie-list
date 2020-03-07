@@ -23,6 +23,7 @@ import de.njsm.movielist.server.business.GenreManager;
 import de.njsm.movielist.server.business.data.Genre;
 import freemarker.template.Configuration;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -39,6 +40,7 @@ public class GenreEndpoint extends TemplateEndpoint {
 
     private GenreManager manager;
 
+    @Inject
     public GenreEndpoint(Configuration configuration, GenreManager manager) {
         super(configuration);
         this.manager = manager;

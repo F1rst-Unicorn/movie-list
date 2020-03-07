@@ -22,6 +22,7 @@ package de.njsm.movielist.server.web;
 import fj.data.Validation;
 import freemarker.template.Configuration;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
@@ -37,6 +38,7 @@ import java.util.Collections;
 @Path("/")
 public class AuthEndpoint extends TemplateEndpoint {
 
+    @Inject
     public AuthEndpoint(Configuration configuration) {
         super(configuration);
     }
