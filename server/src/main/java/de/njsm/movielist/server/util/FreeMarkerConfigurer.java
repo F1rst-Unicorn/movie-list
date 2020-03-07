@@ -6,6 +6,6 @@ public class FreeMarkerConfigurer extends org.springframework.web.servlet.view.f
 
     @Override
     protected Configuration newConfiguration() {
-        return new Configuration(Configuration.getVersion());
+        return new Configuration(Configuration.VERSION_2_3_30);
     }
 }
