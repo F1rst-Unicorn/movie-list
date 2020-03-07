@@ -40,6 +40,15 @@
         </property>
     </bean>
 
+    <bean name="freemarkerProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:/freemarker.properties</value>
+            </list>
+        </property>
+    </bean>
+
     <bean name="config" class="de.njsm.movielist.server.Config">
         <constructor-arg index="0" ref="propertiesFile"/>
     </bean>
