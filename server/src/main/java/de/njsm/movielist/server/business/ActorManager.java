@@ -20,6 +20,7 @@
 package de.njsm.movielist.server.business;
 
 import de.njsm.movielist.server.business.data.Actor;
+import de.njsm.movielist.server.business.data.MovieCount;
 import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.ActorHandler;
@@ -61,7 +62,7 @@ public class ActorManager extends BusinessObject {
         return runAsynchronously(ar, () -> {
             handler.setReadOnly();
             return handler.getActorsWithMovieCounts()
-                    .map(d -> Collections.singletonMap("items", d));
+                    .map(d -> Collections.singletonMap("items", (Iterable<MovieCount>) d::iterator));
         });
     }
 
