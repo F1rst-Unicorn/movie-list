@@ -98,6 +98,12 @@
         <property name="unreturnedConnectionTimeout" value="15" />
     </bean>
 
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase" lazy-init="false">
+        <property name="dataSource" ref="datasource" />
+        <property name="changeLog" value="classpath:migrations/master.xml" />
+        <property name="contexts" value="production" />
+    </bean>
+
     <bean name="connectionFactory"
           class="de.njsm.movielist.server.db.ConnectionFactory" scope="request">
         <constructor-arg index="0" ref="datasource" />

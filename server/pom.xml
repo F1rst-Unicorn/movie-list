@@ -187,6 +187,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.8.7</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.functionaljava</groupId>
             <artifactId>functionaljava</artifactId>
             <version>4.8.1</version>
@@ -265,6 +271,7 @@
                 <de.njsm.movielist.server.db.postgres.sslcert>${user.home}/ssl/db.j.njsm.de.crt</de.njsm.movielist.server.db.postgres.sslcert>
                 <de.njsm.movielist.server.db.postgres.sslkey>${user.home}/ssl/db.j.njsm.de.pk8</de.njsm.movielist.server.db.postgres.sslkey>
                 <de.njsm.movielist.server.db.postgres.sslrootcert>${user.home}/ssl/ca.crt</de.njsm.movielist.server.db.postgres.sslrootcert>
+                <liquibase.promptOnNonLocalDatabase>false</liquibase.promptOnNonLocalDatabase>
             </properties>
         </profile>
     </profiles>
@@ -300,6 +307,30 @@
                         <de.njsm.movielist.server.db.postgres.sslrootcert>${de.njsm.movielist.server.db.postgres.sslrootcert}</de.njsm.movielist.server.db.postgres.sslrootcert>
                     </systemPropertyVariables>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.8.7</version>
+                <configuration>
+                    <changeLogFile>${basedir}/src/main/resources/migrations/master.xml</changeLogFile>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>
+                        jdbc:postgresql://${de.njsm.movielist.server.db.host}:${de.njsm.movielist.server.db.port}/${de.njsm.movielist.server.db.name}?user=${de.njsm.movielist.server.db.postgres.user}&amp;password=${de.njsm.movielist.server.db.postgres.password}&amp;ssl=${de.njsm.movielist.server.db.postgres.ssl}&amp;sslmode=${de.njsm.movielist.server.db.postgres.sslmode}&amp;sslcert=${de.njsm.movielist.server.db.postgres.sslcert}&amp;sslkey=${de.njsm.movielist.server.db.postgres.sslkey}&amp;sslrootcert=${de.njsm.movielist.server.db.postgres.sslrootcert}&amp;
+                    </url>
+                    <referenceDriver>org.postgresql.Driver</referenceDriver>
+                    <referenceUrl>
+                        jdbc:postgresql://${de.njsm.movielist.server.db.host}:${de.njsm.movielist.server.db.port}/${de.njsm.movielist.server.db.name}?user=${de.njsm.movielist.server.db.postgres.user}&amp;password=${de.njsm.movielist.server.db.postgres.password}&amp;ssl=${de.njsm.movielist.server.db.postgres.ssl}&amp;sslmode=${de.njsm.movielist.server.db.postgres.sslmode}&amp;sslcert=${de.njsm.movielist.server.db.postgres.sslcert}&amp;sslkey=${de.njsm.movielist.server.db.postgres.sslkey}&amp;sslrootcert=${de.njsm.movielist.server.db.postgres.sslrootcert}&amp;
+                    </referenceUrl>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jooq</groupId>
@@ -388,15 +419,4 @@
 
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.19.1</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
 </project>
