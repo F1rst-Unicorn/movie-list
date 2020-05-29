@@ -43,7 +43,7 @@
                 <input type="text" name="name" class="form-control"
                        id="id_name" value="${ (genre.name)! }">
             </div>
-            <input class="btn btn-success" type="submit"
+            <input class="btn btn-success" type="submit" id="submit"
                    value="${ submitLabel }">
         </form>
     </div>

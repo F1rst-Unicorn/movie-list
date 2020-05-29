@@ -58,7 +58,6 @@ package_movie-list() {
 
     install -D -m 444 server/target/server-*.war $pkgdir/usr/lib/$pkgbase/server.war
     ln -s /usr/lib/$pkgbase/server.war           $pkgdir/var/lib/tomcat8/webapp/movie-list.war
-    install -D -m 444 pkg/db-migration.sql       $pkgdir/usr/share/$pkgbase/db-migration.sql
     install -D -m 644 pkg/$pkgbase.properties    $pkgdir/etc/$pkgbase.properties
     install -D -m 444 LICENSE.md                 $pkgdir/usr/share/licenses/$pkgbase/LICENSE.md
 }

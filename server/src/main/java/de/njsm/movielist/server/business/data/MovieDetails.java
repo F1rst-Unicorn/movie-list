@@ -53,6 +53,8 @@ public class MovieDetails {
     @FormParam("location")
     private int location;
 
+    private String prettyLocation;
+
     private List<Genre> genres;
 
     private List<Actor> actors;
@@ -140,5 +142,13 @@ public class MovieDetails {
 
     public int getLocation() {
         return location;
+    }
+
+    public String getPrettyLocation() {
+        return prettyLocation;
+    }
+
+    public void setPrettyLocation(String prettyLocation) {
+        this.prettyLocation = prettyLocation;
     }
 }

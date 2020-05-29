@@ -41,7 +41,7 @@
                 <input type="number" name="index" class="form-control"
                        id="id_index">
             </div>
-            <input class="btn btn-success" type="submit"
+            <input class="btn btn-success" type="submit" id="submit"
                    value="${ translate("Add") }">
         </form>
     </div>

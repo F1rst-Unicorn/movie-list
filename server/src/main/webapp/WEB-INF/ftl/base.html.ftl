@@ -41,48 +41,48 @@
                          id="navbardropdown">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a href="${ url("index") }"
+                                <a href="${ url("index") }" id="home"
                                    class="nav-link">
                                     <img class="white-icon"
                                          style="width: 24px; height: auto;"
                                          src="${ static("octicons/build/svg/home.svg") }"/>
                                 </a>
                             </li>
-                            <li class="nav-item dropdown">
+                            <li class="nav-item dropdown" id="add-dropdown">
                                 <a href="#" class="nav-link dropdown-toggle"
                                    data-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
                                     <img class="white-icon"
                                          src="${ static("octicons/build/svg/plus.svg") }"/>
                                 </a>
-                                <ul class="dropdown-menu" id="navbardropdown">
+                                <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="add-movie"
                                            href="${ url('add_movie') }">
                                             ${ translate("Movie") }
                                         </a>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="add-actor"
                                            href="${ url('add_actor') }">
                                             ${ translate("Actor") }
                                         </a>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="add-genre"
                                            href="${ url('add_genre') }">
                                             ${ translate("Genre") }
                                         </a>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="add-location"
                                            href="${ url('add_location') }">
                                             ${ translate("Location") }
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
+                            <li class="nav-item dropdown" id="nav-dropdown">
                                 <a href="#" class="nav-link dropdown-toggle"
                                    data-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
                                     ${ translate("Browse") }
                                 </a>
-                                <ul class="dropdown-menu" id="navbardropdown">
+                                <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item"
                                            href="${ url('index') }">
@@ -90,48 +90,48 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="latest"
                                            href="${ url('latest') }">
                                             ${ translate("Newly recorded") }
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="actors"
                                            href="${ url('actors') }">
                                             ${ translate("Actors") }
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="genres"
                                            href="${ url('genres') }">
                                             ${ translate("Genres") }
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
+                            <li class="nav-item dropdown" id="mgmt-dropdown">
                                 <a href="#" class="nav-link dropdown-toggle"
                                    data-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
                                     ${ translate("Manage") }
                                 </a>
-                                <ul class="dropdown-menu" id="navbardropdown">
+                                <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="removed"
                                            href="${ url('removed_movies') }">
                                             ${ translate("Movies to remove") }
                                         </a>
                                     </li>
                                     <li class="dropdown-divider"></li>
                                     <li>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item" id="absent"
                                            href="${ url('absent_movies') }">
                                             ${ translate("Absent movies") }
                                         </a>
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link"
+                                <a class="nav-link" id="search"
                                    href="${ url('search') }">
                                     ${ translate("Search") }
                                 </a>
@@ -146,6 +146,7 @@
                         ${ user.username }
                         <form style="display: inline" action="${ url("logout") }" method="post">
                             <input class="btn btn-outline-primary" type="submit"
+                                   id="logout"
                                    value="${ translate("Logout") }">
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"

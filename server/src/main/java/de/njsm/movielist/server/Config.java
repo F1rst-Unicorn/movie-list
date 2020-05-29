@@ -46,11 +46,14 @@ public class Config {
 
     static final String POSTGRESQL_CONFIG_PREFIX = "de.njsm.movielist.server.db.postgres.";
 
+    static final String LIQUIBASE_CONTEXTS = "de.njsm.movielist.server.db.liquibase.contexts";
+
     private String dbAddress;
     private String dbPort;
     private String dbName;
     private String basePath;
     private String staticBasePath;
+    private String liquibaseContexts;
     private int circuitBreakerTimeout;
     private Properties dbProperties;
 
@@ -64,6 +67,7 @@ public class Config {
         dbName = p.getProperty(DB_NAME_KEY);
         basePath = p.getProperty(HTTP_BASE_PATH);
         staticBasePath = p.getProperty(HTTP_STATIC_BASE_PATH);
+        liquibaseContexts = p.getProperty(LIQUIBASE_CONTEXTS);
 
         String rawCircuitBreakerTimeout = p.getProperty(DB_CIRCUIT_BREAKER_TIMEOUT_KEY);
         try {
@@ -94,6 +98,10 @@ public class Config {
 
     public String getStaticBasePath() {
         return staticBasePath;
+    }
+
+    public String getLiquibaseContexts() {
+        return liquibaseContexts;
     }
 
     public int getCircuitBreakerTimeout() {

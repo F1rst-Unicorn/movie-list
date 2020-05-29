@@ -110,7 +110,7 @@ public class ActorManager extends BusinessObject {
                         result.put("actor", d);
                         return handler.get();
                     }).map(d -> {
-                        result.put("actors", d);
+                        result.put("actors", (Iterable<Actor>) d::iterator);
                         return result;
                     });
         });

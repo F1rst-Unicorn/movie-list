@@ -65,14 +65,17 @@ public abstract class DbTestCase {
         ds.setProperties(getPostgresqlProperties(System.getProperties()));
         factory = new ConnectionFactory(ds);
         connection = factory.getConnection();
-        SampleData.insertSampleData(connection);
+        connection.setAutoCommit(false);
 
         resourceCounter++;
     }
 
     @After
     public void tearDown() throws SQLException {
-        connection.close();
+        if (!connection.isClosed()) {
+            connection.rollback();
+            connection.close();
+        }
     }
 
     protected ConnectionFactory getConnectionFactory() {

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    movie-list is client-server program to manage a household's food stock
+    Copyright (C) 2019  The movie-list developers
+
+    This file is part of the movie-list program suite.
+
+    movie-list is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    movie-list is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see https://www.gnu.org/licenses/.
+-->
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+        logicalFilePath="classpath:migrations/0002-test-data.xml"
+        context="test">
+
+    <changeSet id="1" author="">
+        <sql>
+            insert into public.auth_user (id, username, password) values
+            (1, 'Jack', 'pbkdf2_sha256$180000$owUGhPcrcMx7$DUJPXb7idZQwSckHOYBuwxq56XJC4Nbsj7N8OXxrNJ8='),
+            (2, 'Juliette', 'pbkdf2_sha256$180000$owUGhPcrcMx7$DUJPXb7idZQwSckHOYBuwxq56XJC4Nbsj7N8OXxrNJ8='),
+            (3, 'Jasmine', 'pbkdf2_sha256$180000$owUGhPcrcMx7$DUJPXb7idZQwSckHOYBuwxq56XJC4Nbsj7N8OXxrNJ8='),
+            (4, 'Jude', 'pbkdf2_sha256$180000$owUGhPcrcMx7$DUJPXb7idZQwSckHOYBuwxq56XJC4Nbsj7N8OXxrNJ8=');
+            alter sequence public.auth_user_id_seq restart with 5;
+
+            insert into public.movies_actor (id, first_name, last_name) values
+            (1, 'Natalie', 'Portman'),
+            (2, 'Kate', 'Winslet'),
+            (3, 'Judy', 'Dench'),
+            (4, 'Meg', 'Ryan');
+            alter sequence public.movies_actor_id_seq restart with 5;
+
+            insert into public.movies_location (id, name, index) values
+            (1, 'Blu-Ray', 0),
+            (2, 'Box', 3),
+            (3, 'Netflix', 0),
+            (4, 'DVD', 0);
+            alter sequence public.movies_location_id_seq restart with 5;
+
+            insert into public.movies_movie (id, name, description, year, created_at, to_delete, deleted, location_id, link) values
+            (1, 'Revolutionary Road', 'Theater', 2000, '2020-03-10 17:21:24.650072+01', false, false, 2, ''),
+            (2, 'Inception', 'Great', 2000, '2020-03-11 17:21:24.650072+01', false, false, 4, 'https://en.wikipedia.org/wiki/Inception'),
+            (3, 'Lord of the Rings', 'Best movie ever', 2000, '2020-03-12 17:21:24.650072+01', false, false, 4, ''),
+            (4, 'V for Vendetta', '', 2000, '2020-03-13 17:21:24.650072+01', false, false, 1, ''),
+            (5, 'Eragon', '', 2000, '2020-03-13 17:21:24.650072+01', true, false, 1, ''),
+            (6, 'Jumper', '', 2000, '2020-03-13 17:21:24.650072+01', false, true, 1, '');
+            alter sequence public.movies_movie_id_seq restart with 7;
+
+            insert into public.movies_comment (id, content, creator_id, movie_id) values
+            (1, 'great', 1, 1),
+            (2, 'difficult to understand', 4, 2),
+            (3, 'not at all!', 3, 2),
+            (4, 'A wizard is never late', 2, 3);
+            alter sequence public.movies_comment_id_seq restart with 5;
+
+            insert into public.movies_genre (id, name) values
+            (1, 'Fantasy'),
+            (2, 'Crime'),
+            (3, 'Thriller'),
+            (4, 'Documentation');
+            alter sequence public.movies_genre_id_seq restart with 5;
+
+            insert into public.movies_movie_actors (id, movie_id, actor_id) values
+            (1, 1, 2),
+            (2, 4, 1);
+            alter sequence public.movies_movie_actors_id_seq restart with 3;
+
+            insert into public.movies_moviesingenre (id, genre_id, movie_id) values
+            (1, 1, 3),
+            (2, 3, 2),
+            (3, 3, 4);
+            alter sequence public.movies_moviesingenre_id_seq restart with 4;
+
+            insert into public.movies_watchstatus (id, movie_id, user_id) values
+            (1, 1, 1),
+            (2, 2, 2),
+            (3, 3, 3),
+            (4, 4, 4);
+            alter sequence public.movies_watchstatus_id_seq restart with 5;
+        </sql>
+        <rollback>
+            delete from public.auth_user;
+            delete from public.movies_actor;
+            delete from public.movies_location;
+            delete from public.movies_movie;
+            delete from public.movies_comment;
+            delete from public.movies_genre;
+            delete from public.movies_movie_actor;
+            delete from public.movies_moviesingenre;
+            delete from public.movies_watchstatus;
+
+            alter sequence public.auth_user_id_seq restart with 1;
+            alter sequence public.movies_actor_id_seq restart with 1;
+            alter sequence public.movies_comment_id_seq restart with 1;
+            alter sequence public.movies_genre_id_seq restart with 1;
+            alter sequence public.movies_location_id_seq restart with 1;
+            alter sequence public.movies_movie_actors_id_seq restart with 1;
+            alter sequence public.movies_movie_id_seq restart with 1;
+            alter sequence public.movies_moviesingenre_id_seq restart with 1;
+            alter sequence public.movies_watchstatus_id_seq restart with 1;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

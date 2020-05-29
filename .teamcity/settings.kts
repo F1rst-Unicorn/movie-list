@@ -1,4 +1,7 @@
+
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.exec
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.v2019_2.projectFeatures.youtrack
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 
@@ -47,13 +50,64 @@ project {
 object FullBuild : BuildType({
     name = "Full Build"
 
+    artifactRules = """
+        pkg/Archlinux/movie-list-*-any.pkg.tar.xz
+    """.trimIndent()
+
     vcs {
         root(DslContext.settingsRoot)
     }
 
     triggers {
         vcs {
-            branchFilter = ""
+            branchFilter = "+:*"
         }
+    }
+
+    steps {
+        maven {
+            name = "Build and Unit Test"
+            goals = "clean package"
+            runnerArgs = "-P teamcity"
+            pomLocation = "server/pom.xml"
+            coverageEngine = idea {
+                includeClasses = "de.njsm.movielist.*"
+                excludeClasses = "de.njsm.movielist.*.*Test\n" +
+                        "de.njsm.movielist.server.db.jooq.*"
+            }
+        }
+        exec {
+            name = "Package"
+            path = "makepkg"
+            arguments = "-cf"
+            workingDir = "pkg/Archlinux"
+        }
+        exec {
+            name = "Clean server"
+            executionMode = BuildStep.ExecutionMode.ALWAYS
+            path = "system-test/bin/clean-up.sh"
+        }
+        exec {
+            name = "Install server"
+            path = "system-test/bin/vm-deployment-test.sh"
+        }
+        maven {
+            name = "System Test"
+            goals = "test"
+            pomLocation = "system-test/pom.xml"
+            mavenVersion = auto()
+        }
+    }
+
+    params {
+        param("env.CI_SERVER", "1")
+    }
+
+    failureConditions {
+        executionTimeoutMin = 45
+    }
+
+    cleanup {
+        artifacts(builds = 100)
     }
 })

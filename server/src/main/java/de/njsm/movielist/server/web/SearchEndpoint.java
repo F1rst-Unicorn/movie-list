@@ -35,9 +35,9 @@ import javax.ws.rs.core.MediaType;
 @Path("search")
 public class SearchEndpoint extends TemplateEndpoint {
 
-    @Inject
     private SearchManager searchManager;
 
+    @Inject
     public SearchEndpoint(Configuration configuration, SearchManager searchManager) {
         super(configuration);
         this.searchManager = searchManager;

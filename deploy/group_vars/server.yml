@@ -1,0 +1,14 @@
+movie_list_use_official_repo: False
+movie_list_package_directory: "{{ playbook_dir }}/../pkg/Archlinux/"
+movie_list_db:
+  host: localhost
+  port: 5432
+  name: movie_list
+  properties:
+    user: movie_list
+    password: linux
+movie_list_base: /movie-list
+movie_list_redirect: /movies
+movie_list_contexts:
+  - production
+  - test

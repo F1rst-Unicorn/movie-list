@@ -177,6 +177,14 @@ public class MovieHandler extends FailSafeDatabaseHandler {
                     .collect(Collectors.toList());
             result.setComments(comments);
 
+            String location = context.select(DSL.case_().when(MOVIES_LOCATION.INDEX.eq(0), MOVIES_LOCATION.NAME)
+                                                        .otherwise(DSL.concat(MOVIES_LOCATION.NAME, DSL.concat(" ", MOVIES_LOCATION.INDEX.cast(String.class)))))
+                    .from(MOVIES_LOCATION)
+                    .where(MOVIES_LOCATION.ID.eq(record.getLocationId()))
+                    .fetchOne()
+                    .component1();
+            result.setPrettyLocation(location);
+
             return Validation.success(result);
         });
     }

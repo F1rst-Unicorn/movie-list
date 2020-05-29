@@ -70,6 +70,9 @@
     <bean name="dbConfig" factory-bean="config"
           factory-method="getDbProperties"/>
 
+    <bean name="liquibaseContexts" factory-bean="config"
+          factory-method="getLiquibaseContexts"/>
+
     <bean name="dbUrl" class="java.lang.String" factory-method="format">
         <constructor-arg index="0" value="jdbc:postgresql://%s:%s/%s"/>
         <constructor-arg index="1" type="java.lang.Object[]">
@@ -101,7 +104,7 @@
     <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase" lazy-init="false">
         <property name="dataSource" ref="datasource" />
         <property name="changeLog" value="classpath:migrations/master.xml" />
-        <property name="contexts" value="production" />
+        <property name="contexts" ref="liquibaseContexts" />
     </bean>
 
     <bean name="connectionFactory"

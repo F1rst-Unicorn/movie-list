@@ -22,7 +22,7 @@
     <div>
         <div class="row">
             <div class="col">
-                <h2>${ movie.name }</h2>
+                <h2 id="title">${ movie.name }</h2>
             </div>
             <div class="col col-auto">
                 <div class="dropdown dropdown-menu-right">
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="col col-auto">
-                <a class="btn btn-success"
+                <a class="btn btn-success" id="edit"
                    href="${ url('edit', movie.id) }">
                     <img class="white-icon"
                          src="${ static("octicons/build/svg/pencil.svg") }"/>
@@ -56,7 +56,7 @@
                     <form style="display: inline"
                           action="${ url("delete", movie.id) }"
                           method="post">
-                        <input class="btn btn-warning" type="submit"
+                        <input class="btn btn-warning" type="submit" id="record"
                                value="${ translate("Record again") }">
                         <input type="hidden"
                                name="${ csrftoken.parameterName }"
@@ -66,7 +66,7 @@
                     <form style="display: inline"
                           action="${ url("mark_removal", movie.id) }"
                           method="post">
-                        <input class="btn btn-warning" type="submit"
+                        <input class="btn btn-warning" type="submit" id="keep"
                                value="${ translate("Keep anyway") }">
                         <input type="hidden"
                                name="${ csrftoken.parameterName }"
@@ -75,7 +75,7 @@
                     <form style="display: inline"
                           action="${ url("delete", movie.id) }"
                           method="post">
-                        <input class="btn btn-danger" type="submit"
+                        <input class="btn btn-danger" type="submit" id="make-absent"
                                value="${ translate("Remove") }">
                         <input type="hidden"
                                name="${ csrftoken.parameterName }"
@@ -85,7 +85,7 @@
                     <form style="display: inline"
                           action="${ url("mark_removal", movie.id) }"
                           method="post">
-                        <input class="btn btn-warning" type="image"
+                        <input class="btn btn-warning" type="image" id="delete"
                                src="${ static("octicons/build/svg/trashcan.svg") }">
                         <input type="hidden"
                                name="${ csrftoken.parameterName }"
@@ -101,30 +101,34 @@
                 <dl class="dl-horizontal">
                     <#if movie.year != 0>
                         <dt>${ translate("Year") }</dt>
-                        <dd>${ movie.year?string.computer }</dd>
+                        <dd id="year">${ movie.year?string.computer }</dd>
                     </#if>
                     <dt>${ translate("Recorded on") }</dt>
                     <dd>${ movie.createdAt }</dd>
+                    <dt>${ translate("Location") }</dt>
+                    <dd id="location">${ movie.prettyLocation }</dd>
                     <#if movie.link?? && ! movie.link?matches("^$") >
-                        <a href="${ movie.link }">${ translate("External information") }</a>
+                        <a href="${ movie.link }" id="link">${ translate("External information") }</a>
                     </#if>
-                    <#list movie.genres as genre >
-                        <#if genre?is_first>
-                            <dt>${ translate("Genres") }</dt>
-                        </#if>
-                        <a href="${ url("genre_detail", genre.id) }">
-                            <dd class="badge badge-info"
-                                style="margin-right: 5px">${ genre.name }
-                            </dd>
-                        </a>
-                    </#list>
+                    <div id="movie-genres">
+                        <#list movie.genres as genre >
+                            <#if genre?is_first>
+                                <dt>${ translate("Genres") }</dt>
+                            </#if>
+                            <a href="${ url("genre_detail", genre.id) }">
+                                <dd class="badge badge-info"
+                                    style="margin-right: 5px">${ genre.name }
+                                </dd>
+                            </a>
+                        </#list>
+                    </div>
                 </dl>
             </div>
             <div class="col">
                 <dl class="dl-horizontal">
                     <dt>${ translate("Actors") }</dt>
                     <dd>
-                        <ul>
+                        <ul id="actors">
                             <#list movie.actors as actor>
                                 <a href="${ url("actor_detail", actor.id) }">
                                     <li>${ actor.firstName } ${ actor.lastName }</li>
@@ -140,7 +144,7 @@
                     <dd>
                         <ul>
                             <#list movie.watchedBy as status>
-                                <li>${ status.user.username }
+                                <li id="watchedBy">${ status.user.username }
                                     (${ status.watchedOn })
                                 </li>
                             </#list>
@@ -150,9 +154,9 @@
             </div>
         </div>
     </div>
-    <p>${ movie.description?replace("\n", "<br>") }</p>
+    <p id="description">${ movie.description?replace("\n", "<br>") }</p>
     <h2>${ translate("Comments") }</h2>
-    <div class="container">
+    <div id="comments" class="container">
         <#list movie.comments as comment>
             <div style="margin-top: 5px; padding: 5px"
                  class="justify-content-between row border rounded">
@@ -177,10 +181,10 @@
             <input type="hidden" name="${ csrftoken.parameterName }"
                    value="${ csrftoken.token }"/>
             <textarea placeholder="${ translate("Leave a comment") }"
-                      form="form"
+                      form="form" id="comment"
                       class="form-control" rows="2" name="comment"
                       hint="${ translate("Add comment") }"></textarea>
-            <input class="btn btn-success" type="submit"
+            <input class="btn btn-success" type="submit" id="submit"
                    value="${ translate("Comment") }"/>
         </form>
     </div>

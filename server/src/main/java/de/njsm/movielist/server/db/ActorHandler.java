@@ -84,7 +84,7 @@ public class ActorHandler extends FailSafeDatabaseHandler {
 
     public Validation<StatusCode, Stream<Actor>> get() {
         return runFunction(context -> Validation.success(context.selectFrom(MOVIES_ACTOR)
-                .orderBy(MOVIES_ACTOR.LAST_NAME)
+                .orderBy(MOVIES_ACTOR.LAST_NAME, MOVIES_ACTOR.FIRST_NAME)
                 .stream()
                 .map(r -> new Actor(r.getId(), r.getFirstName(), r.getLastName()))));
     }

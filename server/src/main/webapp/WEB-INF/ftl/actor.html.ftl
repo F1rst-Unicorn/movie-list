@@ -50,7 +50,7 @@
                 <input type="text" name="lastname" class="form-control"
                        id="id_lastname" value="${ (actor.lastName)! }">
             </div>
-            <input class="btn btn-success" type="submit"
+            <input class="btn btn-success" type="submit" id="submit"
                    value="${ submitLabel }">
         </form>
     </div>

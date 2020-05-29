@@ -334,12 +334,27 @@
                     <referenceUrl>
                         jdbc:postgresql://${de.njsm.movielist.server.db.host}:${de.njsm.movielist.server.db.port}/${de.njsm.movielist.server.db.name}?user=${de.njsm.movielist.server.db.postgres.user}&amp;password=${de.njsm.movielist.server.db.postgres.password}&amp;ssl=${de.njsm.movielist.server.db.postgres.ssl}&amp;sslmode=${de.njsm.movielist.server.db.postgres.sslmode}&amp;sslcert=${de.njsm.movielist.server.db.postgres.sslcert}&amp;sslkey=${de.njsm.movielist.server.db.postgres.sslkey}&amp;sslrootcert=${de.njsm.movielist.server.db.postgres.sslrootcert}&amp;
                     </referenceUrl>
+                    <contexts>production,test</contexts>
                 </configuration>
                 <executions>
                     <execution>
+                        <id>setup-schema</id>
                         <phase>generate-sources</phase>
                         <goals>
+                            <goal>dropAll</goal>
+                            <goal>status</goal>
                             <goal>update</goal>
+                            <goal>status</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>setup-test-data</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>dropAll</goal>
+                            <goal>status</goal>
+                            <goal>update</goal>
+                            <goal>status</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -428,7 +443,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>

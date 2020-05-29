@@ -48,6 +48,7 @@
                         <form action="${ url("delete", movie.id) }"
                               method="post">
                             <input class="btn btn-sm btn-warning" type="submit"
+                                   id="record"
                                    value="${ translate("Record again") }" >
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"
@@ -58,6 +59,7 @@
                               action="${ url("mark_removal", movie.id) }"
                               method="post">
                             <input class="btn btn-sm btn-warning" type="submit"
+                                   id="keep"
                                    value="${ translate("Keep anyway") }" >
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"
@@ -67,6 +69,7 @@
                               action="${ url("delete", movie.id) }"
                               method="post">
                             <input class="btn btn-sm btn-danger" type="submit"
+                                   id="absent"
                                    value="${ translate("Remove") }" >
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"
@@ -76,6 +79,7 @@
                         <form action="${ url("mark_removal", movie.id) }"
                               method="post">
                             <input class="btn btn-sm btn-warning" type="image"
+                                   id="delete"
                                    src="${ static("octicons/build/svg/trashcan.svg") }">
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"

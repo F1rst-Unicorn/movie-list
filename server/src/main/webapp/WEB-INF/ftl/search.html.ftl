@@ -73,7 +73,7 @@
                     </#list>
                 </select>
             </div>
-            <input class="btn btn-success" type="submit"
+            <input class="btn btn-success" type="submit" id="submit"
                    value="${ translate("Search") }">
         </form>
         <#if movies?? >

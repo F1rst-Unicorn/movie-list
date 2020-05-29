@@ -21,7 +21,7 @@
 <@base.base>
     <h1>${ translate("Login") }</h1>
     <#if error>
-        <div class="alert alert-danger"
+        <div id="error" class="alert alert-danger"
              role="alert">${ translate("Username or password wrong!")}</div>
     </#if>
     <form action="${ url("login") }" method="post">
@@ -43,7 +43,7 @@
                value="${ csrftoken.token }"/>
         <input type="hidden" name="remember-me"
                value="1"/>
-        <input class="btn btn-success" type="submit"
+        <input class="btn btn-success" type="submit" id="id_submit"
                value="${ translate("Login") }">
     </form>
     <p><a class="btn btn-primary"
