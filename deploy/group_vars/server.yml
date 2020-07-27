@@ -12,3 +12,9 @@ movie_list_redirect: /movies
 movie_list_contexts:
   - production
   - test
+
+movie_list_oidc:
+  issuer_url: https://j.njsm.de/oidc
+  client_id: dummy
+  client_secret: dummy
+  algorithm: RS256
