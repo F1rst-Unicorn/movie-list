@@ -43,6 +43,7 @@
             <security:cache-control disabled="true" />
         </security:headers>
         <security:oauth2-login jwt-decoder-factory-ref="decoder"
+                               oidc-user-service-ref="oidcUserService"
                                authorized-client-repository-ref="authorizedClientRepository"/>
     </security:http>
 
@@ -54,6 +55,19 @@
         <constructor-arg index="0" ref="presistentConnectionFactory" />
         <constructor-arg index="1" ref="circuitBreakerDatabase" />
         <constructor-arg index="2" ref="circuitBreakerTimeout" />
+    </bean>
+
+    <bean name="persistentUserBackend" class="de.njsm.movielist.server.db.UserHandler">
+        <constructor-arg index="0" ref="presistentConnectionFactory" />
+        <constructor-arg index="1" ref="circuitBreakerDatabase" />
+        <constructor-arg index="2" ref="circuitBreakerTimeout"/>
+    </bean>
+
+    <bean id="oidcUserService" class="de.njsm.movielist.server.db.OidcUserService">
+        <constructor-arg index="0" ref="presistentConnectionFactory" />
+        <constructor-arg index="1" ref="circuitBreakerDatabase" />
+        <constructor-arg index="2" ref="circuitBreakerTimeout" />
+        <constructor-arg index="3" ref="persistentUserBackend" />
     </bean>
 
     <bean id="algorithmResolver" factory-bean="config" factory-method="getOidcTokenAlgorithm" />

@@ -63,6 +63,11 @@ public class AuthHandler extends FailSafeDatabaseHandler implements UserDetailsS
             if (e == null)
                 return Validation.fail(StatusCode.NOT_FOUND);
 
+            if (e.component3() == null || e.component3().isEmpty()) {
+                LOG.info("OIDC user " + e.component2() + " tried to authenticate with password");
+                return Validation.fail(StatusCode.ACCESS_DENIED);
+            }
+
             PasswordEncoder p = new PasswordEncoder(Integer.parseInt(e.component3()),
                     e.component4(),
                     e.component5());

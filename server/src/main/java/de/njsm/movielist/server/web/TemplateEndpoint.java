@@ -20,6 +20,7 @@
 package de.njsm.movielist.server.web;
 
 import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.data.OidcUser;
 import de.njsm.movielist.server.business.data.User;
 import fj.data.Validation;
 import freemarker.core.Environment;
@@ -95,7 +96,8 @@ public class TemplateEndpoint {
             return (User) user;
         } else if (user instanceof OAuth2AuthenticationToken) {
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) user;
-            return new User(-1, token.getName(), null);
+            OidcUser oidcUser = (OidcUser) token.getPrincipal();
+            return new User(oidcUser.getId(), oidcUser.getName(), "");
         } else {
             return new User();
         }

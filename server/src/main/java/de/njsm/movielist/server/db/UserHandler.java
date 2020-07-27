@@ -21,6 +21,7 @@ package de.njsm.movielist.server.db;
 
 import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.db.jooq.tables.records.AuthUserRecord;
 import fj.data.Validation;
 
 import java.util.List;
@@ -42,5 +43,24 @@ public class UserHandler extends FailSafeDatabaseHandler {
                         .map(r -> new User(r.getId(), r.getUsername()))
                         .collect(Collectors.toList())
         ));
+    }
+
+    Validation<StatusCode, User> getOrCreate(String username) {
+        return runFunction(context -> {
+            AuthUserRecord record = context.selectFrom(AUTH_USER)
+                    .where(AUTH_USER.USERNAME.eq(username))
+                    .fetchOne();
+            if (record == null) {
+                int id = context.insertInto(AUTH_USER)
+                        .columns(AUTH_USER.USERNAME, AUTH_USER.PASSWORD)
+                        .values(username, "")
+                        .returning(AUTH_USER.ID)
+                        .fetch()
+                        .getValue(0, AUTH_USER.ID);
+                return Validation.success(new User(id, username, ""));
+            } else {
+                return Validation.success(new User(record.getId(), record.getUsername(), record.getPassword()));
+            }
+        });
     }
 }
