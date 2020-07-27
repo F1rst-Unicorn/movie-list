@@ -200,6 +200,9 @@ msgstr "Aktionen"
 msgid "Login"
 msgstr "Login"
 
+msgid "Login with OpenID Connect"
+msgstr "Login mit OpenID Connect"
+
 msgid "Logout"
 msgstr "Ausloggen"
 

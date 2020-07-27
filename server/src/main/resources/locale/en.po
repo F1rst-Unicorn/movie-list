@@ -200,6 +200,9 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+msgid "Login with OpenID Connect"
+msgstr ""
+
 msgid "Logout"
 msgstr ""
 

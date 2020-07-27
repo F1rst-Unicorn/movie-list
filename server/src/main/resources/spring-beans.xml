@@ -162,6 +162,7 @@
                                 <entry key="add_genre" value="genres/add" />
                                 <entry key="genre_detail" value="genres/%s/detail" />
                                 <entry key="genre_edit" value="genres/%s/edit" />
+                                <entry key="oidc" value="oauth2/authorization/oauth2" />
                             </util:map>
                         </constructor-arg>
                     </bean>

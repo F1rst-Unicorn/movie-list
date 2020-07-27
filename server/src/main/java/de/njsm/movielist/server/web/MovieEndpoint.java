@@ -22,7 +22,6 @@ package de.njsm.movielist.server.web;
 import de.njsm.movielist.server.business.MovieManager;
 import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.MovieDetails;
-import de.njsm.movielist.server.business.data.User;
 import fj.data.Validation;
 import freemarker.template.Configuration;
 
@@ -148,7 +147,7 @@ public class MovieEndpoint extends TemplateEndpoint {
                                @PathParam("movie") int id,
                                @FormParam("comment") String comment) {
 
-        manager.addComment(id, comment, (User) req.getUserPrincipal());
+        manager.addComment(id, comment, getUser(req));
         return Response.seeOther(URI.create(req.getHeader("referer")))
                 .build();
     }

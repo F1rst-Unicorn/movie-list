@@ -24,6 +24,9 @@
         <div id="error" class="alert alert-danger"
              role="alert">${ translate("Username or password wrong!")}</div>
     </#if>
+    <p><a class="btn btn-success"
+          href="${ url('oidc') }">${ translate("Login with OpenID Connect") }</a>
+    </p>
     <form action="${ url("login") }" method="post">
         <div class="form-group">
             <label class="control-label"

@@ -23,12 +23,14 @@
 <beans xmlns:security="http://www.springframework.org/schema/security"
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd
-            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
        default-lazy-init="true">
 
     <security:http use-expressions="true">
-        <security:intercept-url pattern="/login" access="permitAll()"/>
+        <security:intercept-url pattern="/login/**" access="permitAll()"/>
         <security:intercept-url pattern="/create_account" access="permitAll()"/>
         <security:intercept-url pattern="/metrics" access="permitAll()"/>
         <security:intercept-url pattern="/health" access="permitAll()"/>
@@ -40,6 +42,8 @@
         <security:headers>
             <security:cache-control disabled="true" />
         </security:headers>
+        <security:oauth2-login jwt-decoder-factory-ref="decoder"
+                               authorized-client-repository-ref="authorizedClientRepository"/>
     </security:http>
 
     <security:authentication-manager alias="authenticationManager">
@@ -50,6 +54,32 @@
         <constructor-arg index="0" ref="presistentConnectionFactory" />
         <constructor-arg index="1" ref="circuitBreakerDatabase" />
         <constructor-arg index="2" ref="circuitBreakerTimeout" />
+    </bean>
+
+    <bean id="algorithmResolver" factory-bean="config" factory-method="getOidcTokenAlgorithm" />
+
+    <bean id="decoder" class="org.springframework.security.oauth2.client.oidc.authentication.OidcIdTokenDecoderFactory">
+        <property name="jwsAlgorithmResolver" ref="algorithmResolver" />
+    </bean>
+
+    <bean id="client" factory-bean="config" factory-method="getOidcClient" />
+
+    <bean id="clientRepository" class="org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository">
+        <constructor-arg index="0">
+            <util:list>
+                <ref bean="client"/>
+            </util:list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="authorizedClientService"
+          class="org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService">
+        <constructor-arg index="0" ref="clientRepository"/>
+    </bean>
+
+    <bean id="authorizedClientRepository"
+            class="org.springframework.security.oauth2.client.web.AuthenticatedPrincipalOAuth2AuthorizedClientRepository">
+        <constructor-arg ref="authorizedClientService"/>
     </bean>
 
 </beans>

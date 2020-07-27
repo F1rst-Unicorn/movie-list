@@ -27,12 +27,14 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.MediaType;
 import java.io.PrintWriter;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +43,7 @@ public class TemplateEndpoint {
 
     private static final Logger LOG = LogManager.getLogger(TemplateEndpoint.class);
 
-    private Configuration configuration;
+    private final Configuration configuration;
 
     public TemplateEndpoint(Configuration configuration) {
         this.configuration = configuration;
@@ -81,21 +83,21 @@ public class TemplateEndpoint {
             env.setLocale(request.getLocale());
             env.process();
 
-            asyncResponse.resume(new Object());
             drain.flush();
         } catch (Exception e) {
             LOG.error("", e);
-        } finally {
-            asyncResponse.resume(new Object());
         }
-
     }
 
     protected User getUser(HttpServletRequest request) {
-        User user = (User) request.getUserPrincipal();
-        if (user == null)
+        Principal user = request.getUserPrincipal();
+        if (user instanceof User) {
+            return (User) user;
+        } else if (user instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) user;
+            return new User(-1, token.getName(), null);
+        } else {
             return new User();
-        else
-            return user;
+        }
     }
 }

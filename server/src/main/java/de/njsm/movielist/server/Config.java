@@ -21,10 +21,16 @@ package de.njsm.movielist.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrations;
+import org.springframework.security.oauth2.core.AuthenticationMethod;
+import org.springframework.security.oauth2.jose.jws.JwsAlgorithm;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Function;
 
 public class Config {
 
@@ -48,6 +54,14 @@ public class Config {
 
     static final String LIQUIBASE_CONTEXTS = "de.njsm.movielist.server.db.liquibase.contexts";
 
+    static final String ISSUER_URI = "de.njsm.movielist.server.oidc.issuer.uri";
+
+    static final String CLIENT_ID = "de.njsm.movielist.server.oidc.client.id";
+
+    static final String CLIENT_SECRET = "de.njsm.movielist.server.oidc.client.secret";
+
+    static final String TOKEN_ALGORITHM = "de.njsm.movielist.server.oidc.token.algorithm";
+
     private String dbAddress;
     private String dbPort;
     private String dbName;
@@ -56,6 +70,10 @@ public class Config {
     private String liquibaseContexts;
     private int circuitBreakerTimeout;
     private Properties dbProperties;
+    private String tokenAlgorithm;
+    private String clientId;
+    private String clientSecret;
+    private String issuerUri;
 
     public Config(Properties p) {
         readProperties(p);
@@ -68,6 +86,10 @@ public class Config {
         basePath = p.getProperty(HTTP_BASE_PATH);
         staticBasePath = p.getProperty(HTTP_STATIC_BASE_PATH);
         liquibaseContexts = p.getProperty(LIQUIBASE_CONTEXTS);
+        issuerUri = p.getProperty(ISSUER_URI);
+        clientId = p.getProperty(CLIENT_ID);
+        clientSecret = p.getProperty(CLIENT_SECRET);
+        tokenAlgorithm = p.getProperty(TOKEN_ALGORITHM);
 
         String rawCircuitBreakerTimeout = p.getProperty(DB_CIRCUIT_BREAKER_TIMEOUT_KEY);
         try {
@@ -130,5 +152,26 @@ public class Config {
             }
         }
         return result;
+    }
+
+    public Function<ClientRegistration, JwsAlgorithm> getOidcTokenAlgorithm() {
+        return clientRegistration -> {
+            SignatureAlgorithm algorithm = SignatureAlgorithm.from(tokenAlgorithm);
+            if (algorithm == null) {
+                throw new RuntimeException("Invalid token algorithm " + tokenAlgorithm);
+            }
+            return algorithm;
+        };
+    }
+
+    public ClientRegistration getOidcClient() {
+        return ClientRegistrations.fromOidcIssuerLocation(issuerUri)
+                .registrationId("oauth2")
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .scope("openid")
+                .userInfoAuthenticationMethod(AuthenticationMethod.HEADER)
+                .userNameAttributeName("sub")
+                .build();
     }
 }
