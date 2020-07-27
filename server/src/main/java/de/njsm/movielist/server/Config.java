@@ -169,7 +169,7 @@ public class Config {
                 .registrationId("oauth2")
                 .clientId(clientId)
                 .clientSecret(clientSecret)
-                .scope("openid")
+                .scope("openid", "profile")
                 .userInfoAuthenticationMethod(AuthenticationMethod.HEADER)
                 .userNameAttributeName("sub")
                 .build();
