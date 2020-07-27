@@ -84,9 +84,12 @@ public class TemplateEndpoint {
             env.setLocale(request.getLocale());
             env.process();
 
+            asyncResponse.resume(new Object());
             drain.flush();
         } catch (Exception e) {
             LOG.error("", e);
+        } finally {
+            asyncResponse.resume(new Object());
         }
     }
 
