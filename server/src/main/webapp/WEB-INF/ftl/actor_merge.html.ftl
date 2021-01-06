@@ -24,6 +24,8 @@
     </div>
     <div>
         <form action="${ url("actor_merge", actor.id) }" method="post">
+            <input class="btn btn-success" type="submit"
+                   value="${ translate("Save") }">
             <input type="hidden"
                    name="${ csrftoken.parameterName }"
                    value="${ csrftoken.token }"/>

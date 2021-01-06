@@ -24,6 +24,8 @@
     </div>
     <div>
         <form action="${ url("add_location") }" method="post">
+            <input class="btn btn-success" type="submit"
+                   value="${ translate("Add") }">
             <input type="hidden"
                    name="${ csrftoken.parameterName }"
                    value="${ csrftoken.token }"/>

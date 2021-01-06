@@ -33,6 +33,8 @@
     </div>
     <div>
         <form action="${ url }" method="post">
+            <input class="btn btn-success" type="submit"
+                   value="${ submitLabel }">
             <input type="hidden"
                    name="${ csrftoken.parameterName }"
                    value="${ csrftoken.token }"/>

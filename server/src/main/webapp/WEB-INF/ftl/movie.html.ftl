@@ -36,7 +36,8 @@
             <input type="hidden"
                    name="${ csrftoken.parameterName }"
                    value="${ csrftoken.token }"/>
-
+            <input class="btn btn-success" type="submit"
+                   value="${ submitLabel }">
             <div class="form-group">
                 <label class="control-label"
                        for="id_name">${ translate("Name")}
