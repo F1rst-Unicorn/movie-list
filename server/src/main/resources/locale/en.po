@@ -226,3 +226,9 @@ msgstr ""
 
 msgid "No error has occured"
 msgstr ""
+
+msgid "Wikipedia Search"
+msgstr ""
+
+msgid "DuckDuckGo Search"
+msgstr ""

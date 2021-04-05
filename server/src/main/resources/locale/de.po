@@ -226,3 +226,9 @@ msgstr "Du hast eine ungültige Anfrage an den Server geschickt"
 
 msgid "No error has occured"
 msgstr "Es ist kein Fehler aufgetreten"
+
+msgid "Wikipedia Search"
+msgstr "Wikipedia Suche"
+
+msgid "DuckDuckGo Search"
+msgstr "DuckDuckGo Suche"

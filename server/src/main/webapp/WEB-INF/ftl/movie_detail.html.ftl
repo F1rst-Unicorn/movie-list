@@ -109,7 +109,11 @@
                     <dd id="location">${ movie.prettyLocation }</dd>
                     <#if movie.link?? && ! movie.link?matches("^$") >
                         <a href="${ movie.link }" id="link">${ translate("External information") }</a>
+                        <br>
                     </#if>
+                        <a href="https://de.wikipedia.org/w/index.php?search=${ movie.name }&title=Spezial%3ASuche&go=Artikel&ns0=1" id="link">${ translate("Wikipedia Search") }</a>
+                        <br>
+                        <a href="https://duckduckgo.com/?q=${ movie.name }" id="link">${ translate("DuckDuckGo Search") }</a>
                     <div id="movie-genres">
                         <#list movie.genres as genre >
                             <#if genre?is_first>
