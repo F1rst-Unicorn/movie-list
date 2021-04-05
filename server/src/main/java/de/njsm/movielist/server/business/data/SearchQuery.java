@@ -48,7 +48,7 @@ public class SearchQuery {
     }
 
     public boolean isIncludeMissing() {
-        return includeMissing != null && includeMissing.equals("on");
+        return includeMissing != null;
     }
 
     public List<Integer> getGenres() {
