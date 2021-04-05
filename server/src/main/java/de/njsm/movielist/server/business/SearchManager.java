@@ -66,6 +66,8 @@ public class SearchManager extends BusinessObject {
         return runAsynchronously(ar, () -> {
             handler.setReadOnly();
             Map<String, Object> result = new HashMap<>();
+            result.put("query", query);
+
             return userHandler.get()
                     .bind(d -> {
                         result.put("users", d);
