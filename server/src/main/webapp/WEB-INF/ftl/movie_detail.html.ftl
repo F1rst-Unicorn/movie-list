@@ -158,7 +158,7 @@
             </div>
         </div>
     </div>
-    <p id="description">${ movie.description?replace("\n", "<br>") }</p>
+    <p id="description">${ movie.description?replace("\n", "<br>")?no_esc }</p>
     <h2>${ translate("Comments") }</h2>
     <div id="comments" class="container">
         <#list movie.comments as comment>
