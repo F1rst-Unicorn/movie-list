@@ -13,5 +13,8 @@ changeBuildType(RelativeId("FullBuild")) {
         add {
             exists("POSTGRESQL_DB")
         }
+        add {
+            exists("DEPLOYMENT_VM")
+        }
     }
 }
