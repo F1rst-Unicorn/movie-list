@@ -11,10 +11,10 @@ accordingly, and delete the patch script.
 changeBuildType(RelativeId("FullBuild")) {
     requirements {
         add {
-            exists("POSTGRESQL_DB")
+            exists("env.DEPLOYMENT_VM")
         }
         add {
-            exists("env.DEPLOYMENT_VM")
+            exists("env.POSTGRESQL_DB")
         }
     }
 }
