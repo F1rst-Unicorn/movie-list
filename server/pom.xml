@@ -328,9 +328,9 @@
             <properties>
                 <de.njsm.movielist.server.db.host>db.j.njsm.de</de.njsm.movielist.server.db.host>
                 <de.njsm.movielist.server.db.port>5432</de.njsm.movielist.server.db.port>
-                <de.njsm.movielist.server.db.name>movie-list-teamcity-rivendell</de.njsm.movielist.server.db.name>
+                <de.njsm.movielist.server.db.name>${env.POSTGRESQL_DB}</de.njsm.movielist.server.db.name>
                 <de.njsm.movielist.server.circuitbreaker.timeout>2000</de.njsm.movielist.server.circuitbreaker.timeout>
-                <de.njsm.movielist.server.db.postgres.user>movie-list-teamcity-rivendell</de.njsm.movielist.server.db.postgres.user>
+                <de.njsm.movielist.server.db.postgres.user>${env.POSTGRESQL_DB}</de.njsm.movielist.server.db.postgres.user>
                 <de.njsm.movielist.server.db.postgres.password>linux</de.njsm.movielist.server.db.postgres.password>
                 <de.njsm.movielist.server.db.postgres.ssl>true</de.njsm.movielist.server.db.postgres.ssl>
                 <de.njsm.movielist.server.db.postgres.sslmode>verify-ca</de.njsm.movielist.server.db.postgres.sslmode>
