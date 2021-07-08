@@ -79,7 +79,7 @@ public class IndexHandler extends FailSafeDatabaseHandler {
                             .leftOuterJoin(MOVIES_MOVIE_ACTORS).on(MOVIES_MOVIE_ACTORS.MOVIE_ID.eq(MOVIES_MOVIE.ID))
                             .leftOuterJoin(MOVIES_ACTOR).on(MOVIES_ACTOR.ID.eq(MOVIES_MOVIE_ACTORS.ACTOR_ID))
                             .where(MOVIES_MOVIE.DELETED.eq(deleted).and(MOVIES_MOVIE.TO_DELETE.eq(toDelete)))
-                            .orderBy(orderByField)
+                            .orderBy(orderByField, MOVIES_MOVIE.ID)
                             .stream();
 
 
