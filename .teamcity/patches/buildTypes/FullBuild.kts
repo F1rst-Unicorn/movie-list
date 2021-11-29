@@ -1,6 +1,7 @@
 package patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.commitStatusPublisher
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 import jetbrains.buildServer.configs.kotlin.v2019_2.ui.*
 
@@ -14,6 +15,17 @@ changeBuildType(RelativeId("FullBuild")) {
         remove {
             vcs {
                 branchFilter = "+:*"
+            }
+        }
+    }
+
+    features {
+        add {
+            commitStatusPublisher {
+                publisher = gitlab {
+                    gitlabApiUrl = "https://gitlab.com/api/v4"
+                    accessToken = "credentialsJSON:271c5ea5-69f0-4bc8-854f-413abaaa29ed"
+                }
             }
         }
     }
