@@ -101,7 +101,7 @@
                     <test>de.njsm.movielist.servertest.TestSuite</test>
                     <systemPropertyVariables>
                         <de.njsm.movielist.servertest.website>
-                            http://dp-server/movie-list
+                            http://${env.DEPLOYMENT_VM}/movie-list
                         </de.njsm.movielist.servertest.website>
                     </systemPropertyVariables>
                 </configuration>

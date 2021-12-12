@@ -1,6 +1,8 @@
 #!/bin/bash
 
-ssh dp-server "
+DEPLOYMENT_VM="${DEPLOYMENT_VM:-dp-server}"
+
+ssh ${DEPLOYMENT_VM} "
         sudo pacman -Rsn movie-list movie-list-static --noconfirm;
         sudo rm -rf /usr/share/movie-list;
         while [ -d /usr/share/tomcat8/webapp/movie-list ] ; do sleep 1 ; done;
