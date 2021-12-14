@@ -1,9 +1,8 @@
 
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.commitStatusPublisher
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.exec
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
-import jetbrains.buildServer.configs.kotlin.v2019_2.projectFeatures.youtrack
-import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 import jetbrains.buildServer.configs.kotlin.v2019_2.ui.add
 
 /*
@@ -33,19 +32,6 @@ version = "2019.2"
 project {
 
     buildType(FullBuild)
-
-    features {
-        youtrack {
-            id = "PROJECT_EXT_4"
-            displayName = "YouTrack"
-            host = "https://j.njsm.de/youtrack"
-            userName = ""
-            password = ""
-            projectExtIds = "ML"
-            accessToken = "credentialsJSON:94939717-d1c5-4b83-9d0f-52d919a3de6a"
-            param("authType", "accesstoken")
-        }
-    }
 }
 
 object FullBuild : BuildType({
@@ -59,9 +45,12 @@ object FullBuild : BuildType({
         root(DslContext.settingsRoot)
     }
 
-    triggers {
-        vcs {
-            branchFilter = "+:*"
+    features {
+        commitStatusPublisher {
+            publisher = gitlab {
+                gitlabApiUrl = "https://gitlab.com/api/v4"
+                accessToken = "credentialsJSON:271c5ea5-69f0-4bc8-854f-413abaaa29ed"
+            }
         }
     }
 
