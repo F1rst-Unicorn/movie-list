@@ -27,7 +27,7 @@
             <a class="btn btn-success" id="edit"
                href="${ url('genre_edit', genre.id) }">
                 <img class="white-icon"
-                     src="${ static("octicons/build/svg/pencil.svg") }"/>
+                     src="${ static("@primer/octicons/build/svg/pencil-16.svg") }"/>
             </a>
         </div>
     </div>

@@ -41,7 +41,7 @@
                            class="btn btn-sm btn-primary"
                            onclick="event.stopPropagation(); mark_watched(${ movie.id?string.computer }, ${ user.id })">
                             <img class="white-icon"
-                                 src="${ static("octicons/build/svg/eye.svg") }"/>
+                                 src="${ static("@primer/octicons/build/svg/eye-16.svg") }"/>
                         </a>
                     </#if>
                     <#if movie.deleted >
@@ -80,7 +80,7 @@
                               method="post">
                             <input class="btn btn-sm btn-warning" type="image"
                                    id="delete"
-                                   src="${ static("octicons/build/svg/trashcan.svg") }">
+                                   src="${ static("@primer/octicons/build/svg/trash-16.svg") }">
                             <input type="hidden"
                                    name="${ csrftoken.parameterName }"
                                    value="${ csrftoken.token }"/>

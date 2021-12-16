@@ -28,10 +28,10 @@
                 <div class="dropdown dropdown-menu-right">
                     <button id="Watched" type="button"
                             class="btn btn-primary dropdown-toggle"
-                            data-toggle="dropdown" aria-haspopup="true"
+                            data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                         <img class="white-icon"
-                             src="${ static("octicons/build/svg/eye.svg") }"/>
+                             src="${ static("@primer/octicons/build/svg/eye-16.svg") }"/>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right"
                          aria-labelledby="Watched">
@@ -48,7 +48,7 @@
                 <a class="btn btn-success" id="edit"
                    href="${ url('edit', movie.id) }">
                     <img class="white-icon"
-                         src="${ static("octicons/build/svg/pencil.svg") }"/>
+                         src="${ static("@primer/octicons/build/svg/pencil-16.svg") }"/>
                 </a>
             </div>
             <div class="col col-auto">
@@ -86,7 +86,7 @@
                           action="${ url("mark_removal", movie.id) }"
                           method="post">
                         <input class="btn btn-warning" type="image" id="delete"
-                               src="${ static("octicons/build/svg/trashcan.svg") }">
+                               src="${ static("@primer/octicons/build/svg/trash-16.svg") }">
                         <input type="hidden"
                                name="${ csrftoken.parameterName }"
                                value="${ csrftoken.token }"/>
@@ -171,7 +171,7 @@
                       action="${ url("delete_comment", movie.id, comment.id) }"
                       method="post">
                     <input type="image" class="btn btn-sm btn-warning"
-                           src="${ static("octicons/build/svg/trashcan.svg") }">
+                           src="${ static("@primer/octicons/build/svg/trash-16.svg") }">
                     <input type="hidden"
                            name="${ csrftoken.parameterName }"
                            value="${ csrftoken.token }"/>

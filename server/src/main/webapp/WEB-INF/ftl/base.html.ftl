@@ -45,15 +45,15 @@
                                    class="nav-link">
                                     <img class="white-icon"
                                          style="width: 24px; height: auto;"
-                                         src="${ static("octicons/build/svg/home.svg") }"/>
+                                         src="${ static("@primer/octicons/build/svg/home-24.svg") }"/>
                                 </a>
                             </li>
                             <li class="nav-item dropdown" id="add-dropdown">
                                 <a href="#" class="nav-link dropdown-toggle"
-                                   data-toggle="dropdown" aria-haspopup="true"
+                                   data-bs-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
                                     <img class="white-icon"
-                                         src="${ static("octicons/build/svg/plus.svg") }"/>
+                                         src="${ static("@primer/octicons/build/svg/plus-24.svg") }"/>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
@@ -78,7 +78,7 @@
                             </li>
                             <li class="nav-item dropdown" id="nav-dropdown">
                                 <a href="#" class="nav-link dropdown-toggle"
-                                   data-toggle="dropdown" aria-haspopup="true"
+                                   data-bs-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
                                     ${ translate("Browse") }
                                 </a>
@@ -111,7 +111,7 @@
                             </li>
                             <li class="nav-item dropdown" id="mgmt-dropdown">
                                 <a href="#" class="nav-link dropdown-toggle"
-                                   data-toggle="dropdown" aria-haspopup="true"
+                                   data-bs-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
                                     ${ translate("Manage") }
                                 </a>
@@ -142,7 +142,7 @@
                 <div class="navbar-header navbar-brand navbar-right">
                     <#if user.authenticated >
                         <img class="white-icon"
-                             src="${ static("octicons/build/svg/person.svg") }"/>
+                             src="${ static("@primer/octicons/build/svg/person-24.svg") }"/>
                         ${ user.username }
                         <form style="display: inline" action="${ url("logout") }" method="post">
                             <input class="btn btn-outline-primary" type="submit"
@@ -159,7 +159,6 @@
                 <#nested>
             </div>
         </div>
-        <script src="${ static("jquery/dist/jquery.slim.min.js") }"></script>
         <script src="${ static("bootstrap/dist/js/bootstrap.bundle.min.js") }"></script>
         <script>
             <#include "js/functions.js.ftl">

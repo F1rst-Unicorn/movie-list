@@ -27,13 +27,13 @@
             <a class="btn btn-success" id="edit"
                href="${ url('actor_edit', actor.id) }">
                 <img class="white-icon"
-                     src="${ static("octicons/build/svg/pencil.svg") }"/>
+                     src="${ static("@primer/octicons/build/svg/pencil-16.svg") }"/>
             </a>
         </div>
         <div class="col col-auto">
             <a class="btn btn-warning" id="merge"
                href="${ url('actor_merge', actor.id) }">
-                <img src="${ static("octicons/build/svg/git-merge.svg") }"/>
+                <img src="${ static("@primer/octicons/build/svg/git-merge-16.svg") }"/>
             </a>
         </div>
     </div>
