@@ -32,8 +32,8 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.container.AsyncResponse;
-import jakarta.ws.rs.core.MediaType;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.core.MediaType;
 import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.Collections;

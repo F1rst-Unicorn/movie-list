@@ -21,7 +21,7 @@ package de.njsm.movielist.server.business;
 
 import fj.data.Validation;
 
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.core.Response;
 
 public enum StatusCode {
 

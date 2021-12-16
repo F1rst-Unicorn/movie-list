@@ -19,8 +19,8 @@
 
 package de.njsm.movielist.server.business.data;
 
-import jakarta.ws.rs.FormParam;
-import jakarta.ws.rs.PathParam;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.PathParam;
 
 public class Genre {
 

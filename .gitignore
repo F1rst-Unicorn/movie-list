@@ -10,6 +10,7 @@ node_modules
 # Archlinux
 pkg/Archlinux/pkg
 *.pkg.tar.xz
+*.pkg.tar.zst
 
 # Ansible
 deploy/cache

@@ -19,7 +19,7 @@
 
 package de.njsm.movielist.server.business.data;
 
-import jakarta.ws.rs.FormParam;
+import javax.ws.rs.FormParam;
 
 public class Location {
 

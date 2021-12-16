@@ -21,8 +21,8 @@ package de.njsm.movielist.server.business.data;
 
 import de.njsm.movielist.server.Config;
 
-import jakarta.ws.rs.FormParam;
-import jakarta.ws.rs.PathParam;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.PathParam;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.TimeZone;

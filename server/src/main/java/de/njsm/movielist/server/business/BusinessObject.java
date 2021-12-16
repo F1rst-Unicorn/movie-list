@@ -22,8 +22,8 @@ package de.njsm.movielist.server.business;
 import de.njsm.movielist.server.db.FailSafeDatabaseHandler;
 import fj.data.Validation;
 import io.prometheus.client.Summary;
-import jakarta.ws.rs.container.AsyncResponse;
-import jakarta.ws.rs.container.CompletionCallback;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.CompletionCallback;
 import org.glassfish.jersey.internal.util.Producer;
 
 
