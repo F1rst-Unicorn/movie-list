@@ -26,8 +26,8 @@
 
         <RollingFile
                 name="logfile"
-                fileName="/var/log/tomcat8/movie-list.log"
-                filePattern="/var/log/tomcat8/movie-list-%i.log">
+                fileName="/var/log/tomcat10/movie-list.log"
+                filePattern="/var/log/tomcat10/movie-list-%i.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %p %C:%L %m%n" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="10MB" />

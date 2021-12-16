@@ -25,7 +25,7 @@ pkgdesc="Manages a large movie list"
 arch=('any')
 url="https://github.com/F1rst-Unicorn/movie-list"
 license=('GPL3')
-depends=('tomcat8')
+depends=('tomcat10')
 makedepends=('git'
              'yarn'
              'maven')
@@ -51,12 +51,12 @@ build() {
 package_movie-list() {
     cd "$srcdir"
 
-    mkdir -p $pkgdir/var/lib/tomcat8/webapp
-    chmod 0775 $pkgdir/var/lib/tomcat8
-    chmod 0755 $pkgdir/var/lib/tomcat8/webapp
+    mkdir -p $pkgdir/var/lib/tomcat10/webapp
+    chmod 0775 $pkgdir/var/lib/tomcat10
+    chmod 0755 $pkgdir/var/lib/tomcat10/webapp
 
     install -D -m 444 server/target/server-*.war $pkgdir/usr/lib/$pkgbase/server.war
-    ln -s /usr/lib/$pkgbase/server.war           $pkgdir/var/lib/tomcat8/webapp/movie-list.war
+    ln -s /usr/lib/$pkgbase/server.war           $pkgdir/var/lib/tomcat10/webapp/movie-list.war
     install -D -m 644 pkg/$pkgbase.properties    $pkgdir/etc/$pkgbase.properties
     install -D -m 444 LICENSE.md                 $pkgdir/usr/share/licenses/$pkgbase/LICENSE.md
 }
