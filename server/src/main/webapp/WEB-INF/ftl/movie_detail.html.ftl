@@ -120,7 +120,7 @@
                                 <dt>${ translate("Genres") }</dt>
                             </#if>
                             <a href="${ url("genre_detail", genre.id) }">
-                                <dd class="badge badge-info"
+                                <dd class="badge bg-info"
                                     style="margin-right: 5px">${ genre.name }
                                 </dd>
                             </a>
