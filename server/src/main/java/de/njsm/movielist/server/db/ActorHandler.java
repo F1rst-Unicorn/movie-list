@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static de.njsm.movielist.server.db.jooq.Tables.*;
+import static org.jooq.impl.DSL.*;
 
 public class ActorHandler extends FailSafeDatabaseHandler {
 
@@ -68,6 +69,15 @@ public class ActorHandler extends FailSafeDatabaseHandler {
         return runCommand(context -> {
             context.update(MOVIES_MOVIE_ACTORS)
                     .set(MOVIES_MOVIE_ACTORS.ACTOR_ID, data.getId())
+                    .where(MOVIES_MOVIE_ACTORS.ACTOR_ID.eq(other))
+                    .and(row(inline(data.getId(), Integer.class), MOVIES_MOVIE_ACTORS.MOVIE_ID).notIn(
+                            select(MOVIES_MOVIE_ACTORS.ACTOR_ID, MOVIES_MOVIE_ACTORS.MOVIE_ID)
+                                    .from(MOVIES_MOVIE_ACTORS)
+                                    .where(MOVIES_MOVIE_ACTORS.ACTOR_ID.eq(data.getId()))
+                    ))
+                    .execute();
+
+            context.deleteFrom(MOVIES_MOVIE_ACTORS)
                     .where(MOVIES_MOVIE_ACTORS.ACTOR_ID.eq(other))
                     .execute();
 
@@ -114,7 +124,7 @@ public class ActorHandler extends FailSafeDatabaseHandler {
                                     context.select(MOVIES_WATCHSTATUS.MOVIE_ID)
                                             .from(MOVIES_WATCHSTATUS)
                                             .where(MOVIES_WATCHSTATUS.USER_ID.eq(user.getId()))),
-                                    DSL.inline(true))
+                                    inline(true))
                                     .otherwise(false).as("watched_by_user"),
                             MOVIES_MOVIE.DELETED,
                             MOVIES_MOVIE.TO_DELETE,
