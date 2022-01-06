@@ -56,6 +56,7 @@ public class TestSuite {
         FirefoxOptions options = new FirefoxOptions();
         options.setHeadless(true);
         options.setProfile(profile);
+        options.addPreference("general.useragent.override", "Selenium Testdriver");
         DRIVER = new FirefoxDriver(options);
     }
 
