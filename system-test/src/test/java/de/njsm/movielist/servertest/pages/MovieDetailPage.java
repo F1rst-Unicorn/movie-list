@@ -175,7 +175,7 @@ public class MovieDetailPage extends LoggedInWebpage {
 
     public MovieDetailPage deleteComment(int index) {
         List<WebElement> commentList = driver.findElement(comments).findElements(By.tagName("form"));
-        commentList.get(index).click();
+        commentList.get(index).findElement(By.className("btn")).click();
         return this;
     }
 
