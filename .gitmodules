@@ -1,3 +1,3 @@
 [submodule "deploy/roles/movie-list"]
 	path = deploy/roles/movie-list
-	url = gitea@git.j.njsm.de:ansible/movie-list.git
+	url = ssh://gitea@j.njsm.de:2222/ansible/movie-list.git
