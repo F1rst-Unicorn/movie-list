@@ -39,19 +39,11 @@ object FullBuild : BuildType({
 
     artifactRules = """
         pkg/Archlinux/movie-list-*-any.pkg.tar.xz
+        pkg/Archlinux/movie-list-*-any.pkg.tar.zst
     """.trimIndent()
 
     vcs {
         root(DslContext.settingsRoot)
-    }
-
-    features {
-        commitStatusPublisher {
-            publisher = gitlab {
-                gitlabApiUrl = "https://gitlab.com/api/v4"
-                accessToken = "credentialsJSON:271c5ea5-69f0-4bc8-854f-413abaaa29ed"
-            }
-        }
     }
 
     steps {
