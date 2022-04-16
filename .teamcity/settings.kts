@@ -31,6 +31,8 @@ version = "2019.2"
 
 project {
 
+    vcsRoot(Gitea)
+
     buildType(FullBuild)
 }
 
@@ -101,3 +103,15 @@ object FullBuild : BuildType({
         }
     }
 })
+
+object Gitea : GitVcsRoot({
+    name = "Gitea"
+    url = "ssh://gitea@j.njsm.de:2222/veenj/movie-list.git"
+    branch = "refs/heads/master"
+    branchSpec = "+:refs/heads/*"
+    checkoutPolicy = GitVcsRoot.AgentCheckoutPolicy.USE_MIRRORS
+    authMethod = uploadedKey {
+        uploadedKey = "id_rsa"
+    }
+})
+
