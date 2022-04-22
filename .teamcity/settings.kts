@@ -32,7 +32,7 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2019.2"
 
 project {
-//    vcsRoot(Gitea)
+    vcsRoot(Gitea)
     buildType(FullBuild)
 }
 
@@ -113,6 +113,7 @@ object FullBuild : BuildType({
 })
 
 object Gitea : GitVcsRoot({
+    id("Projects_MovieList_Gitlab")
     name = "Gitea"
     url = "ssh://gitea@j.njsm.de:2222/veenj/movie-list.git"
     branch = "refs/heads/master"
