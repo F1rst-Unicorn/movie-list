@@ -114,7 +114,7 @@ object FullBuild : BuildType({
 
 object Gitea : GitVcsRoot({
     id("Projects_MovieList_Gitlab")
-    name = "Gitea"
+    name = "Gitea 2"
     url = "ssh://gitea@j.njsm.de:2222/veenj/movie-list.git"
     branch = "refs/heads/master"
     branchSpec = "+:refs/heads/*"
