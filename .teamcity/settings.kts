@@ -4,6 +4,8 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.commitStatusPu
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.exec
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.v2019_2.ui.add
+import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
+import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -30,9 +32,7 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2019.2"
 
 project {
-
     vcsRoot(Gitea)
-
     buildType(FullBuild)
 }
 
@@ -94,6 +94,14 @@ object FullBuild : BuildType({
     cleanup {
         artifacts(builds = 100)
     }
+
+    triggers {
+        vcs {
+            id = "vcsTrigger"
+            branchFilter = "+:*"
+        }
+    }
+
     requirements {
         add {
             exists("env.DEPLOYMENT_VM")
