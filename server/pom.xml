@@ -326,7 +326,7 @@
         <profile>
             <id>teamcity</id>
             <properties>
-                <de.njsm.movielist.server.db.host>db.j.njsm.de</de.njsm.movielist.server.db.host>
+                <de.njsm.movielist.server.db.host>eregion.m.njsm.de</de.njsm.movielist.server.db.host>
                 <de.njsm.movielist.server.db.port>5432</de.njsm.movielist.server.db.port>
                 <de.njsm.movielist.server.db.name>${env.POSTGRESQL_DB}</de.njsm.movielist.server.db.name>
                 <de.njsm.movielist.server.circuitbreaker.timeout>2000</de.njsm.movielist.server.circuitbreaker.timeout>
