@@ -84,7 +84,11 @@ public class AddMoviePage extends LoggedInWebpage {
     public AddMoviePage setActors(int... indices) {
         Select select = new Select(driver.findElement(this.actors));
         for (int i : indices) {
-            select.selectByIndex(i);
+            waitUntil(v -> {
+                        select.selectByIndex(i);
+                        return true;
+                    });
+
         }
         return this;
     }
@@ -92,13 +96,19 @@ public class AddMoviePage extends LoggedInWebpage {
     public AddMoviePage setGenres(int... indices) {
         Select select = new Select(driver.findElement(this.genres));
         for (int i : indices) {
-            select.selectByIndex(i);
+            waitUntil(v -> {
+                select.selectByIndex(i);
+                return true;
+            });
         }
         return this;
     }
 
     public MovieDetailPage submit() {
-        driver.findElement(submit).click();
+        waitUntil(v -> {
+            driver.findElement(submit).click();
+            return true;
+        });
         return new MovieDetailPage(driver);
     }
 }

@@ -163,7 +163,10 @@ public class MovieDetailPage extends LoggedInWebpage {
 
     public MovieDetailPage addComment(String comment) {
         driver.findElement(this.comment).sendKeys(comment);
-        driver.findElement(By.id("submit")).click();
+        waitUntil(v -> {
+            driver.findElement(By.id("submit")).click();
+            return true;
+        });
         return this;
     }
 

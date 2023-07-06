@@ -107,8 +107,11 @@ public class EditMoviePage extends LoggedInWebpage {
     }
 
     public EditMoviePage setLink(String link) {
-        driver.findElement(this.link).clear();
-        driver.findElement(this.link).sendKeys(link);
+        waitUntil(v -> {
+            driver.findElement(this.link).clear();
+            driver.findElement(this.link).sendKeys(link);
+            return true;
+        });
         return this;
     }
 
@@ -128,7 +131,10 @@ public class EditMoviePage extends LoggedInWebpage {
         Select select = new Select(driver.findElement(this.actors));
         select.deselectAll();
         for (int i : indices) {
-            select.selectByIndex(i);
+            waitUntil(v -> {
+                select.selectByIndex(i);
+                return true;
+            });
         }
         return this;
     }
@@ -146,15 +152,24 @@ public class EditMoviePage extends LoggedInWebpage {
 
     public EditMoviePage setGenres(int... indices) {
         Select select = new Select(driver.findElement(this.genres));
-        select.deselectAll();
+        waitUntil(v -> {
+            select.deselectAll();
+            return true;
+        });
         for (int i : indices) {
-            select.selectByIndex(i);
+            waitUntil(v -> {
+                select.selectByIndex(i);
+                return true;
+            });
         }
         return this;
     }
 
     public MovieDetailPage submit() {
-        driver.findElement(submit).click();
+        waitUntil(v -> {
+            driver.findElement(submit).click();
+            return true;
+        });
         return new MovieDetailPage(driver);
     }
 }

@@ -19,9 +19,12 @@
 
 package de.njsm.movielist.servertest.pages;
 
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public abstract class Webpage {
 
@@ -34,7 +37,9 @@ public abstract class Webpage {
     }
 
     protected <T> T waitUntil(ExpectedCondition<T> condition) {
-        return new WebDriverWait(driver, 10).until(condition);
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .ignoring(ElementNotInteractableException.class)
+                .until(condition);
     }
 
     /**
