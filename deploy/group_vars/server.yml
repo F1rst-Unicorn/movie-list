@@ -14,7 +14,7 @@ movie_list_contexts:
   - test
 
 movie_list_oidc:
-  issuer_url: https://j.njsm.de/oidc
+  issuer_url: https://veenj.de/oidc
   client_id: dummy
   client_secret: dummy
   algorithm: RS256

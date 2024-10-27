@@ -3,7 +3,6 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.commitStatusPublisher
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.exec
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
-import jetbrains.buildServer.configs.kotlin.v2019_2.ui.add
 import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 
@@ -103,11 +102,19 @@ object FullBuild : BuildType({
     }
 
     requirements {
-        add {
-            exists("env.DEPLOYMENT_VM")
-        }
-        add {
-            exists("env.POSTGRESQL_DB")
+        exists("env.DEPLOYMENT_VM")
+        exists("env.POSTGRESQL_DB")
+    }
+
+    features {
+        commitStatusPublisher {
+            vcsRootExtId = "${DslContext.settingsRoot.id}"
+            publisher = github {
+                githubUrl = "https://veenj.de/git/api/v1"
+                authType = personalToken {
+                    token = "credentialsJSON:557337ec-b35f-4879-a148-11d578a847a4"
+                }
+            }
         }
     }
 })
@@ -115,7 +122,7 @@ object FullBuild : BuildType({
 object Gitea : GitVcsRoot({
     id("Projects_MovieList_Gitlab")
     name = "Gitea 2"
-    url = "ssh://gitea@j.njsm.de:2222/veenj/movie-list.git"
+    url = "ssh://gitea@veenj.de:2222/veenj/movie-list.git"
     branch = "refs/heads/master"
     branchSpec = "+:refs/heads/*"
     checkoutPolicy = GitVcsRoot.AgentCheckoutPolicy.USE_MIRRORS
