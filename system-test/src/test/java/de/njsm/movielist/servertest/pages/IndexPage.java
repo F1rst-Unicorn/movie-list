@@ -43,8 +43,8 @@ public class IndexPage extends MovieListWebpage {
     }
 
     public static IndexPage test(WebDriver driver) {
-        driver.navigate().to(System.getProperty("de.njsm.movielist.servertest.website"));
-        return new IndexPage(driver);
+        return LoginPage.test(driver)
+                .login("Jack", "testtesttest");
     }
 
     public IndexPage assertMovieList() {
