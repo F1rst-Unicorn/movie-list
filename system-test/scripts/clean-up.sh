@@ -9,7 +9,7 @@ ssh ${DEPLOYMENT_VM} "
         sudo touch /var/log/tomcat10/movie-list.log;
         sudo chown tomcat10:tomcat10 /var/log/tomcat10/movie-list.log
         sudo setfacl -m u:jan:r /var/log/tomcat10/movie-list.log
-        while [ -d /usr/share/tomcat8/webapp/movie-list ] ; do sleep 1 ; done;
+        while [ -d /usr/share/tomcat10/webapp/movie-list ] ; do sleep 1 ; done;
         sudo -u postgres psql -c \"\$(
             sudo -u postgres psql -c \"
                 select 'drop table if exists \\\"' || tablename || '\\\" cascade;' from pg_tables where schemaname = 'public';\" movie_list | tail -n +3 | head -n -2
