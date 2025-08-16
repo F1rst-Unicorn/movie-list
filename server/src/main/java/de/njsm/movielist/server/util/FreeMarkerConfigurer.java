@@ -24,6 +24,7 @@ import static java.util.Map.entry;
 import java.util.Map;
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import de.njsm.movielist.server.web.template.methods.Static;
 import de.njsm.movielist.server.web.template.methods.Translate;
@@ -34,9 +35,9 @@ import freemarker.template.Configuration;
 public class FreeMarkerConfigurer extends org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer {
 
     public FreeMarkerConfigurer(
-        Properties freemarkerProperties,
-        String basePath,
-        String staticBasePath
+        @Qualifier("freemarkerProperties") Properties freemarkerProperties,
+        @Qualifier("basePath") String basePath,
+        @Qualifier("staticBasePath") String staticBasePath
     ) {
         setTemplateLoaderPath("/WEB-INF/ftl/");
         setDefaultEncoding("UTF-8");

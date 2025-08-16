@@ -27,9 +27,9 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.client.web.AuthenticatedPrincipalOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithm;
-import org.springframework.security.oauth2.jwt.JwtDecoderFactory;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import de.njsm.movielist.server.db.AuthHandler;
 import de.njsm.movielist.server.db.ConnectionFactory;
@@ -46,16 +46,15 @@ public class AppConfig {}
 
 @Configuration
 @Lazy
+@EnableWebSecurity
 class Security {
 
 	@Bean
 	public SecurityFilterChain filterChain(
 		HttpSecurity http,
 		OAuth2AuthorizedClientRepository authorizedClientRepository,
-		JwtDecoderFactory jwtDecoderFactory,
 		AuthHandler userService,
-		OidcUserService oidcUserService,
-		OidcIdTokenDecoderFactory decoder
+		OidcUserService oidcUserService
 	) throws Exception {
 		String loginPage = "/login";
 		return http
@@ -84,10 +83,15 @@ class Security {
 			.build();
 	}
 
-	@Bean("persistentUserBackend")
+	@Bean
+	public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+		return new HandlerMappingIntrospector();
+	}
+
+	@Bean
 	public UserHandler persistentUserBackend(
-		ConnectionFactory persistentConnectionFactory,
-		String circuitBreakerDatabase,
+		@Qualifier("persistentConnectionFactory") ConnectionFactory persistentConnectionFactory,
+		@Qualifier("circuitBreakerDatabase") String circuitBreakerDatabase,
 		int circuitBreakerTimeout
 	) {
 		return new UserHandler(

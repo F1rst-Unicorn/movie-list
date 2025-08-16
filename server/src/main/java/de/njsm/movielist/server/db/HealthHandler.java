@@ -29,7 +29,10 @@ import de.njsm.movielist.server.business.StatusCode;
 @RequestScope
 public class HealthHandler extends FailSafeDatabaseHandler {
 
-    public HealthHandler(ConnectionFactory connectionFactory, @Qualifier("circuitBreakerDatabase") String resourceIdentifier, int timeout) {
+    public HealthHandler(
+        @Qualifier("connectionFactory") ConnectionFactory connectionFactory,
+        @Qualifier("circuitBreakerDatabase") String resourceIdentifier,
+        int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 
