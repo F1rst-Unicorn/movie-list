@@ -50,6 +50,8 @@
         <security:authentication-provider ref="userService"/>
     </security:authentication-manager>
 
+    <bean id="mvcHandlerMappingIntrospector" class="org.springframework.web.servlet.handler.HandlerMappingIntrospector" />
+
     <bean id="userService" class="de.njsm.movielist.server.db.AuthHandler">
         <constructor-arg index="0" ref="presistentConnectionFactory" />
         <constructor-arg index="1" ref="circuitBreakerDatabase" />
