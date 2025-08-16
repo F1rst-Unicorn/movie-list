@@ -27,8 +27,8 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import rx.schedulers.Schedulers;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 import java.lang.reflect.Field;
 import java.sql.Driver;
 import java.sql.DriverManager;

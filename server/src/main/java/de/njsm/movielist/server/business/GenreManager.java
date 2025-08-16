@@ -26,7 +26,7 @@ import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.GenreHandler;
 import fj.data.Validation;
 
-import javax.ws.rs.container.AsyncResponse;
+import jakarta.ws.rs.container.AsyncResponse;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

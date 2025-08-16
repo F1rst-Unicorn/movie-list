@@ -19,6 +19,20 @@
 
 package de.njsm.movielist.server.web;
 
+import java.io.PrintWriter;
+import java.security.Principal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.container.AsyncResponse;
+import jakarta.ws.rs.core.MediaType;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.OidcUser;
 import de.njsm.movielist.server.business.data.User;
@@ -26,19 +40,6 @@ import fj.data.Validation;
 import freemarker.core.Environment;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.core.MediaType;
-import java.io.PrintWriter;
-import java.security.Principal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TemplateEndpoint {
 
