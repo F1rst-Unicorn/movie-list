@@ -19,24 +19,38 @@
 
 package de.njsm.movielist.server.db;
 
-import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.*;
-import de.njsm.movielist.server.db.jooq.tables.records.MoviesActorRecord;
-import fj.data.Validation;
-import org.jooq.Record7;
-import org.jooq.impl.DSL;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_ACTOR;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_LOCATION;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIE_ACTORS;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_WATCHSTATUS;
+import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.row;
+import static org.jooq.impl.DSL.select;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static de.njsm.movielist.server.db.jooq.Tables.*;
-import static org.jooq.impl.DSL.*;
+import org.jooq.Record7;
+import org.jooq.impl.DSL;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.context.annotation.RequestScope;
+import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.data.Actor;
+import de.njsm.movielist.server.business.data.MovieCount;
+import de.njsm.movielist.server.business.data.MovieOutline;
+import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.db.jooq.tables.records.MoviesActorRecord;
+import fj.data.Validation;
 
+@Repository
+@RequestScope
 public class ActorHandler extends FailSafeDatabaseHandler {
 
-    public ActorHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
+    public ActorHandler(ConnectionFactory connectionFactory, @Qualifier("circuitBreakerDatabase") String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 

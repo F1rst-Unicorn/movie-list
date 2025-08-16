@@ -19,9 +19,65 @@
 
 package de.njsm.movielist.server.util;
 
+import static java.util.Map.entry;
+
+import java.util.Map;
+import java.util.Properties;
+
+import org.springframework.stereotype.Component;
+import de.njsm.movielist.server.web.template.methods.Static;
+import de.njsm.movielist.server.web.template.methods.Translate;
+import de.njsm.movielist.server.web.template.methods.Url;
 import freemarker.template.Configuration;
 
+@Component
 public class FreeMarkerConfigurer extends org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer {
+
+    public FreeMarkerConfigurer(
+        Properties freemarkerProperties,
+        String basePath,
+        String staticBasePath
+    ) {
+        setTemplateLoaderPath("/WEB-INF/ftl/");
+        setDefaultEncoding("UTF-8");
+        setFreemarkerSettings(freemarkerProperties);
+        setFreemarkerVariables(Map.of(
+            "translate", new Translate(),
+            "url", new Url(
+                basePath,
+                Map.ofEntries(
+                    entry("index", ""),
+                    entry("latest", "latest"),
+                    entry("removed_movies", "to_delete"),
+                    entry("absent_movies", "absent"),
+                    entry("create_account", "create_account"),
+                    entry("login", "login"),
+                    entry("logout", "logout"),
+                    entry("add_movie", "movies/add"),
+                    entry("add_location", "add_location"),
+                    entry("add_comment", "movies/%s/add_comment"),
+                    entry("search", "search"),
+                    entry("detail", "movies/%s/detail"),
+                    entry("edit", "movies/%s/edit"),
+                    entry("mark_removal", "movies/%s/mark_removal"),
+                    entry("mark_watched", "movies/1234/mark_watched/5678"),
+                    entry("delete", "movies/%s/delete"),
+                    entry("delete_comment", "movies/%s/%s/delete"),
+                    entry("actors", "actors"),
+                    entry("add_actor", "actors/add"),
+                    entry("actor_detail", "actors/%s/detail"),
+                    entry("actor_edit", "actors/%s/edit"),
+                    entry("actor_merge", "actors/%s/merge"),
+                    entry("genres", "genres"),
+                    entry("add_genre", "genres/add"),
+                    entry("genre_detail", "genres/%s/detail"),
+                    entry("genre_edit", "genres/%s/edit"),
+                    entry("oidc", "oauth2/authorization/oauth2")
+                )
+            ),
+            "static", new Static(staticBasePath)
+        ));
+    }
 
     @Override
     protected Configuration newConfiguration() {

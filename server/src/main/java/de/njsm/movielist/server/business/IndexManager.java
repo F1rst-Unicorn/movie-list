@@ -19,16 +19,21 @@
 
 package de.njsm.movielist.server.business;
 
+import java.util.Collections;
+import java.util.Map;
+
+import jakarta.ws.rs.container.AsyncResponse;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.data.Location;
 import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.IndexHandler;
 import fj.data.Validation;
-import jakarta.ws.rs.container.AsyncResponse;
 
-import java.util.Collections;
-import java.util.Map;
-
+@Service
+@RequestScope
 public class IndexManager extends BusinessObject {
 
     private IndexHandler dbBackend;

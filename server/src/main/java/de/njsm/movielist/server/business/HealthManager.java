@@ -19,10 +19,14 @@
 
 package de.njsm.movielist.server.business;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.data.Health;
 import de.njsm.movielist.server.db.HealthHandler;
 import fj.data.Validation;
 
+@Service
+@RequestScope
 public class HealthManager extends BusinessObject {
 
     private HealthHandler dbBackend;

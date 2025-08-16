@@ -19,16 +19,19 @@
 
 package de.njsm.movielist.server.db;
 
-import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.User;
-import fj.data.Validation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.stereotype.Repository;
+import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.data.User;
+import fj.data.Validation;
 
+@Repository
 public class OidcUserService extends FailSafeDatabaseHandler implements OAuth2UserService<OidcUserRequest, OidcUser> {
 
     private static final Logger LOG = LogManager.getLogger(OidcUserService.class);
@@ -40,7 +43,12 @@ public class OidcUserService extends FailSafeDatabaseHandler implements OAuth2Us
 
     private final ConnectionHandler connectionHandler;
 
-    public OidcUserService(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout, UserHandler userHandler) {
+    public OidcUserService(
+        @Qualifier("persistentConnectionFactory") ConnectionFactory connectionFactory,
+        @Qualifier("circuitBreakerDatabase") String resourceIdentifier,
+        int timeout,
+        @Qualifier("persistentUserBackend") UserHandler userHandler
+    ) {
         super(connectionFactory, resourceIdentifier, timeout);
         this.userHandler = userHandler;
         this.connectionHandler = new ConnectionHandler(resourceIdentifier, connectionFactory, timeout);

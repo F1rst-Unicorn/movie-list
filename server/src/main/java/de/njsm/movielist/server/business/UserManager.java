@@ -19,12 +19,16 @@
 
 package de.njsm.movielist.server.business;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.UserHandler;
 import fj.data.Validation;
 
-import java.util.List;
-
+@Service
+@RequestScope
 public class UserManager extends BusinessObject {
 
     private UserHandler handler;

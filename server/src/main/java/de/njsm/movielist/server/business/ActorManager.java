@@ -19,6 +19,15 @@
 
 package de.njsm.movielist.server.business;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import jakarta.ws.rs.container.AsyncResponse;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.data.Actor;
 import de.njsm.movielist.server.business.data.MovieCount;
 import de.njsm.movielist.server.business.data.MovieOutline;
@@ -26,12 +35,8 @@ import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.ActorHandler;
 import fj.data.Validation;
 
-import jakarta.ws.rs.container.AsyncResponse;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-
+@Service
+@RequestScope
 public class ActorManager extends BusinessObject {
 
     private ActorHandler handler;

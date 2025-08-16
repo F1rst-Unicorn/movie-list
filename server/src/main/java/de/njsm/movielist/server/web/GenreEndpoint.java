@@ -19,23 +19,33 @@
 
 package de.njsm.movielist.server.web;
 
-import de.njsm.movielist.server.business.GenreManager;
-import de.njsm.movielist.server.business.data.Genre;
-import freemarker.template.Configuration;
+import java.net.URI;
+import java.util.Collections;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.BeanParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.container.AsyncResponse;
 import jakarta.ws.rs.container.Suspended;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.net.URI;
-import java.util.Collections;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.RequestScope;
+import de.njsm.movielist.server.business.GenreManager;
+import de.njsm.movielist.server.business.data.Genre;
+import freemarker.template.Configuration;
 
 @Path("genres")
+@Controller
+@RequestScope
 public class GenreEndpoint extends TemplateEndpoint {
 
     private GenreManager manager;

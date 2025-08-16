@@ -19,19 +19,23 @@
 
 package de.njsm.movielist.server;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrations;
-import org.springframework.security.oauth2.core.AuthenticationMethod;
-import org.springframework.security.oauth2.jose.jws.JwsAlgorithm;
-import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
-
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrations;
+import org.springframework.security.oauth2.core.AuthenticationMethod;
+import org.springframework.security.oauth2.jose.jws.JwsAlgorithm;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
+
+@Component
 public class Config {
 
     private static final Logger LOG = LogManager.getLogger(Config.class);
@@ -75,7 +79,7 @@ public class Config {
     private String clientSecret;
     private String issuerUri;
 
-    public Config(Properties p) {
+    public Config(@Qualifier("propertiesFile") Properties p) {
         readProperties(p);
     }
 
@@ -102,34 +106,42 @@ public class Config {
         dbProperties = filterPostgresqlProperties(p);
     }
 
+    @Bean("dbAddress")
     public String getDbAddress() {
         return dbAddress;
     }
 
+    @Bean("dbPort")
     public String getDbPort() {
         return dbPort;
     }
 
+    @Bean("dbName")
     public String getDbName() {
         return dbName;
     }
 
+    @Bean("basePath")
     public String getBasePath() {
         return basePath;
     }
 
+    @Bean("staticBasePath")
     public String getStaticBasePath() {
         return staticBasePath;
     }
 
+    @Bean("liquibaseContexts")
     public String getLiquibaseContexts() {
         return liquibaseContexts;
     }
 
+    @Bean("circuitBreakerTimeout")
     public int getCircuitBreakerTimeout() {
         return circuitBreakerTimeout;
     }
 
+    @Bean("dbConfig")
     public Properties getDbProperties() {
         return dbProperties;
     }
@@ -154,6 +166,7 @@ public class Config {
         return result;
     }
 
+    @Bean("algorithmResolver")
     public Function<ClientRegistration, JwsAlgorithm> getOidcTokenAlgorithm() {
         return clientRegistration -> {
             SignatureAlgorithm algorithm = SignatureAlgorithm.from(tokenAlgorithm);
@@ -164,6 +177,7 @@ public class Config {
         };
     }
 
+    @Bean("client")
     public ClientRegistration getOidcClient() {
         return ClientRegistrations.fromOidcIssuerLocation(issuerUri)
                 .registrationId("oauth2")

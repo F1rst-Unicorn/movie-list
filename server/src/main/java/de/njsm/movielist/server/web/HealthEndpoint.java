@@ -19,18 +19,22 @@
 
 package de.njsm.movielist.server.web;
 
-import de.njsm.movielist.server.business.HealthManager;
-import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.Health;
-import fj.data.Validation;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.RequestScope;
+import de.njsm.movielist.server.business.HealthManager;
+import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.data.Health;
+import fj.data.Validation;
+
 @Path("/health")
+@Controller
+@RequestScope
 public class HealthEndpoint {
 
     private HealthManager healthManager;

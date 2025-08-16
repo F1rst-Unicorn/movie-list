@@ -19,19 +19,24 @@
 
 package de.njsm.movielist.server.db;
 
+import static de.njsm.movielist.server.db.jooq.Tables.AUTH_USER;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.jooq.tables.records.AuthUserRecord;
 import fj.data.Validation;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static de.njsm.movielist.server.db.jooq.Tables.AUTH_USER;
-
+@Repository
+@RequestScope
 public class UserHandler extends FailSafeDatabaseHandler {
 
-    public UserHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
+    public UserHandler(ConnectionFactory connectionFactory, @Qualifier("circuitBreakerDatabase") String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 

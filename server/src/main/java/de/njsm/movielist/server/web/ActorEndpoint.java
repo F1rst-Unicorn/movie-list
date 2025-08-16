@@ -38,11 +38,15 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.ActorManager;
 import de.njsm.movielist.server.business.data.Actor;
 import freemarker.template.Configuration;
 
 @Path("actors")
+@Controller
+@RequestScope
 public class ActorEndpoint extends TemplateEndpoint {
 
     private ActorManager manager;

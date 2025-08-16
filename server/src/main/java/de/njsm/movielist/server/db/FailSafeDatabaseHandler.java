@@ -19,26 +19,26 @@
 
 package de.njsm.movielist.server.db;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.util.FunctionWithExceptions;
 import de.njsm.movielist.server.util.HystrixProducer;
 import de.njsm.movielist.server.util.HystrixWrapper;
 import de.njsm.movielist.server.util.ProducerWithExceptions;
 import fj.data.Validation;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class FailSafeDatabaseHandler implements HystrixWrapper<DSLContext, SQLException> {
 
-    private String resourceIdentifier;
+    private final String resourceIdentifier;
 
     private final int timeout;
 
-    private ConnectionFactory connectionFactory;
+    private final ConnectionFactory connectionFactory;
 
     public FailSafeDatabaseHandler(ConnectionFactory connectionFactory,
                                    String resourceIdentifier,

@@ -19,23 +19,42 @@
 
 package de.njsm.movielist.server.db;
 
-import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.*;
-import de.njsm.movielist.server.db.jooq.tables.records.MoviesMovieRecord;
-import fj.data.Validation;
-import org.jooq.InsertValuesStep2;
-import org.jooq.impl.DSL;
+import static de.njsm.movielist.server.db.jooq.Tables.AUTH_USER;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_ACTOR;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_COMMENT;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_GENRE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_LOCATION;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIESINGENRE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIE_ACTORS;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_WATCHSTATUS;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static de.njsm.movielist.server.db.jooq.Tables.*;
+import org.jooq.InsertValuesStep2;
+import org.jooq.impl.DSL;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.context.annotation.RequestScope;
+import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.data.Actor;
+import de.njsm.movielist.server.business.data.Comment;
+import de.njsm.movielist.server.business.data.Genre;
+import de.njsm.movielist.server.business.data.Location;
+import de.njsm.movielist.server.business.data.MovieDetails;
+import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.business.data.WatchStatus;
+import de.njsm.movielist.server.db.jooq.tables.records.MoviesMovieRecord;
+import fj.data.Validation;
 
 
+@Repository
+@RequestScope
 public class MovieHandler extends FailSafeDatabaseHandler {
 
-    public MovieHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
+    public MovieHandler(ConnectionFactory connectionFactory, @Qualifier("circuitBreakerDatabase") String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 

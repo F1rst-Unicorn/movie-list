@@ -19,9 +19,11 @@
 
 package de.njsm.movielist.server.web;
 
-import fj.data.Validation;
-import freemarker.template.Configuration;
+import java.util.Collections;
+
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -31,11 +33,14 @@ import jakarta.ws.rs.container.Suspended;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.util.Collections;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.RequestScope;
+import fj.data.Validation;
+import freemarker.template.Configuration;
 
 @Path("/")
+@Controller
+@RequestScope
 public class AuthEndpoint extends TemplateEndpoint {
 
     @Inject

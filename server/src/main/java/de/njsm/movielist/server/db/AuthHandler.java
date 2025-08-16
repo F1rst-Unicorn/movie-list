@@ -19,13 +19,12 @@
 
 package de.njsm.movielist.server.db;
 
-import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.User;
-import de.njsm.movielist.server.util.PasswordEncoder;
-import fj.data.Validation;
+import static de.njsm.movielist.server.db.jooq.Tables.AUTH_USER;
+
 import org.jooq.Record2;
 import org.jooq.Record5;
 import org.jooq.impl.DSL;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,12 +33,21 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Repository;
+import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.data.User;
+import de.njsm.movielist.server.util.PasswordEncoder;
+import fj.data.Validation;
 
-import static de.njsm.movielist.server.db.jooq.Tables.AUTH_USER;
-
+@Repository
+@Qualifier("userService")
 public class AuthHandler extends FailSafeDatabaseHandler implements UserDetailsService, AuthenticationProvider {
 
-    public AuthHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
+    public AuthHandler(
+        @Qualifier("persistentConnectionFactory") ConnectionFactory connectionFactory,
+        @Qualifier("circuitBreakerDatabase") String resourceIdentifier,
+        int timeout
+    ) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 

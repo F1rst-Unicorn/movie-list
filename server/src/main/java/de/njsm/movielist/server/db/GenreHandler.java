@@ -19,6 +19,22 @@
 
 package de.njsm.movielist.server.db;
 
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_ACTOR;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_GENRE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_LOCATION;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIESINGENRE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIE_ACTORS;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_WATCHSTATUS;
+
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import org.jooq.Record7;
+import org.jooq.impl.DSL;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.StatusCode;
 import de.njsm.movielist.server.business.data.Genre;
 import de.njsm.movielist.server.business.data.MovieCount;
@@ -26,18 +42,13 @@ import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.jooq.tables.records.MoviesGenreRecord;
 import fj.data.Validation;
-import org.jooq.Record7;
-import org.jooq.impl.DSL;
 
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
-import static de.njsm.movielist.server.db.jooq.Tables.*;
-
+@Repository
+@RequestScope
 public class GenreHandler extends FailSafeDatabaseHandler {
 
 
-    public GenreHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
+    public GenreHandler(ConnectionFactory connectionFactory, @Qualifier("circuitBreakerDatabase") String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 

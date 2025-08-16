@@ -19,18 +19,26 @@
 
 package de.njsm.movielist.server.business;
 
-import de.njsm.movielist.server.business.data.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import jakarta.ws.rs.container.AsyncResponse;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
+import de.njsm.movielist.server.business.data.Actor;
+import de.njsm.movielist.server.business.data.Genre;
+import de.njsm.movielist.server.business.data.MovieDetails;
+import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.ActorHandler;
 import de.njsm.movielist.server.db.GenreHandler;
 import de.njsm.movielist.server.db.MovieHandler;
 import de.njsm.movielist.server.db.UserHandler;
 import fj.data.Validation;
 
-import jakarta.ws.rs.container.AsyncResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+@Service
+@RequestScope
 public class MovieManager extends BusinessObject {
 
     private MovieHandler handler;

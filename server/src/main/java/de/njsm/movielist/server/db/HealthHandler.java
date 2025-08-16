@@ -19,12 +19,17 @@
 
 package de.njsm.movielist.server.db;
 
-import de.njsm.movielist.server.business.StatusCode;
 import org.jooq.impl.DSL;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.context.annotation.RequestScope;
+import de.njsm.movielist.server.business.StatusCode;
 
+@Repository
+@RequestScope
 public class HealthHandler extends FailSafeDatabaseHandler {
 
-    public HealthHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
+    public HealthHandler(ConnectionFactory connectionFactory, @Qualifier("circuitBreakerDatabase") String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 

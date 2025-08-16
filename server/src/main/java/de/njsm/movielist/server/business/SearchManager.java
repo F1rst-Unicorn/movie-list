@@ -19,6 +19,13 @@
 
 package de.njsm.movielist.server.business;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.ws.rs.container.AsyncResponse;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.data.MovieCount;
 import de.njsm.movielist.server.business.data.MovieOutline;
 import de.njsm.movielist.server.business.data.SearchQuery;
@@ -28,10 +35,8 @@ import de.njsm.movielist.server.db.SearchHandler;
 import de.njsm.movielist.server.db.UserHandler;
 import fj.data.Validation;
 
-import jakarta.ws.rs.container.AsyncResponse;
-import java.util.HashMap;
-import java.util.Map;
-
+@Service
+@RequestScope
 public class SearchManager extends BusinessObject {
 
     private SearchHandler handler;

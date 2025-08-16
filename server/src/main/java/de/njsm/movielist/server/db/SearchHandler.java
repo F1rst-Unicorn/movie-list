@@ -19,13 +19,13 @@
 
 package de.njsm.movielist.server.db;
 
-import de.njsm.movielist.server.business.StatusCode;
-import de.njsm.movielist.server.business.data.MovieOutline;
-import de.njsm.movielist.server.business.data.SearchQuery;
-import de.njsm.movielist.server.business.data.User;
-import fj.data.Validation;
-import org.jooq.*;
-import org.jooq.impl.DSL;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_ACTOR;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_COMMENT;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_LOCATION;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIESINGENRE;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_MOVIE_ACTORS;
+import static de.njsm.movielist.server.db.jooq.Tables.MOVIES_WATCHSTATUS;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -35,12 +35,27 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static de.njsm.movielist.server.db.jooq.Tables.*;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import org.jooq.Record17;
+import org.jooq.SelectOnConditionStep;
+import org.jooq.SelectOrderByStep;
+import org.jooq.impl.DSL;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.context.annotation.RequestScope;
+import de.njsm.movielist.server.business.StatusCode;
+import de.njsm.movielist.server.business.data.MovieOutline;
+import de.njsm.movielist.server.business.data.SearchQuery;
+import de.njsm.movielist.server.business.data.User;
+import fj.data.Validation;
 
+@Repository
+@RequestScope
 public class SearchHandler extends FailSafeDatabaseHandler {
 
 
-    public SearchHandler(ConnectionFactory connectionFactory, String resourceIdentifier, int timeout) {
+    public SearchHandler(ConnectionFactory connectionFactory, @Qualifier("circuitBreakerDatabase") String resourceIdentifier, int timeout) {
         super(connectionFactory, resourceIdentifier, timeout);
     }
 

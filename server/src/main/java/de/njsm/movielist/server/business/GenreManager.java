@@ -19,6 +19,14 @@
 
 package de.njsm.movielist.server.business;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.ws.rs.container.AsyncResponse;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.data.Genre;
 import de.njsm.movielist.server.business.data.MovieCount;
 import de.njsm.movielist.server.business.data.MovieOutline;
@@ -26,11 +34,8 @@ import de.njsm.movielist.server.business.data.User;
 import de.njsm.movielist.server.db.GenreHandler;
 import fj.data.Validation;
 
-import jakarta.ws.rs.container.AsyncResponse;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
+@Service
+@RequestScope
 public class GenreManager extends BusinessObject {
 
     private GenreHandler handler;

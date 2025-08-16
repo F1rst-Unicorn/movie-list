@@ -32,11 +32,15 @@ import jakarta.ws.rs.container.Suspended;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.RequestScope;
 import de.njsm.movielist.server.business.SearchManager;
 import de.njsm.movielist.server.business.data.SearchQuery;
 import freemarker.template.Configuration;
 
 @Path("search")
+@Controller
+@RequestScope
 public class SearchEndpoint extends TemplateEndpoint {
 
     private final SearchManager searchManager;
