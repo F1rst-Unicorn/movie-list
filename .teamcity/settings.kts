@@ -68,11 +68,11 @@ object FullBuild : BuildType({
         exec {
             name = "Clean server"
             executionMode = BuildStep.ExecutionMode.ALWAYS
-            path = "system-test/bin/clean-up.sh"
+            path = "system-test/scripts/clean-up.sh"
         }
         exec {
             name = "Install server"
-            path = "system-test/bin/vm-deployment-test.sh"
+            path = "system-test/scripts/vm-deployment-test.sh"
         }
         maven {
             name = "System Test"

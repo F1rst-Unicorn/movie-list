@@ -19,20 +19,13 @@
 
 package de.njsm.movielist.server.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import de.njsm.movielist.server.business.StatusCode;
 import fj.data.Validation;
-import io.prometheus.client.Counter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public interface HystrixWrapper<I, E extends Exception> {
-
-    Counter CIRCUIT_BREAKER_EVENTS = Counter.build()
-            .name("movie_list_circuit_breaker_trigger")
-            .labelNames("resource")
-            .help("Number of circuit breaker open events")
-            .register();
 
     Logger LOG = LogManager.getLogger(HystrixWrapper.class);
 
@@ -58,7 +51,6 @@ public interface HystrixWrapper<I, E extends Exception> {
             else
                 LOG.debug("", e);
 
-            CIRCUIT_BREAKER_EVENTS.labels(getResourceIdentifier()).inc();
             return Validation.fail(getDefaultErrorCode());
         }
     }

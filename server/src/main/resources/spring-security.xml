@@ -32,7 +32,6 @@
     <security:http use-expressions="true">
         <security:intercept-url pattern="/login/**" access="permitAll()"/>
         <security:intercept-url pattern="/create_account" access="permitAll()"/>
-        <security:intercept-url pattern="/metrics" access="permitAll()"/>
         <security:intercept-url pattern="/health" access="permitAll()"/>
         <security:intercept-url pattern="/**" access="isAuthenticated()"/>
         <security:form-login login-page="/login" />

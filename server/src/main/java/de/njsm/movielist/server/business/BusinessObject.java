@@ -19,20 +19,15 @@
 
 package de.njsm.movielist.server.business;
 
+import jakarta.ws.rs.container.AsyncResponse;
+import jakarta.ws.rs.container.CompletionCallback;
+
+import org.glassfish.jersey.internal.util.Producer;
 import de.njsm.movielist.server.db.FailSafeDatabaseHandler;
 import fj.data.Validation;
-import io.prometheus.client.Summary;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.CompletionCallback;
-import org.glassfish.jersey.internal.util.Producer;
 
 
 public class BusinessObject {
-
-    private static final Summary OPERATION_REPETITIONS = Summary.build()
-            .name("movie_list_operation_repetitions")
-            .help("Count number of repetitions for operation due to serialisation")
-            .register();
 
     private FailSafeDatabaseHandler dbHandler;
 
@@ -51,13 +46,10 @@ public class BusinessObject {
 
     private <O> Validation<StatusCode, O> runTransactionUntilSerialisable(Producer<Validation<StatusCode, O>> operation) {
         Validation<StatusCode, O> result;
-        int repetitions = 0;
         do {
             result = operation.call();
-            repetitions++;
             result = finishTransaction(result);
         } while (result.isFail() && result.fail() == StatusCode.SERIALISATION_CONFLICT);
-        OPERATION_REPETITIONS.observe(repetitions);
         return result;
     }
 

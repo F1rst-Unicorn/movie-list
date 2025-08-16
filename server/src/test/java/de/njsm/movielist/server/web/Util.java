@@ -21,7 +21,7 @@ package de.njsm.movielist.server.web;
 
 import org.mockito.Mockito;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class Util {
 
