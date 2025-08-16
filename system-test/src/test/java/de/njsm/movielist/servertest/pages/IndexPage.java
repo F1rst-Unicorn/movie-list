@@ -19,10 +19,10 @@
 
 package de.njsm.movielist.servertest.pages;
 
+import static junit.framework.TestCase.assertTrue;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
-import static junit.framework.TestCase.assertTrue;
 
 public class IndexPage extends MovieListWebpage {
 
@@ -43,8 +43,8 @@ public class IndexPage extends MovieListWebpage {
     }
 
     public static IndexPage test(WebDriver driver) {
-        return LoginPage.test(driver)
-                .login("Jack", "testtesttest");
+        driver.navigate().to(System.getProperty("de.njsm.movielist.servertest.website"));
+        return new IndexPage(driver);
     }
 
     public IndexPage assertMovieList() {
